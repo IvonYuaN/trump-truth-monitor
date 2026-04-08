@@ -1639,17 +1639,15 @@
         function updateTrumpStatus() {
             const now = new Date();
 
-            // EST (Eastern Standard Time) = UTC-5, EDT = UTC-4
-            const estOffset = -5;
-            const estTime = new Date(now.getTime() + estOffset * 60 * 60 * 1000);
-            const estH = estTime.getHours();
-            const estM = estTime.getMinutes().toString().padStart(2, '0');
-            const estDay = estTime.getDay();
+            // Washington time = UTC - 5 (EST) or UTC - 4 (EDT)
+            const utcH = now.getUTCHours(), utcM = now.getUTCMinutes();
+            const estH = ((utcH - 5) % 24 + 24) % 24;
+            const estDay = now.getUTCDay(); // approximate, good enough for activity guess
 
             document.getElementById('estTime').textContent =
-                estH.toString().padStart(2, '0') + ':' + estM;
+                String(estH).padStart(2, '0') + ':' + String(utcM).padStart(2, '0');
 
-            // Local time
+            // Local time (user's timezone)
             const localH = now.getHours().toString().padStart(2, '0');
             const localM = now.getMinutes().toString().padStart(2, '0');
             document.getElementById('localTime').textContent = localH + ':' + localM;
@@ -1800,13 +1798,13 @@
 
         function formatTime(dateStr) {
             const d = new Date(dateStr);
-            // Local time
+            // Local time (user's timezone)
             const lh = d.getHours(), lm = d.getMinutes();
             const localStr = String(lh).padStart(2, '0') + ':' + String(lm).padStart(2, '0');
-            // Washington time: use same method as Trump status widget
-            const estOffset = -5;
-            const estTime = new Date(d.getTime() + estOffset * 60 * 60 * 1000);
-            const estStr = String(estTime.getHours()).padStart(2, '0') + ':' + String(estTime.getMinutes()).padStart(2, '0');
+            // Washington time = UTC - 5
+            const utcH = d.getUTCHours(), utcM = d.getUTCMinutes();
+            const estH = ((utcH - 5) % 24 + 24) % 24;
+            const estStr = String(estH).padStart(2, '0') + ':' + String(utcM).padStart(2, '0');
             if (localStr === estStr) return localStr;
             return localStr + ' <span style="opacity:0.5">(' + estStr + ')</span>';
         }
