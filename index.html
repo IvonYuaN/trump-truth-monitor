@@ -1803,12 +1803,11 @@
             const local = d.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', hour12: false });
             const est = d.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false });
             if (local === est) return local;
-            return est + ' <span style="opacity:0.5">(' + local + ')</span>';
+            return local + ' <span style="opacity:0.5">(' + est + ' EST)</span>';
         }
 
-        function getEstDateKey(dateStr) {
-            const d = new Date(dateStr);
-            return d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+        function getLocalDateKey(dateStr) {
+            return new Date(dateStr).toLocaleDateString('en-CA');
         }
 
         function formatNumber(num) {
@@ -1947,7 +1946,7 @@
             archiveByMonth = {};
 
             allPosts.forEach(post => {
-                const dk = getEstDateKey(post.created_at);
+                const dk = getLocalDateKey(post.created_at);
                 const mk = dk.slice(0, 7);
                 if (!archiveByDate[dk]) archiveByDate[dk] = [];
                 archiveByDate[dk].push(post);
@@ -1956,13 +1955,13 @@
                 archiveByMonth[mk][dk].push(post);
             });
 
-            // Collect posts from last 3 days (EST)
+            // Collect posts from last 3 days (local time)
             const recentDates = [];
             for (let i = 0; i < 3; i++) {
-                const d = new Date(now.getTime() - i * 86400000);
-                recentDates.push(d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }));
+                const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+                recentDates.push(d.toLocaleDateString('en-CA'));
             }
-            recentPosts = allPosts.filter(p => recentDates.includes(getEstDateKey(p.created_at)));
+            recentPosts = allPosts.filter(p => recentDates.includes(getLocalDateKey(p.created_at)));
         }
 
         function updateStats() {
@@ -2037,7 +2036,7 @@
             let html = '<div class="today-section"><div class="section-header"><div class="section-title">' +
                 '<span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>' +
                 '近3天动态 <span class="section-count">' + recentPosts.length + ' 条帖子</span>' +
-                '</div></div><div style="font-size:10px;color:var(--text-muted);margin-bottom:12px;padding-left:28px;">📅 以华盛顿时间(EST)划分日期 · 帖子时间显示 华盛顿时间 (本地时间)</div>';
+                '</div></div><div style="font-size:10px;color:var(--text-muted);margin-bottom:12px;padding-left:28px;">📅 按您的本地时间划分日期 · 帖子时间显示 本地时间 (华盛顿发帖时间)</div>';
 
             if (recentPosts.length > 0) {
                 html += recentPosts.map(p => renderPostCard(p)).join('');
@@ -2057,8 +2056,8 @@
             const now = new Date();
             const recentDates = [];
             for (let i = 0; i < 3; i++) {
-                const d = new Date(now.getTime() - i * 86400000);
-                recentDates.push(d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }));
+                const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+                recentDates.push(d.toLocaleDateString('en-CA'));
             }
             const months = Object.keys(archiveByMonth).sort().reverse();
             if (months.length === 0) {
