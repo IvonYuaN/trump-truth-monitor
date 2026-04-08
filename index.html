@@ -2035,17 +2035,6 @@
             }
             html += '</div>';
 
-            // Yesterday
-            if (yesterdayPosts.length > 0) {
-                const yKey = new Date(new Date() - 86400000).toISOString().slice(0, 10);
-                expandedDates.add(yKey);
-                html += '<div class="archive-section"><div class="section-header"><div class="section-title">' +
-                    '<span class="icon archive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>' +
-                    '近期</div></div>';
-                html += renderDateGroup(yKey, yesterdayPosts, true);
-                html += '</div>';
-            }
-
             section.innerHTML = html;
         }
 
@@ -2054,6 +2043,8 @@
         // =============================================
         function renderArchiveView() {
             const section = document.getElementById('archiveSection');
+            const now = new Date();
+            const todayKey = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().slice(0, 10);
             const months = Object.keys(archiveByMonth).sort().reverse();
             if (months.length === 0) {
                 section.innerHTML = '<div class="empty-state"><p>暂无归档数据</p></div>';
@@ -2065,11 +2056,13 @@
 
             months.forEach(mk => {
                 const dates = Object.keys(archiveByMonth[mk]).sort().reverse();
-                const total = dates.reduce((s, d) => s + archiveByMonth[mk][d].length, 0);
+                const filteredDates = dates.filter(dk => dk !== todayKey);
+                if (filteredDates.length === 0) return;
+                const total = filteredDates.reduce((s, d) => s + archiveByMonth[mk][d].length, 0);
                 html += '<div class="month-group"><div class="month-header"><span class="month-label">' +
                     formatMonthLabel(mk) + '</span><span class="month-count">' + total + ' 条</span></div>';
-                dates.forEach(dk => {
-                    html += renderDateGroup(dk, archiveByMonth[mk][dk], true);
+                filteredDates.forEach(dk => {
+                    html += renderDateGroup(dk, archiveByMonth[mk][dk], expandedDates.has(dk));
                 });
                 html += '</div>';
             });
@@ -2520,10 +2513,8 @@
         initWarTimeline();
 
         // =============================================
-        // STATS PANEL (dynamic from posts.json + trumpstruth.org hourly)
+        // STATS PANEL (dynamic from posts.json)
         // =============================================
-        const STATS_HOURLY = {"labels":["12am","1am","2am","3am","4am","5am","6am","7am","8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm","6pm","7pm","8pm","9pm","10pm","11pm"],"data":[11,2,0,0,0,10,15,21,33,25,44,13,11,7,8,37,40,11,21,31,19,26,18,19]};
-
         function renderStatsPanel() {
             const container = document.getElementById('statsPanelContent');
 
@@ -2557,6 +2548,18 @@
             // Date range
             const firstDate = dates[0] || '—';
             const lastDate = dates[dates.length - 1] || '—';
+
+            // Calculate hourly distribution from actual data (EST = UTC-5)
+            const hourlyData = new Array(24).fill(0);
+            const hourLabels = ['12am','1am','2am','3am','4am','5am','6am','7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm','8pm','9pm','10pm','11pm'];
+            allPosts.forEach(p => {
+                try {
+                    const d = new Date(p.created_at);
+                    // Convert to EST (UTC-5)
+                    const estHour = (d.getUTCHours() - 5 + 24) % 24;
+                    hourlyData[estHour]++;
+                } catch(e) {}
+            });
 
             // Overview cards
             let html = '<div class="stats-overview">';
@@ -2596,18 +2599,18 @@
             html += '</div>';
             html += '</div>';
 
-            // Hourly distribution (from trumpstruth.org archive-wide data)
+            // Hourly distribution (calculated from actual posts, EST timezone)
             html += '<div class="stats-chart-section">';
-            html += '<div class="stats-chart-title">🕐 发帖时段分布（全档案）</div>';
-            const maxHour = Math.max(...STATS_HOURLY.data, 1);
+            html += '<div class="stats-chart-title">🕐 发帖时段分布（EST时间，基于当前档案）</div>';
+            const maxHour = Math.max(...hourlyData, 1);
             html += '<div class="stats-hour-chart">';
             html += '<div class="stats-hour-labels">';
-            STATS_HOURLY.labels.forEach(label => {
+            hourLabels.forEach(label => {
                 html += '<div class="stats-hour-label">' + label + '</div>';
             });
             html += '</div>';
             html += '<div class="stats-hour-bars">';
-            STATS_HOURLY.data.forEach((val, i) => {
+            hourlyData.forEach((val, i) => {
                 const pct = Math.max((val / maxHour) * 100, 0.5);
                 html += '<div class="stats-hour-bar-row">' +
                     '<div class="stats-hour-bar" style="width:' + pct + '%"></div>' +
@@ -2618,7 +2621,7 @@
             html += '</div>';
 
             // Source
-            html += '<div class="stats-source">每日数据基于当前档案（' + totalPosts + ' 条）· 时段分布数据来源 <a href="https://trumpstruth.org/stats" target="_blank" rel="noopener">trumpstruth.org</a></div>';
+            html += '<div class="stats-source">所有数据基于当前档案（' + totalPosts + ' 条帖子，' + dayCount + ' 天）动态计算</div>';
 
             container.innerHTML = html;
         }
