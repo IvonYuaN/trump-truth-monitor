@@ -1768,15 +1768,47 @@
             return null;
         }
 
+        // API 4: 有道翻译 (free, no key)
+        async function translateYoudao(text) {
+            try {
+                const truncated = text.substring(0, 500);
+                const resp = await fetch('https://dict.youdao.com/suggest?num=1&doctype=json&q=' + encodeURIComponent(truncated), {
+                    signal: AbortSignal.timeout(5000)
+                });
+                const data = await resp.json();
+                if (data.translateResult?.resultCode === 0 && data.translateResult?.translateData) {
+                    return data.translateResult.translateData.map(d => d.translateResult).join('');
+                }
+            } catch (e) { console.warn('Youdao failed:', e.message); }
+            return null;
+        }
+
+        // API 5: Google Translate via GoogleTranslateAPI (free proxy)
+        async function translateGoogle(text) {
+            try {
+                const truncated = text.substring(0, 500);
+                const resp = await fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(truncated), {
+                    signal: AbortSignal.timeout(5000)
+                });
+                const data = await resp.json();
+                if (data && data[0]) {
+                    return data[0].map(arr => arr[0]).filter(Boolean).join('');
+                }
+            } catch (e) { console.warn('Google failed:', e.message); }
+            return null;
+        }
+
         // Main translation function with fallback chain
         async function translatePost(text) {
             if (!text || text.length < 2) return '';
             if (translationCache.has(text)) return translationCache.get(text);
 
-            // Try APIs in order: MyMemory → LibreTranslate → Lingva → fallback
+            // Try APIs in order: MyMemory → Google → Lingva → LibreTranslate → Youdao → fallback
             let translated = await translateMyMemory(text);
-            if (!translated) translated = await translateLibre(text);
+            if (!translated) translated = await translateGoogle(text);
             if (!translated) translated = await translateLingva(text);
+            if (!translated) translated = await translateLibre(text);
+            if (!translated) translated = await translateYoudao(text);
             if (!translated) translated = fallbackTranslate(text);
 
             translationCache.set(text, translated);
