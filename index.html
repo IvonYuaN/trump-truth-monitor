@@ -1718,37 +1718,72 @@
         setInterval(updateTrumpStatus, 30000);
 
         // =============================================
-        // TRANSLATION (MyMemory auto + DeepL precise)
+        // TRANSLATION (Multi-API fallback chain)
         // =============================================
         const translationCache = new Map();
         const preciseTranslationCache = new Map();
 
+        // API 1: MyMemory (free, no key, 500 chars limit)
+        async function translateMyMemory(text) {
+            try {
+                const truncated = text.substring(0, 500);
+                const resp = await fetch('https://api.mymemory.translated.net/get?q=' +
+                    encodeURIComponent(truncated) + '&langpair=en|zh-CN', { signal: AbortSignal.timeout(5000) });
+                const data = await resp.json();
+                if (data.responseStatus === 200 && data.responseData?.translatedText) {
+                    let translated = data.responseData.translatedText;
+                    if (translated === text.toUpperCase() || translated === text) return null;
+                    return translated;
+                }
+            } catch (e) { console.warn('MyMemory failed:', e.message); }
+            return null;
+        }
+
+        // API 2: LibreTranslate (free, open source)
+        async function translateLibre(text) {
+            try {
+                const truncated = text.substring(0, 500);
+                const resp = await fetch('https://libretranslate.com/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ q: truncated, source: 'en', target: 'zh', format: 'text' }),
+                    signal: AbortSignal.timeout(5000)
+                });
+                const data = await resp.json();
+                if (data.translatedText) return data.translatedText;
+            } catch (e) { console.warn('LibreTranslate failed:', e.message); }
+            return null;
+        }
+
+        // API 3: Lingva (free, no key)
+        async function translateLingva(text) {
+            try {
+                const truncated = text.substring(0, 500);
+                const resp = await fetch('https://lingva.ml/api/v1/en/zh/' + encodeURIComponent(truncated), {
+                    signal: AbortSignal.timeout(5000)
+                });
+                const data = await resp.json();
+                if (data.translation) return data.translation;
+            } catch (e) { console.warn('Lingva failed:', e.message); }
+            return null;
+        }
+
+        // Main translation function with fallback chain
         async function translatePost(text) {
             if (!text || text.length < 2) return '';
             if (translationCache.has(text)) return translationCache.get(text);
 
-            try {
-                const truncated = text.substring(0, 500);
-                const resp = await fetch('https://api.mymemory.translated.net/get?q=' +
-                    encodeURIComponent(truncated) + '&langpair=en|zh-CN');
-                const data = await resp.json();
+            // Try APIs in order: MyMemory → LibreTranslate → Lingva → fallback
+            let translated = await translateMyMemory(text);
+            if (!translated) translated = await translateLibre(text);
+            if (!translated) translated = await translateLingva(text);
+            if (!translated) translated = fallbackTranslate(text);
 
-                if (data.responseStatus === 200 && data.responseData &&
-                    data.responseData.translatedText) {
-                    let translated = data.responseData.translatedText;
-                    if (translated === text.toUpperCase() || translated === text) {
-                        translated = fallbackTranslate(text);
-                    }
-                    translationCache.set(text, translated);
-                    return translated;
-                }
-                return fallbackTranslate(text);
-            } catch (e) {
-                console.warn('Translation API failed, using fallback:', e);
-                return fallbackTranslate(text);
-            }
+            translationCache.set(text, translated);
+            return translated;
         }
 
+        // DeepL for precise translation
         async function translatePostDeepL(text) {
             if (!text || text.length < 2) return '';
             if (preciseTranslationCache.has(text)) return preciseTranslationCache.get(text);
