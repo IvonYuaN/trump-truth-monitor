@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0c;
-            --bg-secondary: #111114;
-            --bg-card: #16161a;
-            --bg-card-hover: #1c1c21;
-            --border: #2a2a30;
-            --border-light: #3a3a42;
-            --text-primary: #e8e6e3;
-            --text-secondary: #9896a1;
-            --text-muted: #5c5a66;
+            --bg-primary: #1a1b2e;
+            --bg-secondary: #1f2039;
+            --bg-card: #262840;
+            --bg-card-hover: #2e3050;
+            --border: #363858;
+            --border-light: #464870;
+            --text-primary: #eaeaf0;
+            --text-secondary: #b0b0c8;
+            --text-muted: #7878a0;
             --accent: #c9a84c;
             --accent-dim: rgba(201, 168, 76, 0.12);
             --accent-glow: rgba(201, 168, 76, 0.25);
@@ -61,7 +61,7 @@
             left: -200px;
             width: 700px;
             height: 700px;
-            background: radial-gradient(circle, rgba(91, 156, 245, 0.06) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(91, 156, 245, 0.08) 0%, transparent 70%);
             pointer-events: none;
             z-index: 0;
         }
@@ -71,7 +71,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(10, 10, 12, 0.85);
+            background: rgba(26, 27, 46, 0.9);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
@@ -760,48 +760,75 @@
         let currentView = 'today';
         let expandedDates = new Set();
 
-        // === Translation Dictionary ===
-        const PHRASE_DICT = {
-            'MAKE AMERICA GREAT AGAIN!': '让美国再次伟大！',
-            'PRESIDENT DONALD J. TRUMP': '唐纳德·J·特朗普总统',
-            'President Donald J. Trump': '唐纳德·J·特朗普总统',
-            'Donald J. Trump': '唐纳德·J·特朗普',
-            'TRUMP': '特朗普',
-            'Trump': '特朗普',
-            'America First': '美国优先',
-            'AMERICA FIRST': '美国优先',
-            'MAGA': 'MAGA（让美国再次伟大）',
-            'Sleepy Joe': '瞌睡乔',
-            'Crooked Hillary': '狡猾的希拉里',
-            'Fake News': '假新闻',
-            'FAKE NEWS': '假新闻',
-            'Witch Hunt': '政治迫害',
-            'WITCH HUNT': '政治迫害',
-            'God Bless America': '愿上帝保佑美国',
-            'GOD BLESS AMERICA': '愿上帝保佑美国',
-            'God Bless': '愿上帝保佑',
-            'Truth Social': 'Truth Social（真相社交）',
-            'the White House': '白宫',
-            'The White House': '白宫',
-            'Congress': '国会',
-            'Senate': '参议院',
-            'Supreme Court': '最高法院',
-            'Border Crisis': '边境危机',
-            'Radical Left': '激进左翼',
-            'radical left': '激进左翼',
-            'RINO': 'RINO（名义上的共和党人）',
-            'RINOs': 'RINO（名义上的共和党人）',
-            'has my Complete and Total Endorsement': '获得我的完全支持',
-            'Complete and Total Endorsement': '完全支持',
-            'I strongly endorse': '我强烈支持',
-            'law and order': '法律与秩序',
-            'Law and Order': '法律与秩序',
-            'the American People': '美国人民',
-            'American People': '美国人民',
-            'the American Dream': '美国梦',
-            'We the People': '我们人民',
-            'thoughts and prayers': '关心和祈祷',
-        };
+        // === Translation Cache & API ===
+        const translationCache = new Map();
+        const TRANSLATING = '...翻译中...';
+
+        async function translatePost(text) {
+            if (!text || text.length < 2) return '';
+            if (translationCache.has(text)) return translationCache.get(text);
+            translationCache.set(text, TRANSLATING);
+
+            try {
+                const encoded = encodeURIComponent(text.substring(0, 500));
+                const resp = await fetch(`https://api.mymemory.translated.net/get?q=${encoded}&langpair=en|zh-CN`);
+                const data = await resp.json();
+                if (data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
+                    let translated = data.responseData.translatedText;
+                    // MyMemory sometimes returns uppercase English when it can't translate
+                    if (translated === text.toUpperCase() || translated === text) {
+                        translated = await fallbackTranslate(text);
+                    }
+                    translationCache.set(text, translated);
+                    return translated;
+                }
+                return await fallbackTranslate(text);
+            } catch (e) {
+                return await fallbackTranslate(text);
+            }
+        }
+
+        async function fallbackTranslate(text) {
+            // Simple dictionary-based fallback for common phrases
+            const dict = {
+                'MAKE AMERICA GREAT AGAIN!': '让美国再次伟大！',
+                'President Donald J. Trump': '唐纳德·J·特朗普总统',
+                'Donald J. Trump': '唐纳德·J·特朗普',
+                'America First': '美国优先',
+                'AMERICA FIRST': '美国优先',
+                'MAGA': 'MAGA（让美国再次伟大）',
+                'Sleepy Joe': '瞌睡乔',
+                'Fake News': '假新闻',
+                'FAKE NEWS': '假新闻',
+                'Witch Hunt': '政治迫害',
+                'God Bless America': '愿上帝保佑美国',
+                'GOD BLESS AMERICA': '愿上帝保佑美国',
+                'God Bless': '愿上帝保佑',
+                'the White House': '白宫',
+                'The White House': '白宫',
+                'Congress': '国会',
+                'Senate': '参议院',
+                'Supreme Court': '最高法院',
+                'Radical Left': '激进左翼',
+                'law and order': '法律与秩序',
+                'the American People': '美国人民',
+                'We the People': '我们人民',
+                'has my Complete and Total Endorsement': '获得我的完全支持',
+                'Complete and Total Endorsement': '完全支持',
+                'I strongly endorse': '我强烈支持',
+                'Border Crisis': '边境危机',
+                'Truth Social': 'Truth Social',
+                'RINO': 'RINO（名义上的共和党人）',
+                'the American Dream': '美国梦',
+            };
+            let result = text;
+            const entries = Object.entries(dict).sort((a, b) => b[0].length - a[0].length);
+            for (const [en, zh] of entries) {
+                result = result.replace(new RegExp(en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), zh);
+            }
+            translationCache.set(text, result);
+            return result;
+        }
 
         // === Utility Functions ===
         function cleanHTML(html) {
@@ -880,14 +907,14 @@
 
         function renderPostCard(post) {
             const content = cleanHTML(post.content || '');
-            const translation = translatePost(content);
             const time = formatTime(post.created_at);
             const reposts = post.reblogs_count || 0;
             const likes = post.favourites_count || 0;
             const url = post.url || '#';
+            const postId = post.id || Math.random().toString(36).substr(2, 9);
 
             return `
-                <div class="post-card">
+                <div class="post-card" data-post-id="${postId}" data-content="${encodeURIComponent(content)}">
                     <div class="post-header">
                         <div class="post-meta">
                             <div class="post-avatar">T</div>
@@ -917,17 +944,33 @@
                     </button>
                     <div class="post-translation">
                         <div class="translation-label">中文参考翻译</div>
-                        <div class="translation-text">${translation}</div>
+                        <div class="translation-text"></div>
                     </div>
                 </div>
             `;
         }
 
-        function toggleTranslation(btn) {
+        async function toggleTranslation(btn) {
             const card = btn.closest('.post-card');
             const trans = card.querySelector('.post-translation');
-            trans.classList.toggle('visible');
-            btn.textContent = trans.classList.contains('visible') ? '隐藏翻译' : '中文翻译';
+            const textEl = trans.querySelector('.translation-text');
+
+            if (trans.classList.contains('visible')) {
+                trans.classList.remove('visible');
+                btn.textContent = '中文翻译';
+                return;
+            }
+
+            trans.classList.add('visible');
+            btn.textContent = '翻译中...';
+            btn.disabled = true;
+
+            const content = decodeURIComponent(card.dataset.content);
+            const translated = await translatePost(content);
+            textEl.textContent = translated;
+
+            btn.textContent = '隐藏翻译';
+            btn.disabled = false;
         }
 
         // === Data Loading ===
