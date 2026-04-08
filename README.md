@@ -1,149 +1,102 @@
-# 特朗普 Truth Social 每日监控
+# 特朗普 Truth Social 监控面板
 
-自动获取特朗普 Truth Social 帖子，生成中英对照 Excel 报告，每天早上 10 点发送邮件通知。
+实时追踪特朗普 Truth Social 发帖动态的 GitHub Pages 可视化面板。
 
-## 功能特点
+## 在线访问
 
-- ✅ **自动获取**：每天早上 10 点（北京时间）自动获取最新帖子
-- ✅ **中英对照**：重要帖子已翻译，普通帖子使用词典翻译
-- ✅ **邮件通知**：自动发送 Excel 到您的邮箱
-- ✅ **历史保留**：所有历史数据永久保存，不自动删除
-- ✅ **免费运行**：基于 GitHub Actions，完全免费
+**[ivonyuan.github.io/trump-truth-monitor](https://ivonyuan.github.io/trump-truth-monitor/)**
+
+## 功能特性
+
+- **近3天动态** — 默认展示最近3天帖子（EST时区划分），帖子时间双时区显示
+- **历史归档** — 按月/日折叠归档，点击展开查看
+- **全文搜索** — 支持中英文关键词搜索全部帖子
+- **中英翻译** — 点击帖子自动翻译（MyMemory API），带缓存
+- **数据统计** — 每日发帖量柱状图、发帖时段分布、总览数据卡片
+- **热力图** — GitHub 风格的90天发帖活跃度
+- **词云** — 高频词可视化，点击可搜索
+- **Trump Bingo** — 5x5 棋盘，阅读帖子自动标记，localStorage 持久化
+- **关键词排行** — 20个预设正则匹配，柱状图排名
+- **战争时间线** — 美以伊冲突追踪，7阶段进度条 + 46个关键事件
+- **Trump 状态** — EST实时时钟 + 猜测当前活动 + AI头像
+- **日夜主题** — 自动检测系统偏好，手动切换，localStorage 记忆
 
 ## 数据来源
 
-- CNN Truth Social Archive: `https://ix.cnn.io/data/truth-social/truth_archive.json`
-- 账号：@realDonaldTrump
-- 更新频率：实时
+| 来源 | 地址 | 说明 |
+|------|------|------|
+| CNN Truth Social Archive | `ix.cnn.io/data/truth-social/truth_archive.json` | 主数据源，32,000+ 条全量历史帖文 |
+| trumpstruth.org | `trumpstruth.org/feed` | RSS 备用源，发帖时段统计数据 |
+| StardustWhisper/iran-israel-us-timeline | GitHub | 战争时间线数据（347条事件） |
 
-## 快速开始
+- 账号：`@realDonaldTrump`
+- 数据范围：2026年2月至今
+- 更新方式：手动抓取 CNN JSON → 保存 `data/posts.json` → 推送 GitHub Pages
 
-### 1. Fork 本仓库
+## 技术栈
 
-点击右上角 `Fork` 按钮，将仓库复制到您的账号下。
-
-### 2. 配置 Secrets
-
-进入您的仓库 → Settings → Secrets and variables → Actions → New repository secret
-
-添加以下 Secrets：
-
-| Secret 名称 | 说明 | 示例 |
-|------------|------|------|
-| `SMTP_SERVER` | SMTP 服务器地址 | `smtp.gmail.com` |
-| `SMTP_PORT` | SMTP 端口 | `587` |
-| `SMTP_USER` | 发件人邮箱 | `your_email@gmail.com` |
-| `SMTP_PASSWORD` | 邮箱授权码（非密码） | Gmail 需要应用专用密码 |
-| `TO_EMAIL` | 收件人邮箱 | `your_email@example.com` |
-
-### 3. 常用邮箱 SMTP 配置
-
-#### Gmail
-```
-SMTP_SERVER: smtp.gmail.com
-SMTP_PORT: 587
-```
-⚠️ 需要开启两步验证后生成[应用专用密码](https://myaccount.google.com/apppasswords)
-
-#### QQ 邮箱
-```
-SMTP_SERVER: smtp.qq.com
-SMTP_PORT: 587
-```
-⚠️ 需要在邮箱设置中开启 SMTP 服务并获取授权码
-
-#### 163 邮箱
-```
-SMTP_SERVER: smtp.163.com
-SMTP_PORT: 465
-```
-
-### 4. 手动测试
-
-进入 Actions → Trump Truth Social Daily Report → Run workflow → Run workflow
-
-### 5. 查看结果
-
-- **邮件**：检查收件箱
-- **Artifacts**：Actions 运行页面 → Artifacts → truth-social-report
-- **存档**：仓库 `data/truth_archive.json`
+- 纯静态单文件 HTML/CSS/JS（无框架依赖）
+- GitHub Pages 托管（Legacy 模式 + `.nojekyll`）
+- awesome-design-md 设计标准
+- DM Serif Display + Inter 字体
+- CSS 变量主题系统（亮/暗双模式）
 
 ## 项目结构
 
 ```
 trump-truth-monitor/
-├── .github/
-│   └── workflows/
-│       └── daily.yml      # GitHub Actions 工作流
+├── index.html              # 主页面（单文件应用）
 ├── data/
-│   └── truth_archive.json # 历史存档（自动更新）
-├── output/
-│   └── *.xlsx             # 生成的 Excel 文件
-├── fetch_data.py          # 获取数据脚本
-├── process_data.py        # 处理数据脚本
-├── send_email.py          # 发送邮件脚本
-├── requirements.txt       # Python 依赖
-└── README.md              # 本文件
+│   └── posts.json          # 帖子数据（2026-02 至今）
+├── assets/
+│   ├── trump-golf.jpg      # Trump 头像（高尔夫）
+│   ├── trump-phone.jpg     # Trump 头像（刷手机）
+│   ├── trump-speech.jpg    # Trump 头像（演讲）
+│   ├── trump-tv.jpg        # Trump 头像（看电视）
+│   ├── trump-eating.jpg    # Trump 头像（吃饭）
+│   ├── trump-sleeping.jpg  # Trump 头像（睡觉）
+│   └── trump-working.jpg   # Trump 头像（工作）
+├── .nojekyll               # 跳过 Jekyll 构建
+├── .gitignore
+├── main.py                 # 数据抓取脚本
+├── send_email.py           # 邮件通知（备用）
+├── requirements.txt
+└── README.md
 ```
 
-## 翻译说明
+## 更新数据
 
-### 重要帖子（高质量翻译）
-- 伊朗相关（霍尔木兹海峡、核谈判、军事威胁）
-- 关税政策
-- 北约、格陵兰岛
-- UFO/外星生命
-- 重大军事行动
+```bash
+# 1. 抓取最新数据
+python3 -c "
+import requests, json
+resp = requests.get('https://ix.cnn.io/data/truth-social/truth_archive.json')
+archive = resp.json()
+filtered = [p for p in archive if p['created_at'] >= '2026-02']
+with open('data/posts.json', 'w') as f:
+    json.dump(filtered, f, ensure_ascii=False)
+print(f'Updated: {len(filtered)} posts')
+"
 
-### 普通帖子（词典翻译）
-- 政治背书（选举支持类）
-- 日常动态
-- 媒体引用
-
-## 自定义配置
-
-### 修改运行时间
-
-编辑 `.github/workflows/daily.yml`：
-
-```yaml
-schedule:
-  - cron: '0 2 * * *'  # UTC 时间，北京时间 = UTC + 8
+# 2. 推送到 GitHub
+git add data/posts.json
+git commit -m "data: update posts.json"
+git push origin main
 ```
 
-常用时间：
-- 北京时间 8:00 → `cron: '0 0 * * *'`
-- 北京时间 10:00 → `cron: '0 2 * * *'`
-- 北京时间 18:00 → `cron: '0 10 * * *'`
+## 时间说明
 
-### 修改数据保留
+- **日期划分**：以华盛顿时间 (EST/EDT) 为准
+- **帖子时间**：显示格式为 `EST时间 (本地时间)`，相同时区只显示一个
+- **Trump 状态**：基于 EST 时区猜测当前活动
 
-默认保留所有历史数据。如需自动清理，编辑 `process_data.py`：
+## 相关项目
 
-```python
-posts = load_posts(days=30)  # 改为需要的天数
-```
-
-## 故障排除
-
-### 邮件发送失败
-1. 检查 SMTP 配置是否正确
-2. 确认使用的是授权码而非密码
-3. 检查邮箱是否开启 SMTP 服务
-
-### 数据获取失败
-1. CNN 数据源可能临时不可用，等待下次运行
-2. 检查 Actions 日志查看具体错误
-
-### Excel 未生成
-1. 确认 `data/truth_archive.json` 有数据
-2. 检查 `output/` 目录权限
-
-## 相关资源
-
-- [CNN Truth Social Archive](https://ix.cnn.io/data/truth-social/)
-- [stiles/trump-truth-social-archive](https://github.com/stiles/trump-truth-social-archive)
-- [shawnholdings-creator/ntfy-alerts](https://github.com/shawnholdings-creator/ntfy-alerts)
+- [StardustWhisper/iran-israel-us-timeline](https://github.com/StardustWhisper/iran-israel-us-timeline) — 战争时间线数据源
+- [LewisLiu007/iran-war-info](https://github.com/LewisLiu007/iran-war-info) — 多源新闻聚合
+- [Hzyhhh/iron-fetch-news](https://github.com/Hzyhhh/iron-fetch-news) — Next.js 战事追踪
+- [zgywayy/iran-conflict](https://github.com/zgywayy/iran-conflict) — 冲突可视化
+- [1837620622/connectX](https://github.com/1837620622/connectX) — Truth Social 监控 + 微信推送
 
 ## License
 
