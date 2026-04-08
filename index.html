@@ -2013,7 +2013,7 @@
         }
 
         async function handleTranslate(btn) {
-            const trans = btn.nextElement;
+            const trans = btn.nextElementSibling;
             if (!trans || !trans.classList.contains('post-translation')) return;
             
             // Show translation area
