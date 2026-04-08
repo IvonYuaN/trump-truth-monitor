@@ -1439,7 +1439,7 @@
                 <div class="war-source-link">
                     数据来源：<a href="https://github.com/StardustWhisper/iran-israel-us-timeline" target="_blank" rel="noopener">StardustWhisper/iran-israel-us-timeline</a> ·
                     <a href="https://en.wikipedia.org/wiki/Timeline_of_the_2026_Iran_war" target="_blank" rel="noopener">Wikipedia</a> ·
-                    共 347 条事件记录
+                    共 46 个关键节点（精选自347条事件）
                 </div>
             </div>
         </div>
@@ -2069,7 +2069,7 @@
                 html += '<div class="month-group"><div class="month-header"><span class="month-label">' +
                     formatMonthLabel(mk) + '</span><span class="month-count">' + total + ' 条</span></div>';
                 dates.forEach(dk => {
-                    html += renderDateGroup(dk, archiveByMonth[mk][dk], expandedDates.has(dk));
+                    html += renderDateGroup(dk, archiveByMonth[mk][dk], true);
                 });
                 html += '</div>';
             });
@@ -2407,34 +2407,47 @@
         ];
 
         const WAR_EVENTS = [
-            { date: '2026-02-27', title: '特朗普下令推进"Operation Epic Fury"', tags: ['Trump','US'] },
-            { date: '2026-02-28', title: '美以对伊朗发动大规模打击；特朗普称哈梅内伊被杀', tags: ['Trump','Iran'] },
+            { date: '2026-02-27', title: '特朗普下令推进"Operation Epic Fury"（UTC 20:38）', tags: ['Trump','US'] },
+            { date: '2026-02-28', title: '美以对伊朗发动大规模打击；特朗普称哈梅内伊被杀、行动将持续', tags: ['Trump','Iran'] },
             { date: '2026-03-01', title: '特朗普发布"史诗怒火"声明：要求IRGC投降否则"必死无疑"', tags: ['Trump','Iran'] },
             { date: '2026-03-01', title: '拉里贾尼宣布成立"临时领导委员会"；伊朗向海湾7国发动报复打击', tags: ['Iran'] },
             { date: '2026-03-02', title: '鲁比奥：美方"先发制人"是因预期以色列将打击、伊朗会报复美军', tags: ['Trump','Iran','Israel'] },
             { date: '2026-03-02', title: 'IRGC正式确认霍尔木兹海峡关闭，威胁过往船只', tags: ['Iran'] },
+            { date: '2026-03-03', title: '特朗普：最担心"换人不换质"；并对盟友基地/贸易发出威胁', tags: ['Trump'] },
+            { date: '2026-03-04', title: '英媒：Mojtaba Khamenei被指"最可能继任"；多方强硬口径并行', tags: ['Iran','Trump','Israel'] },
             { date: '2026-03-05', title: '特朗普称要参与选择哈梅内伊继任者；美潜艇击沉伊朗军舰', tags: ['Trump','Iran'] },
+            { date: '2026-03-06', title: '特朗普Truth Social：与伊朗"只有一种协议——无条件投降"', tags: ['Trump','Iran'] },
             { date: '2026-03-07', title: '伊朗总统佩泽什基安为打击邻国致歉，但拒绝"无条件投降"', tags: ['Iran','Trump'] },
             { date: '2026-03-08', title: '伊朗宣布由Mojtaba Khamenei继任最高领袖', tags: ['Iran','Trump'] },
             { date: '2026-03-09', title: '特朗普宣布有意"夺取"霍尔木兹海峡控制权；Brent原油突破$100', tags: ['Trump','Iran','Economy'] },
             { date: '2026-03-10', title: '特朗普要求伊朗清除霍尔木兹水雷；美军摧毁16艘布雷船', tags: ['Trump','Iran'] },
-            { date: '2026-03-11', title: 'IEA成员国同意释油4亿桶应对供应扰动', tags: ['G7','Economy'] },
-            { date: '2026-03-13', title: '美防长宣布已"功能性摧毁"伊朗弹道导弹产能', tags: ['Trump','Iran'] },
+            { date: '2026-03-11', title: '美情报：对油轮"直接打击"风险更高；白宫以Truth Social威胁回应', tags: ['Trump','Iran'] },
+            { date: '2026-03-12', title: 'IRGC击沉商船Safesea Vishnu（1名船员死亡）；开战以来对商船攻击达21起', tags: ['Iran'] },
+            { date: '2026-03-13', title: '特朗普称将"狠狠打击伊朗"；美防长宣布已"功能性摧毁"伊朗弹道导弹产能', tags: ['Trump','Iran'] },
             { date: '2026-03-14', title: '特朗普拒绝阿曼和埃及的停火调解努力', tags: ['Mediator','Trump','Iran'] },
+            { date: '2026-03-15', title: '英媒：Kharg Island风险与油田"被迫关停"担忧，油价仍可能高位', tags: ['Iran','Economy'] },
             { date: '2026-03-16', title: '以军大规模打击德黑兰；IDF称已执行超7,600次打击', tags: ['Israel','Iran'] },
+            { date: '2026-03-17', title: '伊朗首次打击"生产设施"相关报道；外长否认与美方特使接触', tags: ['Iran'] },
+            { date: '2026-03-18', title: 'IRGC威胁报复海湾能源设施；卡塔尔称威胁全球能源安全', tags: ['Iran'] },
             { date: '2026-03-19', title: '美军启动霍尔木兹海峡通航军事行动；追加2000亿美元拨款', tags: ['Trump','Iran'] },
-            { date: '2026-03-20', title: '特朗普告诉Axios正考虑"逐步收尾"战争', tags: ['Trump','Iran'] },
-            { date: '2026-03-21', title: '美以空袭伊朗纳坦兹核设施及核武研发基地', tags: ['Trump','Iran'] },
+            { date: '2026-03-20', title: '特朗普告诉Axios正考虑"逐步收尾"战争；痛批北约盟友为"懦夫"', tags: ['Trump','Iran'] },
+            { date: '2026-03-21', title: '美以空袭伊朗纳坦兹核设施及核武研发基地；IAEA呼吁"军事克制"', tags: ['Trump','Iran'] },
             { date: '2026-03-22', title: '伊朗拒绝48小时最后通牒；威胁报复海湾能源设施', tags: ['Iran','Trump'] },
             { date: '2026-03-23', title: '特朗普宣布延期5天：称与伊朗有"良好且富有成效的对话"', tags: ['Trump','Iran'] },
+            { date: '2026-03-24', title: '巴基斯坦总理谢里夫愿主持美伊谈判；美方递交15点和平方案', tags: ['Mediator','Trump'] },
             { date: '2026-03-25', title: '伊朗正式拒绝美方15点和平方案，提出五项反条件', tags: ['Iran','Trump'] },
             { date: '2026-03-26', title: '特朗普延后"打击伊朗能源设施"期限至4/6', tags: ['Trump','Iran'] },
+            { date: '2026-03-27', title: '白宫预计将收到伊朗对15点方案的正式回复', tags: ['Trump'] },
             { date: '2026-03-28', title: '特朗普在沙特称伊朗"在撒谎"；称伊朗送来10船石油作为"礼物"', tags: ['Trump','Iran'] },
+            { date: '2026-03-29', title: '特朗普抨击北约"纸老虎"；鲁比奥称"数周内结束"战事', tags: ['Trump','G7'] },
             { date: '2026-03-30', title: '特朗普对FT称"想夺取伊朗石油"、考虑占领哈尔克岛', tags: ['Trump','Iran'] },
+            { date: '2026-03-31', title: '两艘中国中远海运集装箱船通过霍尔木兹——冲突以来首批非伊朗旗船离港', tags: ['China'] },
             { date: '2026-04-01', title: '特朗普称战争"两到三周内"结束；宣布黄金时段全国讲话', tags: ['Trump'] },
-            { date: '2026-04-02', title: 'CENTCOM：美以联军已打击超12,300个伊朗目标；Brent突破$103', tags: ['Trump','Iran'] },
-            { date: '2026-04-03', title: '特朗普升级威胁：美军对伊朗"剩余基础设施的摧毁甚至还没开始"', tags: ['Trump'] },
-            { date: '2026-04-05', title: '伊朗高级军方官员拒绝特朗普"48小时最后通牒"', tags: ['Iran','Trump'] },
+            { date: '2026-04-02', title: 'CENTCOM：美以联军已打击超12,300个目标；Brent突破$103', tags: ['Trump','Iran'] },
+            { date: '2026-04-03', title: '特朗普升级威胁：对伊朗"剩余基础设施的摧毁甚至还没开始"', tags: ['Trump'] },
+            { date: '2026-04-04', title: '美军救起在伊朗坠机事件中的部分机组成员；搜救仍在继续', tags: ['Trump','Israel','Iran'] },
+            { date: '2026-04-05', title: '伊朗军方拒绝特朗普"48小时最后通牒"：威胁只会促使更坚决回击', tags: ['Iran','Trump'] },
+            { date: '2026-04-06', title: '特朗普在"重开霍尔木兹"最后通牒后再发神秘时间点：周二晚8点', tags: ['Trump'] },
             { date: '2026-04-07', title: '特朗普：只有我能决定停火；称伊朗正在寻求停火', tags: ['Trump','Iran'] },
             { date: '2026-04-08', title: '白宫官员：以色列已同意停火（CBS）', tags: ['US','Israel','Trump'] },
             { date: '2026-04-09', title: '特朗普：美军将继续留在伊朗周边直至"真正协议"完全履行', tags: ['Trump','US'] },
@@ -2507,65 +2520,85 @@
         initWarTimeline();
 
         // =============================================
-        // STATS PANEL (trumpstruth.org data)
+        // STATS PANEL (dynamic from posts.json + trumpstruth.org hourly)
         // =============================================
-        const STATS_DAILY = {"labels":["2026-03-11","2026-03-12","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18","2026-03-19","2026-03-20","2026-03-21","2026-03-22","2026-03-23","2026-03-24","2026-03-25","2026-03-26","2026-03-27","2026-03-28","2026-03-29","2026-03-30","2026-03-31","2026-04-01","2026-04-02","2026-04-03","2026-04-04","2026-04-05","2026-04-06","2026-04-07","2026-04-08","2026-04-09"],"datasets":[{"label":"Originals","data":[15,6,25,6,4,16,5,20,17,7,9,14,19,29,10,11,5,6,22,7,16,13,13,8,9,8,17,37,10,0]},{"label":"Quotes","data":[0,0,1,0,1,0,0,1,0,0,0,1,0,1,0,0,0,0,3,0,0,0,0,0,0,3,2,0,0,0]},{"label":"Reblogs","data":[0,0,9,0,0,0,0,0,0,0,0,3,2,0,0,6,0,0,2,0,0,0,0,0,1,0,1,1,0,0]}]};
-
         const STATS_HOURLY = {"labels":["12am","1am","2am","3am","4am","5am","6am","7am","8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm","6pm","7pm","8pm","9pm","10pm","11pm"],"data":[11,2,0,0,0,10,15,21,33,25,44,13,11,7,8,37,40,11,21,31,19,26,18,19]};
 
         function renderStatsPanel() {
             const container = document.getElementById('statsPanelContent');
-            const originals = STATS_DAILY.datasets[0].data;
-            const quotes = STATS_DAILY.datasets[1].data;
-            const reblogs = STATS_DAILY.datasets[2].data;
-            const totalPosts = 33112;
-            const avgPerDay = 21.9;
-            const peakDay = '2025-12-01';
-            const peakCount = 168;
-            const originalsTotal = 25884;
-            const reblogsTotal = 5487;
+
+            // Calculate stats from actual posts data
+            const totalPosts = allPosts.length;
+            const dates = [...new Set(allPosts.map(p => p.created_at.slice(0, 10)))].sort();
+            const dayCount = dates.length || 1;
+            const avgPerDay = (totalPosts / dayCount).toFixed(1);
+
+            // Find peak day
+            const postsPerDay = {};
+            allPosts.forEach(p => {
+                const d = p.created_at.slice(0, 10);
+                postsPerDay[d] = (postsPerDay[d] || 0) + 1;
+            });
+            let peakDay = '', peakCount = 0;
+            Object.entries(postsPerDay).forEach(([d, c]) => {
+                if (c > peakCount) { peakCount = c; peakDay = d; }
+            });
+
+            // Count empty (media-only) posts
+            const emptyPosts = allPosts.filter(p => !p.content || p.content.trim().length < 10).length;
+
+            // Total interactions
+            let totalLikes = 0, totalReposts = 0;
+            allPosts.forEach(p => {
+                totalLikes += (p.favourites_count || 0);
+                totalReposts += (p.reblogs_count || 0);
+            });
+
+            // Date range
+            const firstDate = dates[0] || '—';
+            const lastDate = dates[dates.length - 1] || '—';
 
             // Overview cards
             let html = '<div class="stats-overview">';
-            html += '<div class="stats-overview-card"><div class="sov-label">全档案总量</div><div class="sov-value">' + totalPosts.toLocaleString() + '</div><div class="sov-sub">2022.02.14 至今</div></div>';
-            html += '<div class="stats-overview-card"><div class="sov-label">日均发帖</div><div class="sov-value">' + avgPerDay + '</div><div class="sov-sub">Originals 78.2%</div></div>';
+            html += '<div class="stats-overview-card"><div class="sov-label">总帖数</div><div class="sov-value">' + totalPosts.toLocaleString() + '</div><div class="sov-sub">' + firstDate + ' 至 ' + lastDate + '</div></div>';
+            html += '<div class="stats-overview-card"><div class="sov-label">日均发帖</div><div class="sov-value">' + avgPerDay + '</div><div class="sov-sub">覆盖 ' + dayCount + ' 天</div></div>';
             html += '<div class="stats-overview-card"><div class="sov-label">峰值日</div><div class="sov-value" style="color:var(--red)">' + peakCount + '</div><div class="sov-sub">' + peakDay + '</div></div>';
-            html += '<div class="stats-overview-card"><div class="sov-label">转发帖</div><div class="sov-value" style="color:var(--blue)">' + reblogsTotal.toLocaleString() + '</div><div class="sov-sub">占比 16.6%</div></div>';
+            html += '<div class="stats-overview-card"><div class="sov-label">纯媒体帖</div><div class="sov-value" style="color:var(--blue)">' + emptyPosts + '</div><div class="sov-sub">占比 ' + (emptyPosts / totalPosts * 100).toFixed(1) + '%</div></div>';
             html += '</div>';
 
-            // Daily posting volume bar chart
+            // Interaction stats
+            html += '<div class="stats-overview" style="margin-bottom:20px">';
+            html += '<div class="stats-overview-card"><div class="sov-label">总点赞</div><div class="sov-value" style="color:var(--red)">' + formatNumber(totalLikes) + '</div><div class="sov-sub">篇均 ' + formatNumber(Math.round(totalLikes / totalPosts)) + '</div></div>';
+            html += '<div class="stats-overview-card"><div class="sov-label">总转帖</div><div class="sov-value" style="color:var(--green)">' + formatNumber(totalReposts) + '</div><div class="sov-sub">篇均 ' + formatNumber(Math.round(totalReposts / totalPosts)) + '</div></div>';
+            html += '</div>';
+
+            // Daily posting volume bar chart (last 30 days with data)
+            const recentDates = dates.slice(-30);
+            const recentCounts = recentDates.map(d => postsPerDay[d] || 0);
+            const maxDaily = Math.max(...recentCounts, 1);
+
             html += '<div class="stats-chart-section">';
             html += '<div class="stats-chart-title">📊 每日发帖量（近30天）</div>';
-            const maxDaily = Math.max(...originals.map((v, i) => v + quotes[i] + reblogs[i]), 1);
             html += '<div class="stats-bar-chart">';
-            STATS_DAILY.labels.forEach((label, i) => {
-                const o = originals[i], q = quotes[i], r = reblogs[i];
-                const total = o + q + r;
-                const oH = Math.max((o / maxDaily) * 100, 0);
-                const qH = Math.max((q / maxDaily) * 100, 0);
-                const rH = Math.max((r / maxDaily) * 100, 0);
+            recentDates.forEach((label, i) => {
+                const count = recentCounts[i];
+                const pct = Math.max((count / maxDaily) * 100, 0);
                 const dayNum = parseInt(label.slice(8));
+                const monthNum = parseInt(label.slice(5, 7));
                 html += '<div class="stats-bar-col">' +
-                    '<div class="stats-bar-tooltip">' + label + '<br>原创 ' + o + ' · 引用 ' + q + ' · 转发 ' + r + '<br>合计 ' + total + '</div>' +
+                    '<div class="stats-bar-tooltip">' + label + '<br>发帖 ' + count + ' 条</div>' +
                     '<div class="stats-bar-stack">' +
-                    '<div class="stats-bar-seg" style="height:' + oH + '%;background:rgba(49,46,129,0.9)"></div>' +
-                    '<div class="stats-bar-seg" style="height:' + qH + '%;background:rgba(83,72,238,0.9)"></div>' +
-                    '<div class="stats-bar-seg" style="height:' + rH + '%;background:rgba(196,181,253,0.9)"></div>' +
+                    '<div class="stats-bar-seg" style="height:' + pct + '%;background:var(--accent)"></div>' +
                     '</div>' +
-                    '<div class="stats-bar-label">' + dayNum + '</div>' +
+                    '<div class="stats-bar-label">' + monthNum + '/' + dayNum + '</div>' +
                     '</div>';
             });
             html += '</div>';
-            html += '<div class="stats-chart-legend">' +
-                '<div class="stats-chart-legend-item"><div class="stats-chart-legend-dot" style="background:rgba(49,46,129,0.9)"></div>原创</div>' +
-                '<div class="stats-chart-legend-item"><div class="stats-chart-legend-dot" style="background:rgba(83,72,238,0.9)"></div>引用</div>' +
-                '<div class="stats-chart-legend-item"><div class="stats-chart-legend-dot" style="background:rgba(196,181,253,0.9)"></div>转发</div>' +
-                '</div>';
             html += '</div>';
 
-            // Hourly distribution
+            // Hourly distribution (from trumpstruth.org archive-wide data)
             html += '<div class="stats-chart-section">';
-            html += '<div class="stats-chart-title">🕐 发帖时段分布（全部档案）</div>';
+            html += '<div class="stats-chart-title">🕐 发帖时段分布（全档案）</div>';
             const maxHour = Math.max(...STATS_HOURLY.data, 1);
             html += '<div class="stats-hour-chart">';
             html += '<div class="stats-hour-labels">';
@@ -2585,7 +2618,7 @@
             html += '</div>';
 
             // Source
-            html += '<div class="stats-source">数据来源：<a href="https://trumpstruth.org/stats" target="_blank" rel="noopener">trumpstruth.org/stats</a> · 全档案覆盖 2022.02.14 – 2026.04.08</div>';
+            html += '<div class="stats-source">每日数据基于当前档案（' + totalPosts + ' 条）· 时段分布数据来源 <a href="https://trumpstruth.org/stats" target="_blank" rel="noopener">trumpstruth.org</a></div>';
 
             container.innerHTML = html;
         }
