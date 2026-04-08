@@ -600,6 +600,16 @@
         .translate-toggle:hover { background: var(--accent-border); }
         .translate-toggle svg { width: 11px; height: 11px; }
         .translate-toggle.loading { opacity: 0.6; pointer-events: none; }
+        .translate-toggle.precise {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.2s;
+        }
+        .translate-toggle.precise:hover { border-color: var(--accent); color: var(--accent); }
 
         /* === 12. States === */
         .empty-state { text-align: center; padding: 50px 24px; color: var(--text-muted); }
@@ -1708,9 +1718,10 @@
         setInterval(updateTrumpStatus, 30000);
 
         // =============================================
-        // TRANSLATION (MyMemory API)
+        // TRANSLATION (MyMemory auto + DeepL precise)
         // =============================================
         const translationCache = new Map();
+        const preciseTranslationCache = new Map();
 
         async function translatePost(text) {
             if (!text || text.length < 2) return '';
@@ -1725,7 +1736,6 @@
                 if (data.responseStatus === 200 && data.responseData &&
                     data.responseData.translatedText) {
                     let translated = data.responseData.translatedText;
-                    // MyMemory returns ALL CAPS English when it can't translate
                     if (translated === text.toUpperCase() || translated === text) {
                         translated = fallbackTranslate(text);
                     }
@@ -1736,6 +1746,33 @@
             } catch (e) {
                 console.warn('Translation API failed, using fallback:', e);
                 return fallbackTranslate(text);
+            }
+        }
+
+        async function translatePostDeepL(text) {
+            if (!text || text.length < 2) return '';
+            if (preciseTranslationCache.has(text)) return preciseTranslationCache.get(text);
+
+            try {
+                const truncated = text.substring(0, 500);
+                const resp = await fetch('https://api-free.deepl.com/v2/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'text=' + encodeURIComponent(truncated) + '&target_lang=ZH&source_lang=EN'
+                });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data.translations && data.translations[0]) {
+                        const translated = data.translations[0].text;
+                        preciseTranslationCache.set(text, translated);
+                        return translated;
+                    }
+                }
+                // Fallback to MyMemory if DeepL fails
+                return await translatePost(text);
+            } catch (e) {
+                console.warn('DeepL failed, falling back to MyMemory:', e);
+                return await translatePost(text);
             }
         }
 
@@ -1890,39 +1927,54 @@
                         </div>
                     </div>
                     ${contentHtml}
-                    <button class="translate-toggle" onclick="handleTranslate(this)">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
-                        中文翻译
-                    </button>
-                    <div class="post-translation">
-                        <div class="translation-label">中文参考翻译</div>
-                        <div class="translation-text"></div>
+                    <div class="post-translation visible">
+                        <div class="translation-label">中文参考翻译 <span class="translation-source" style="font-size:9px;opacity:0.5"></span></div>
+                        <div class="translation-text" data-raw="${encodeURIComponent(content)}"></div>
+                        <button class="translate-toggle precise" onclick="handlePreciseTranslate(this)" style="margin-top:4px;font-size:10px;padding:2px 8px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;vertical-align:middle;margin-right:3px;"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                            精确翻译
+                        </button>
                     </div>
                 </div>
             `;
         }
 
-        async function handleTranslate(btn) {
-            const card = btn.closest('.post-card');
-            const trans = card.querySelector('.post-translation');
+        async function handlePreciseTranslate(btn) {
+            const trans = btn.closest('.post-translation');
             const textEl = trans.querySelector('.translation-text');
+            const sourceEl = trans.querySelector('.translation-source');
+            const raw = decodeURIComponent(textEl.dataset.raw);
 
-            if (trans.classList.contains('visible')) {
-                trans.classList.remove('visible');
-                btn.textContent = '中文翻译';
-                return;
-            }
-
-            trans.classList.add('visible');
             btn.classList.add('loading');
             btn.textContent = '翻译中...';
 
-            const raw = decodeURIComponent(card.dataset.raw);
-            const translated = await translatePost(raw);
+            const translated = await translatePostDeepL(raw);
             textEl.textContent = translated;
+            sourceEl.textContent = '(DeepL)';
 
             btn.classList.remove('loading');
-            btn.textContent = '隐藏翻译';
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;vertical-align:middle;margin-right:3px;"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> 已使用精确翻译';
+            btn.style.opacity = '0.5';
+            btn.style.pointerEvents = 'none';
+        }
+
+        // Auto-translate all visible posts after rendering
+        async function autoTranslatePosts() {
+            const textEls = document.querySelectorAll('.translation-text[data-raw]');
+            const batchSize = 3;
+            for (let i = 0; i < textEls.length; i += batchSize) {
+                const batch = Array.from(textEls).slice(i, i + batchSize);
+                await Promise.all(batch.map(async el => {
+                    const raw = decodeURIComponent(el.dataset.raw);
+                    if (!raw || raw.length < 2) return;
+                    const translated = await translatePost(raw);
+                    if (translated) el.textContent = translated;
+                }));
+                // Small delay between batches to avoid rate limiting
+                if (i + batchSize < textEls.length) {
+                    await new Promise(r => setTimeout(r, 300));
+                }
+            }
         }
 
         // =============================================
@@ -2060,6 +2112,7 @@
             html += '</div>';
 
             section.innerHTML = html;
+            autoTranslatePosts();
         }
 
         // =============================================
@@ -2118,8 +2171,12 @@
             const g = document.querySelector('.date-group[data-date="' + dateKey + '"]');
             if (!g) return;
             g.classList.toggle('expanded');
-            if (g.classList.contains('expanded')) expandedDates.add(dateKey);
-            else expandedDates.delete(dateKey);
+            if (g.classList.contains('expanded')) {
+                expandedDates.add(dateKey);
+                autoTranslatePosts();
+            } else {
+                expandedDates.delete(dateKey);
+            }
         }
 
         // =============================================
@@ -2156,6 +2213,7 @@
                 html += renderDateGroup(dk, grouped[dk], true);
             });
             list.innerHTML = html;
+            autoTranslatePosts();
         }
 
         // =============================================
