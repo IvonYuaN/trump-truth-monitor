@@ -1165,6 +1165,194 @@
             text-align: right;
         }
 
+        /* Stats Panel */
+        .stats-panel-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stats-overview-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px;
+            text-align: center;
+        }
+        .stats-overview-card .sov-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+        .stats-overview-card .sov-value {
+            font-family: 'DM Serif Display', serif;
+            font-size: 24px;
+            color: var(--text-primary);
+        }
+        .stats-overview-card .sov-sub {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .stats-chart-section {
+            margin-bottom: 20px;
+        }
+        .stats-chart-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .stats-bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 120px;
+            padding: 0 4px;
+        }
+        .stats-bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            cursor: default;
+            min-width: 0;
+            position: relative;
+        }
+        .stats-bar-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .stats-bar-seg {
+            width: 100%;
+            min-height: 1px;
+            transition: opacity 0.2s;
+        }
+        .stats-bar-col:hover .stats-bar-seg { opacity: 0.8; }
+        .stats-bar-label {
+            font-size: 8px;
+            color: var(--text-muted);
+            transform: rotate(-45deg);
+            transform-origin: top center;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+        .stats-bar-tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: var(--text-primary);
+            white-space: nowrap;
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+            pointer-events: none;
+        }
+        .stats-bar-col:hover .stats-bar-tooltip { display: block; }
+        .stats-chart-legend {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+            justify-content: center;
+        }
+        .stats-chart-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .stats-chart-legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+        }
+        .stats-hour-chart {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 200px;
+        }
+        .stats-hour-labels {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            height: 100%;
+        }
+        .stats-hour-label {
+            flex: 1;
+            font-size: 9px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 4px;
+        }
+        .stats-hour-bars {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            height: 100%;
+        }
+        .stats-hour-bar-row {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .stats-hour-bar {
+            height: 100%;
+            border-radius: 2px;
+            background: var(--accent);
+            transition: width 0.6s ease;
+            min-width: 1px;
+            position: relative;
+        }
+        .stats-hour-bar:hover { opacity: 0.8; }
+        .stats-hour-val {
+            font-size: 9px;
+            color: var(--text-muted);
+            min-width: 20px;
+        }
+        .stats-source {
+            margin-top: 16px;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .stats-source a { color: var(--accent); text-decoration: none; }
+        .stats-source a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .stats-overview { grid-template-columns: repeat(2, 1fr); }
+            .stats-bar-chart { height: 80px; }
+            .stats-hour-chart { height: 160px; }
+        }
+
         @media (max-width: 768px) {
             .bingo-grid { grid-template-columns: repeat(5, 1fr); gap: 4px; }
             .bingo-cell { font-size: 9px; padding: 4px 2px; }
@@ -1298,6 +1486,7 @@
             <button class="tab-btn" data-view="wordcloud" onclick="switchView('wordcloud')">💬 词云</button>
             <button class="tab-btn" data-view="bingo" onclick="switchView('bingo')">🎯 Bingo</button>
             <button class="tab-btn" data-view="ranking" onclick="switchView('ranking')">📈 排行</button>
+            <button class="tab-btn" data-view="stats" onclick="switchView('stats')">📊 统计</button>
         </div>
     </div>
 
@@ -1382,6 +1571,17 @@
             <div class="ranking-container">
                 <div class="ranking-list" id="rankingList"></div>
             </div>
+        </div>
+        <!-- Stats Panel -->
+        <div class="fun-panel" id="statsPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></span>
+                    数据统计
+                </div>
+                <span class="section-count">数据来源 trumpstruth.org</span>
+            </div>
+            <div class="stats-panel-container" id="statsPanelContent"></div>
         </div>
     </div>
 
@@ -1644,6 +1844,10 @@
             const likes = post.favourites_count || 0;
             const url = post.url || '#';
             const pid = post.id || Math.random().toString(36).substr(2, 9);
+            const isEmpty = !content || content.trim().length < 10;
+            const contentHtml = isEmpty
+                ? '<div style="color:var(--text-muted);font-style:italic;padding:8px 0;">📷 纯图片/视频帖 — <a href="' + url + '" target="_blank" rel="noopener" style="color:var(--accent)">点击查看原文</a></div>'
+                : '<div class="post-content">' + formatContent(content) + '</div>';
 
             return `
                 <div class="post-card" data-pid="${pid}" data-raw="${encodeURIComponent(content)}">
@@ -1669,7 +1873,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="post-content">${formatContent(content)}</div>
+                    ${contentHtml}
                     <button class="translate-toggle" onclick="handleTranslate(this)">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
                         中文翻译
@@ -1781,7 +1985,7 @@
 
             const ta = document.getElementById('todayArchiveView');
             const sr = document.getElementById('searchResults');
-            const panels = ['heatmapPanel','wordcloudPanel','bingoPanel','rankingPanel'];
+            const panels = ['heatmapPanel','wordcloudPanel','bingoPanel','rankingPanel','statsPanel'];
 
             // Hide all panels
             ta.classList.add('hidden');
@@ -1808,6 +2012,9 @@
             } else if (view === 'ranking') {
                 document.getElementById('rankingPanel').classList.add('active');
                 renderRanking();
+            } else if (view === 'stats') {
+                document.getElementById('statsPanel').classList.add('active');
+                renderStatsPanel();
             }
         }
 
@@ -2298,6 +2505,90 @@
         }
 
         initWarTimeline();
+
+        // =============================================
+        // STATS PANEL (trumpstruth.org data)
+        // =============================================
+        const STATS_DAILY = {"labels":["2026-03-11","2026-03-12","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18","2026-03-19","2026-03-20","2026-03-21","2026-03-22","2026-03-23","2026-03-24","2026-03-25","2026-03-26","2026-03-27","2026-03-28","2026-03-29","2026-03-30","2026-03-31","2026-04-01","2026-04-02","2026-04-03","2026-04-04","2026-04-05","2026-04-06","2026-04-07","2026-04-08","2026-04-09"],"datasets":[{"label":"Originals","data":[15,6,25,6,4,16,5,20,17,7,9,14,19,29,10,11,5,6,22,7,16,13,13,8,9,8,17,37,10,0]},{"label":"Quotes","data":[0,0,1,0,1,0,0,1,0,0,0,1,0,1,0,0,0,0,3,0,0,0,0,0,0,3,2,0,0,0]},{"label":"Reblogs","data":[0,0,9,0,0,0,0,0,0,0,0,3,2,0,0,6,0,0,2,0,0,0,0,0,1,0,1,1,0,0]}]};
+
+        const STATS_HOURLY = {"labels":["12am","1am","2am","3am","4am","5am","6am","7am","8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm","6pm","7pm","8pm","9pm","10pm","11pm"],"data":[11,2,0,0,0,10,15,21,33,25,44,13,11,7,8,37,40,11,21,31,19,26,18,19]};
+
+        function renderStatsPanel() {
+            const container = document.getElementById('statsPanelContent');
+            const originals = STATS_DAILY.datasets[0].data;
+            const quotes = STATS_DAILY.datasets[1].data;
+            const reblogs = STATS_DAILY.datasets[2].data;
+            const totalPosts = 33112;
+            const avgPerDay = 21.9;
+            const peakDay = '2025-12-01';
+            const peakCount = 168;
+            const originalsTotal = 25884;
+            const reblogsTotal = 5487;
+
+            // Overview cards
+            let html = '<div class="stats-overview">';
+            html += '<div class="stats-overview-card"><div class="sov-label">全档案总量</div><div class="sov-value">' + totalPosts.toLocaleString() + '</div><div class="sov-sub">2022.02.14 至今</div></div>';
+            html += '<div class="stats-overview-card"><div class="sov-label">日均发帖</div><div class="sov-value">' + avgPerDay + '</div><div class="sov-sub">Originals 78.2%</div></div>';
+            html += '<div class="stats-overview-card"><div class="sov-label">峰值日</div><div class="sov-value" style="color:var(--red)">' + peakCount + '</div><div class="sov-sub">' + peakDay + '</div></div>';
+            html += '<div class="stats-overview-card"><div class="sov-label">转发帖</div><div class="sov-value" style="color:var(--blue)">' + reblogsTotal.toLocaleString() + '</div><div class="sov-sub">占比 16.6%</div></div>';
+            html += '</div>';
+
+            // Daily posting volume bar chart
+            html += '<div class="stats-chart-section">';
+            html += '<div class="stats-chart-title">📊 每日发帖量（近30天）</div>';
+            const maxDaily = Math.max(...originals.map((v, i) => v + quotes[i] + reblogs[i]), 1);
+            html += '<div class="stats-bar-chart">';
+            STATS_DAILY.labels.forEach((label, i) => {
+                const o = originals[i], q = quotes[i], r = reblogs[i];
+                const total = o + q + r;
+                const oH = Math.max((o / maxDaily) * 100, 0);
+                const qH = Math.max((q / maxDaily) * 100, 0);
+                const rH = Math.max((r / maxDaily) * 100, 0);
+                const dayNum = parseInt(label.slice(8));
+                html += '<div class="stats-bar-col">' +
+                    '<div class="stats-bar-tooltip">' + label + '<br>原创 ' + o + ' · 引用 ' + q + ' · 转发 ' + r + '<br>合计 ' + total + '</div>' +
+                    '<div class="stats-bar-stack">' +
+                    '<div class="stats-bar-seg" style="height:' + oH + '%;background:rgba(49,46,129,0.9)"></div>' +
+                    '<div class="stats-bar-seg" style="height:' + qH + '%;background:rgba(83,72,238,0.9)"></div>' +
+                    '<div class="stats-bar-seg" style="height:' + rH + '%;background:rgba(196,181,253,0.9)"></div>' +
+                    '</div>' +
+                    '<div class="stats-bar-label">' + dayNum + '</div>' +
+                    '</div>';
+            });
+            html += '</div>';
+            html += '<div class="stats-chart-legend">' +
+                '<div class="stats-chart-legend-item"><div class="stats-chart-legend-dot" style="background:rgba(49,46,129,0.9)"></div>原创</div>' +
+                '<div class="stats-chart-legend-item"><div class="stats-chart-legend-dot" style="background:rgba(83,72,238,0.9)"></div>引用</div>' +
+                '<div class="stats-chart-legend-item"><div class="stats-chart-legend-dot" style="background:rgba(196,181,253,0.9)"></div>转发</div>' +
+                '</div>';
+            html += '</div>';
+
+            // Hourly distribution
+            html += '<div class="stats-chart-section">';
+            html += '<div class="stats-chart-title">🕐 发帖时段分布（全部档案）</div>';
+            const maxHour = Math.max(...STATS_HOURLY.data, 1);
+            html += '<div class="stats-hour-chart">';
+            html += '<div class="stats-hour-labels">';
+            STATS_HOURLY.labels.forEach(label => {
+                html += '<div class="stats-hour-label">' + label + '</div>';
+            });
+            html += '</div>';
+            html += '<div class="stats-hour-bars">';
+            STATS_HOURLY.data.forEach((val, i) => {
+                const pct = Math.max((val / maxHour) * 100, 0.5);
+                html += '<div class="stats-hour-bar-row">' +
+                    '<div class="stats-hour-bar" style="width:' + pct + '%"></div>' +
+                    '<div class="stats-hour-val">' + val + '</div>' +
+                    '</div>';
+            });
+            html += '</div></div>';
+            html += '</div>';
+
+            // Source
+            html += '<div class="stats-source">数据来源：<a href="https://trumpstruth.org/stats" target="_blank" rel="noopener">trumpstruth.org/stats</a> · 全档案覆盖 2022.02.14 – 2026.04.08</div>';
+
+            container.innerHTML = html;
+        }
 
         // =============================================
         // INIT
