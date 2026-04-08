@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trump Truth Social Archive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #111114;
+            --bg-card: #16161a;
+            --bg-card-hover: #1c1c21;
+            --border: #2a2a30;
+            --border-light: #3a3a42;
+            --text-primary: #e8e6e3;
+            --text-secondary: #9896a1;
+            --text-muted: #5c5a66;
+            --accent: #c9a84c;
+            --accent-dim: rgba(201, 168, 76, 0.12);
+            --accent-glow: rgba(201, 168, 76, 0.25);
+            --red: #e05252;
+            --red-dim: rgba(224, 82, 82, 0.12);
+            --blue: #5b9cf5;
+            --blue-dim: rgba(91, 156, 245, 0.12);
+            --green: #4caf7d;
+            --green-dim: rgba(76, 175, 125, 0.12);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-lg: 16px;
+            --shadow: 0 2px 20px rgba(0,0,0,0.3);
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -300px;
+            left: -200px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(91, 156, 245, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* === Header === */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+        }
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent), #e8c86a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Serif Display', serif;
+            font-size: 18px;
+            color: var(--bg-primary);
+            font-weight: 700;
+        }
+        .logo-text {
+            font-family: 'DM Serif Display', serif;
+            font-size: 20px;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+        .logo-text span { color: var(--accent); }
+        .header-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .header-badge {
+            padding: 6px 14px;
+            background: var(--green-dim);
+            border: 1px solid rgba(76, 175, 125, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--green);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .header-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .update-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* === Hero === */
+        .hero {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px 24px;
+        }
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(28px, 4vw, 44px);
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+        }
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent), #e8c86a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            max-width: 520px;
+            line-height: 1.7;
+        }
+
+        /* === Stats === */
+        .stats-bar {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+        .stats-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .stats-card .label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 500;
+        }
+        .stats-card .value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'DM Serif Display', serif;
+        }
+        .stats-card .value.accent { color: var(--accent); }
+        .stats-card .value.blue { color: var(--blue); }
+        .stats-card .value.green { color: var(--green); }
+        .stats-card .value.red { color: var(--red); }
+
+        /* === Controls === */
+        .controls {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .search-box {
+            flex: 1;
+            min-width: 240px;
+            position: relative;
+        }
+        .search-box svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 18px;
+            height: 18px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px 16px 10px 42px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+        .search-box input::placeholder { color: var(--text-muted); }
+        .search-box input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+        .tab-group {
+            display: flex;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .tab-btn {
+            padding: 10px 18px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--text-secondary); }
+        .tab-btn.active {
+            background: var(--accent-dim);
+            color: var(--accent);
+        }
+        .tab-btn .count {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 1px 7px;
+            background: var(--border);
+            border-radius: 10px;
+            font-size: 11px;
+        }
+        .tab-btn.active .count {
+            background: rgba(201, 168, 76, 0.2);
+        }
+
+        /* === Main Content === */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        /* === Today Section === */
+        .today-section {
+            margin-bottom: 40px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .section-title .icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .section-title .icon.today {
+            background: var(--green-dim);
+            color: var(--green);
+        }
+        .section-title .icon.archive {
+            background: var(--blue-dim);
+            color: var(--blue);
+        }
+        .section-title .icon.search {
+            background: var(--accent-dim);
+            color: var(--accent);
+        }
+        .section-count {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* === Archive Section === */
+        .archive-section { margin-bottom: 40px; }
+        .date-group {
+            margin-bottom: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .date-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+        .date-header:hover {
+            background: var(--bg-card-hover);
+        }
+        .date-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .date-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+        .date-weekday {
+            font-size: 12px;
+            color: var(--text-muted);
+            padding: 2px 8px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+        }
+        .date-post-count {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .date-chevron {
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+            width: 18px;
+            height: 18px;
+        }
+        .date-group.expanded .date-chevron {
+            transform: rotate(180deg);
+        }
+        .date-posts {
+            display: none;
+            border-top: 1px solid var(--border);
+        }
+        .date-group.expanded .date-posts {
+            display: block;
+        }
+        .date-posts-inner {
+            padding: 8px 12px 12px;
+        }
+
+        /* === Month Group === */
+        .month-group { margin-bottom: 24px; }
+        .month-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+        .month-label {
+            font-family: 'DM Serif Display', serif;
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+        .month-count {
+            font-size: 12px;
+            color: var(--text-muted);
+            padding: 2px 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        /* === Post Card === */
+        .post-card {
+            background: var(--bg-secondary);
+            border: 1px solid transparent;
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            margin-bottom: 8px;
+            transition: var(--transition);
+            position: relative;
+        }
+        .post-card:last-child { margin-bottom: 0; }
+        .post-card:hover {
+            border-color: var(--border);
+            background: var(--bg-card-hover);
+        }
+        .post-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            bottom: 12px;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .post-card:hover::before { opacity: 1; }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            gap: 12px;
+        }
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .post-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #e8c86a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Serif Display', serif;
+            font-size: 14px;
+            color: var(--bg-primary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .post-user-info { display: flex; flex-direction: column; }
+        .post-username { font-weight: 600; font-size: 13px; color: var(--text-primary); }
+        .post-time { font-size: 12px; color: var(--text-muted); }
+        .post-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 8px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 16px;
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .action-btn:hover {
+            background: var(--bg-card);
+            border-color: var(--border);
+            color: var(--text-secondary);
+        }
+        .action-btn svg { width: 13px; height: 13px; }
+        .action-btn.repost:hover { color: var(--green); background: var(--green-dim); }
+        .action-btn.like:hover { color: var(--red); background: var(--red-dim); }
+        .action-btn.link:hover { color: var(--blue); background: var(--blue-dim); }
+
+        .post-content {
+            font-size: 14px;
+            line-height: 1.75;
+            color: var(--text-primary);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .post-content a { color: var(--accent); text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content .hashtag { color: var(--blue); }
+        .post-content .mention { color: var(--accent); }
+
+        .post-translation {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+            display: none;
+        }
+        .post-translation.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .translation-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+        .translation-text {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        .translate-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+            padding: 4px 10px;
+            background: var(--accent-dim);
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            border-radius: 16px;
+            color: var(--accent);
+            font-size: 11px;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .translate-toggle:hover { background: rgba(201, 168, 76, 0.18); }
+        .translate-toggle svg { width: 11px; height: 11px; }
+
+        /* === Empty State === */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--text-muted);
+        }
+        .empty-state svg { width: 40px; height: 40px; margin-bottom: 12px; }
+        .empty-state h3 { font-size: 16px; color: var(--text-secondary); margin-bottom: 6px; }
+        .empty-state p { font-size: 13px; }
+
+        /* === Search Results === */
+        .search-results { display: none; }
+        .search-results.active { display: block; }
+        .today-archive-view { display: block; }
+        .today-archive-view.hidden { display: none; }
+
+        /* === Loading === */
+        .loading {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--text-muted);
+        }
+        .loading-spinner {
+            width: 28px;
+            height: 28px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* === Footer === */
+        .footer {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid var(--border);
+            padding: 20px 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+
+        /* === Back to top === */
+        .back-to-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 42px;
+            height: 42px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+            pointer-events: none;
+        }
+        .back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+        .back-to-top:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+        /* === Responsive === */
+        @media (max-width: 768px) {
+            .header-inner { flex-direction: column; height: auto; padding: 12px 0; gap: 8px; }
+            .header-right { flex-wrap: wrap; justify-content: center; }
+            .hero { padding: 28px 24px 20px; }
+            .hero h1 { font-size: 24px; }
+            .controls { flex-direction: column; }
+            .search-box { min-width: 100%; }
+            .tab-group { width: 100%; overflow-x: auto; }
+            .post-actions { display: none; }
+            .stats-bar { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        /* === Scrollbar === */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo" onclick="switchView('today')">
+                <div class="logo-icon">T</div>
+                <div class="logo-text">Truth <span>Archive</span></div>
+            </div>
+            <div class="header-right">
+                <div class="header-badge">
+                    <span class="dot"></span>
+                    实时同步
+                </div>
+                <span class="update-time" id="updateTime">更新中...</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Donald J. Trump<br><span class="highlight">Truth Social</span> 帖子档案</h1>
+        <p>实时追踪特朗普 Truth Social 发帖，默认展示今日动态，历史按日期归档查阅。</p>
+    </section>
+
+    <div class="stats-bar" id="statsBar">
+        <div class="stats-card">
+            <span class="label">总帖数</span>
+            <span class="value accent" id="statTotal">—</span>
+        </div>
+        <div class="stats-card">
+            <span class="label">今日</span>
+            <span class="value green" id="statToday">—</span>
+        </div>
+        <div class="stats-card">
+            <span class="label">昨日</span>
+            <span class="value blue" id="statYesterday">—</span>
+        </div>
+        <div class="stats-card">
+            <span class="label">总转帖</span>
+            <span class="value" id="statReposts">—</span>
+        </div>
+        <div class="stats-card">
+            <span class="label">总点赞</span>
+            <span class="value red" id="statLikes">—</span>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="searchInput" placeholder="搜索全部帖子内容..." autocomplete="off">
+        </div>
+        <div class="tab-group">
+            <button class="tab-btn active" data-view="today" onclick="switchView('today')">今日动态</button>
+            <button class="tab-btn" data-view="archive" onclick="switchView('archive')">历史归档</button>
+            <button class="tab-btn" data-view="search" onclick="switchView('search')">全部搜索</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Today + Archive View -->
+        <div class="today-archive-view" id="todayArchiveView">
+            <div id="todaySection"></div>
+            <div id="archiveSection"></div>
+        </div>
+
+        <!-- Search Results View -->
+        <div class="search-results" id="searchResults">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon search">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </span>
+                    搜索结果
+                </div>
+                <span class="section-count" id="searchCount">0 条结果</span>
+            </div>
+            <div id="searchResultsList"></div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop" title="回到顶部">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+    </button>
+
+    <footer class="footer">
+        数据来源：<a href="https://truthsocial.com/@realDonaldTrump" target="_blank" rel="noopener">Truth Social</a> ·
+        通过 <a href="https://ix.cnn.io/data/truth-social/truth_archive.json" target="_blank" rel="noopener">CNN Archive</a> 实时获取 ·
+        界面由 IvonYuaN 维护
+    </footer>
+
+    <script>
+        // === State ===
+        let allPosts = [];
+        let todayPosts = [];
+        let yesterdayPosts = [];
+        let archiveByDate = {}; // { '2026-04-08': [posts], ... }
+        let archiveByMonth = {}; // { '2026-04': { '2026-04-08': [posts], ... }, ... }
+        let currentView = 'today';
+        let expandedDates = new Set();
+
+        // === Translation Dictionary ===
+        const PHRASE_DICT = {
+            'MAKE AMERICA GREAT AGAIN!': '让美国再次伟大！',
+            'PRESIDENT DONALD J. TRUMP': '唐纳德·J·特朗普总统',
+            'President Donald J. Trump': '唐纳德·J·特朗普总统',
+            'Donald J. Trump': '唐纳德·J·特朗普',
+            'TRUMP': '特朗普',
+            'Trump': '特朗普',
+            'America First': '美国优先',
+            'AMERICA FIRST': '美国优先',
+            'MAGA': 'MAGA（让美国再次伟大）',
+            'Sleepy Joe': '瞌睡乔',
+            'Crooked Hillary': '狡猾的希拉里',
+            'Fake News': '假新闻',
+            'FAKE NEWS': '假新闻',
+            'Witch Hunt': '政治迫害',
+            'WITCH HUNT': '政治迫害',
+            'God Bless America': '愿上帝保佑美国',
+            'GOD BLESS AMERICA': '愿上帝保佑美国',
+            'God Bless': '愿上帝保佑',
+            'Truth Social': 'Truth Social（真相社交）',
+            'the White House': '白宫',
+            'The White House': '白宫',
+            'Congress': '国会',
+            'Senate': '参议院',
+            'Supreme Court': '最高法院',
+            'Border Crisis': '边境危机',
+            'Radical Left': '激进左翼',
+            'radical left': '激进左翼',
+            'RINO': 'RINO（名义上的共和党人）',
+            'RINOs': 'RINO（名义上的共和党人）',
+            'has my Complete and Total Endorsement': '获得我的完全支持',
+            'Complete and Total Endorsement': '完全支持',
+            'I strongly endorse': '我强烈支持',
+            'law and order': '法律与秩序',
+            'Law and Order': '法律与秩序',
+            'the American People': '美国人民',
+            'American People': '美国人民',
+            'the American Dream': '美国梦',
+            'We the People': '我们人民',
+            'thoughts and prayers': '关心和祈祷',
+        };
+
+        // === Utility Functions ===
+        function cleanHTML(html) {
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            return div.textContent || div.innerText || '';
+        }
+
+        function formatContent(text) {
+            if (!text) return '';
+            let clean = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            clean = clean.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+            clean = clean.replace(/(#\w+)/g, '<span class="hashtag">$1</span>');
+            clean = clean.replace(/(@\w+)/g, '<span class="mention">$1</span>');
+            return clean;
+        }
+
+        function formatTime(dateStr) {
+            const d = new Date(dateStr);
+            return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        function getDateKey(dateStr) {
+            return dateStr.slice(0, 10);
+        }
+
+        function getMonthKey(dateStr) {
+            return dateStr.slice(0, 7);
+        }
+
+        function getWeekday(dateStr) {
+            const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+            return days[new Date(dateStr).getDay()];
+        }
+
+        function formatDateLabel(dateKey) {
+            const d = new Date(dateKey + 'T00:00:00');
+            const now = new Date();
+            const today = now.toISOString().slice(0, 10);
+            const yesterday = new Date(now - 86400000).toISOString().slice(0, 10);
+
+            if (dateKey === today) return '今天';
+            if (dateKey === yesterday) return '昨天';
+
+            const month = d.getMonth() + 1;
+            const day = d.getDate();
+            return `${month}月${day}日`;
+        }
+
+        function formatMonthLabel(monthKey) {
+            const [year, month] = monthKey.split('-');
+            const monthNames = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            return `${year}年 ${monthNames[parseInt(month)]}`;
+        }
+
+        function translatePost(text) {
+            if (!text) return '';
+            let result = text;
+            const entries = Object.entries(PHRASE_DICT).sort((a, b) => b[0].length - a[0].length);
+            for (const [en, zh] of entries) {
+                if (en.length <= 3) {
+                    const regex = new RegExp('\\b' + en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+                    result = result.replace(regex, zh);
+                } else {
+                    result = result.replace(new RegExp(en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), zh);
+                }
+            }
+            return result;
+        }
+
+        function renderPostCard(post) {
+            const content = cleanHTML(post.content || '');
+            const translation = translatePost(content);
+            const time = formatTime(post.created_at);
+            const reposts = post.reblogs_count || 0;
+            const likes = post.favourites_count || 0;
+            const url = post.url || '#';
+
+            return `
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-meta">
+                            <div class="post-avatar">T</div>
+                            <div class="post-user-info">
+                                <span class="post-username">@realDonaldTrump</span>
+                                <span class="post-time">${time}</span>
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn repost" title="转帖">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                                ${reposts > 0 ? formatNumber(reposts) : ''}
+                            </button>
+                            <button class="action-btn like" title="点赞">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                ${likes > 0 ? formatNumber(likes) : ''}
+                            </button>
+                            <a class="action-btn link" href="${url}" target="_blank" rel="noopener" title="查看原文">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="post-content">${formatContent(content)}</div>
+                    <button class="translate-toggle" onclick="toggleTranslation(this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+                        中文翻译
+                    </button>
+                    <div class="post-translation">
+                        <div class="translation-label">中文参考翻译</div>
+                        <div class="translation-text">${translation}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleTranslation(btn) {
+            const card = btn.closest('.post-card');
+            const trans = card.querySelector('.post-translation');
+            trans.classList.toggle('visible');
+            btn.textContent = trans.classList.contains('visible') ? '隐藏翻译' : '中文翻译';
+        }
+
+        // === Data Loading ===
+        async function loadData() {
+            try {
+                const response = await fetch('data/posts.json');
+                if (!response.ok) throw new Error('Failed to load');
+                allPosts = await response.json();
+                allPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                organizeData();
+                updateStats();
+                renderTodayView();
+            } catch (err) {
+                document.getElementById('todaySection').innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+                        <h3>数据加载失败</h3>
+                        <p>请检查网络连接后刷新页面</p>
+                    </div>
+                `;
+            }
+        }
+
+        function organizeData() {
+            const now = new Date();
+            const todayKey = now.toISOString().slice(0, 10);
+            const yesterdayDate = new Date(now - 86400000);
+            const yesterdayKey = yesterdayDate.toISOString().slice(0, 10);
+
+            todayPosts = [];
+            yesterdayPosts = [];
+            archiveByDate = {};
+            archiveByMonth = {};
+
+            allPosts.forEach(post => {
+                const dateKey = getDateKey(post.created_at);
+                const monthKey = getMonthKey(post.created_at);
+
+                if (dateKey === todayKey) {
+                    todayPosts.push(post);
+                } else if (dateKey === yesterdayKey) {
+                    yesterdayPosts.push(post);
+                }
+
+                if (!archiveByDate[dateKey]) archiveByDate[dateKey] = [];
+                archiveByDate[dateKey].push(post);
+
+                if (!archiveByMonth[monthKey]) archiveByMonth[monthKey] = {};
+                if (!archiveByMonth[monthKey][dateKey]) archiveByMonth[monthKey][dateKey] = [];
+                archiveByMonth[monthKey][dateKey].push(post);
+            });
+        }
+
+        function updateStats() {
+            let totalReposts = 0, totalLikes = 0;
+            allPosts.forEach(p => {
+                totalReposts += (p.reblogs_count || 0);
+                totalLikes += (p.favourites_count || 0);
+            });
+
+            document.getElementById('statTotal').textContent = allPosts.length.toLocaleString();
+            document.getElementById('statToday').textContent = todayPosts.length;
+            document.getElementById('statYesterday').textContent = yesterdayPosts.length;
+            document.getElementById('statReposts').textContent = formatNumber(totalReposts);
+            document.getElementById('statLikes').textContent = formatNumber(totalLikes);
+
+            if (allPosts.length > 0) {
+                const latest = new Date(allPosts[0].created_at);
+                const m = latest.getMonth() + 1;
+                const d = latest.getDate();
+                const h = latest.getHours().toString().padStart(2, '0');
+                const min = latest.getMinutes().toString().padStart(2, '0');
+                document.getElementById('updateTime').textContent = `最新: ${m}/${d} ${h}:${min}`;
+            }
+        }
+
+        // === View Switching ===
+        function switchView(view) {
+            currentView = view;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.tab-btn[data-view="${view}"]`).classList.add('active');
+
+            const todayArchive = document.getElementById('todayArchiveView');
+            const searchResults = document.getElementById('searchResults');
+
+            if (view === 'search') {
+                todayArchive.classList.add('hidden');
+                searchResults.classList.add('active');
+                document.getElementById('searchInput').focus();
+                performSearch();
+            } else {
+                todayArchive.classList.remove('hidden');
+                searchResults.classList.remove('active');
+                if (view === 'today') {
+                    renderTodayView();
+                } else {
+                    renderArchiveView();
+                }
+            }
+        }
+
+        // === Today View ===
+        function renderTodayView() {
+            const section = document.getElementById('todaySection');
+
+            // Today's posts
+            let todayHTML = '';
+            if (todayPosts.length > 0) {
+                todayHTML = `
+                    <div class="today-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <span class="icon today">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                </span>
+                                今日动态
+                                <span class="section-count">${todayPosts.length} 条帖子</span>
+                            </div>
+                        </div>
+                        ${todayPosts.map(p => renderPostCard(p)).join('')}
+                    </div>
+                `;
+            } else {
+                todayHTML = `
+                    <div class="today-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <span class="icon today">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                </span>
+                                今日动态
+                                <span class="section-count">暂无新帖</span>
+                            </div>
+                        </div>
+                        <div class="empty-state" style="padding: 30px;">
+                            <p>今天还没有发布新帖子</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Yesterday's posts (pre-expanded)
+            let yesterdayHTML = '';
+            if (yesterdayPosts.length > 0) {
+                const yKey = Object.keys(archiveByDate).find(k => {
+                    const d = new Date(new Date() - 86400000);
+                    return k === d.toISOString().slice(0, 10);
+                });
+                if (yKey) {
+                    expandedDates.add(yKey);
+                    yesterdayHTML = `
+                        <div class="archive-section">
+                            <div class="section-header">
+                                <div class="section-title">
+                                    <span class="icon archive">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    </span>
+                                    近期
+                                </div>
+                            </div>
+                            ${renderDateGroup(yKey, yesterdayPosts, true)}
+                        </div>
+                    `;
+                }
+            }
+
+            section.innerHTML = todayHTML + yesterdayHTML;
+        }
+
+        // === Archive View ===
+        function renderArchiveView() {
+            const section = document.getElementById('archiveSection');
+            const months = Object.keys(archiveByMonth).sort().reverse();
+
+            if (months.length === 0) {
+                section.innerHTML = '<div class="empty-state"><p>暂无归档数据</p></div>';
+                return;
+            }
+
+            let html = '<div class="archive-section">';
+            html += `
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="icon archive">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </span>
+                        历史归档
+                    </div>
+                </div>
+            `;
+
+            months.forEach(monthKey => {
+                const dates = Object.keys(archiveByMonth[monthKey]).sort().reverse();
+                const monthTotal = dates.reduce((sum, d) => sum + archiveByMonth[monthKey][d].length, 0);
+
+                html += `<div class="month-group">`;
+                html += `
+                    <div class="month-header">
+                        <span class="month-label">${formatMonthLabel(monthKey)}</span>
+                        <span class="month-count">${monthTotal} 条帖子</span>
+                    </div>
+                `;
+
+                dates.forEach(dateKey => {
+                    const posts = archiveByMonth[monthKey][dateKey];
+                    const isExpanded = expandedDates.has(dateKey);
+                    html += renderDateGroup(dateKey, posts, isExpanded);
+                });
+
+                html += `</div>`;
+            });
+
+            html += '</div>';
+            section.innerHTML = html;
+        }
+
+        function renderDateGroup(dateKey, posts, isExpanded) {
+            const weekday = getWeekday(dateKey);
+            const label = formatDateLabel(dateKey);
+            const expanded = isExpanded ? 'expanded' : '';
+
+            return `
+                <div class="date-group ${expanded}" data-date="${dateKey}">
+                    <div class="date-header" onclick="toggleDate('${dateKey}')">
+                        <div class="date-header-left">
+                            <span class="date-label">${label}</span>
+                            <span class="date-weekday">${weekday}</span>
+                            <span class="date-post-count">${posts.length} 条帖子</span>
+                        </div>
+                        <svg class="date-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                    <div class="date-posts">
+                        <div class="date-posts-inner">
+                            ${posts.map(p => renderPostCard(p)).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleDate(dateKey) {
+            const group = document.querySelector(`.date-group[data-date="${dateKey}"]`);
+            if (!group) return;
+            group.classList.toggle('expanded');
+            if (group.classList.contains('expanded')) {
+                expandedDates.add(dateKey);
+            } else {
+                expandedDates.delete(dateKey);
+            }
+        }
+
+        // === Search ===
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultsList = document.getElementById('searchResultsList');
+            const countEl = document.getElementById('searchCount');
+
+            if (!query) {
+                resultsList.innerHTML = '<div class="empty-state"><p>输入关键词开始搜索</p></div>';
+                countEl.textContent = '0 条结果';
+                return;
+            }
+
+            const results = allPosts.filter(p => {
+                return (p.content || '').toLowerCase().includes(query);
+            });
+
+            countEl.textContent = `${results.length} 条结果`;
+
+            if (results.length === 0) {
+                resultsList.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <h3>没有找到匹配的帖子</h3>
+                        <p>尝试更换搜索词</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Group by date
+            const grouped = {};
+            results.forEach(p => {
+                const key = getDateKey(p.created_at);
+                if (!grouped[key]) grouped[key] = [];
+                grouped[key].push(p);
+            });
+
+            const sortedDates = Object.keys(grouped).sort().reverse();
+            let html = '';
+            sortedDates.forEach(dateKey => {
+                html += `
+                    <div class="date-group expanded" data-date="${dateKey}">
+                        <div class="date-header" onclick="toggleDate('${dateKey}')">
+                            <div class="date-header-left">
+                                <span class="date-label">${formatDateLabel(dateKey)}</span>
+                                <span class="date-weekday">${getWeekday(dateKey)}</span>
+                                <span class="date-post-count">${grouped[dateKey].length} 条匹配</span>
+                            </div>
+                            <svg class="date-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="date-posts">
+                            <div class="date-posts-inner">
+                                ${grouped[dateKey].map(p => renderPostCard(p)).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultsList.innerHTML = html;
+        }
+
+        // === Event Listeners ===
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                if (currentView !== 'search') {
+                    switchView('search');
+                } else {
+                    performSearch();
+                }
+            }, 300);
+        });
+
+        document.getElementById('searchInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                clearTimeout(searchTimeout);
+                if (currentView !== 'search') switchView('search');
+                else performSearch();
+            }
+        });
+
+        // Back to top
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('backToTop');
+            btn.classList.toggle('visible', window.scrollY > 400);
+        });
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // === Auto-refresh every 5 minutes ===
+        setInterval(() => {
+            loadData();
+        }, 5 * 60 * 1000);
+
+        // === Init ===
+        loadData();
+    </script>
+</body>
+</html>

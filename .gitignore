@@ -6,8 +6,8 @@ __pycache__/
 # Output
 output/
 
-# Data (tracked separately)
-data/*.json
+# Data archive (large raw file, not committed)
+data/truth_archive.json
 
 # OS
 .DS_Store
