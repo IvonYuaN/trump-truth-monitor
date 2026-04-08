@@ -1800,10 +1800,33 @@
 
         function formatTime(dateStr) {
             const d = new Date(dateStr);
-            const local = d.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', hour12: false });
-            const est = d.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false });
-            if (local === est) return local;
-            return local + ' <span style="opacity:0.5">(' + est + ' EST)</span>';
+            // Local time (user's timezone)
+            const lh = d.getHours(), lm = d.getMinutes();
+            const localStr = String(lh).padStart(2, '0') + ':' + String(lm).padStart(2, '0');
+            // EST time (UTC-5) / EDT (UTC-4)
+            const utcH = d.getUTCHours(), utcM = d.getUTCMinutes();
+            // Determine if EST or EDT based on date (EDT: second Sunday March ~ first Sunday November)
+            const year = d.getUTCFullYear();
+            const isEDT = isDST(d);
+            const offset = isEDT ? 4 : 5;
+            let estH = ((utcH - offset) % 24 + 24) % 24;
+            const estStr = String(estH).padStart(2, '0') + ':' + String(utcM).padStart(2, '0');
+            const label = isEDT ? 'EDT' : 'EST';
+            if (localStr === estStr) return localStr;
+            return localStr + ' <span style="opacity:0.5">(' + estStr + ' ' + label + ')</span>';
+        }
+
+        function isDST(date) {
+            const y = date.getUTCFullYear();
+            // EDT starts second Sunday of March at 2am
+            const mar2 = new Date(Date.UTC(y, 2, 8));
+            mar2.setUTCDate(8 + (7 - mar2.getUTCDay()) % 7);
+            mar2.setUTCHours(7); // 2am EST = 7am UTC
+            // EDT ends first Sunday of November at 2am
+            const nov1 = new Date(Date.UTC(y, 10, 1));
+            nov1.setUTCDate(1 + (7 - nov1.getUTCDay()) % 7);
+            nov1.setUTCHours(6); // 2am EDT = 6am UTC
+            return date.getTime() >= mar2.getTime() && date.getTime() < nov1.getTime();
         }
 
         function getLocalDateKey(dateStr) {
