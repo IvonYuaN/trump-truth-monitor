@@ -1452,7 +1452,7 @@
 
     <section class="hero">
         <h1>Truth Social <span class="highlight">帖子档案</span></h1>
-        <p>实时追踪特朗普 Truth Social 发帖，默认展示今日动态，历史按日期归档查阅。</p>
+        <p>实时追踪特朗普 Truth Social 发帖，默认展示近3天动态，历史按日期归档查阅。</p>
     </section>
 
     <div class="stats-bar" id="statsBar">
@@ -1461,12 +1461,8 @@
             <span class="value accent" id="statTotal">—</span>
         </div>
         <div class="stats-card">
-            <span class="label">今日</span>
-            <span class="value green" id="statToday">—</span>
-        </div>
-        <div class="stats-card">
-            <span class="label">昨日</span>
-            <span class="value blue" id="statYesterday">—</span>
+            <span class="label">近3天</span>
+            <span class="value green" id="statRecent">—</span>
         </div>
         <div class="stats-card">
             <span class="label">总转帖</span>
@@ -1484,7 +1480,7 @@
             <input type="text" id="searchInput" placeholder="搜索全部帖子内容..." autocomplete="off">
         </div>
         <div class="tab-group">
-            <button class="tab-btn active" data-view="today" onclick="switchView('today')">今日动态</button>
+            <button class="tab-btn active" data-view="today" onclick="switchView('today')">近3天动态</button>
             <button class="tab-btn" data-view="archive" onclick="switchView('archive')">历史归档</button>
             <button class="tab-btn" data-view="search" onclick="switchView('search')">全部搜索</button>
             <button class="tab-btn" data-view="heatmap" onclick="switchView('heatmap')">📊 热力图</button>
@@ -1605,8 +1601,7 @@
         // STATE
         // =============================================
         let allPosts = [];
-        let todayPosts = [];
-        let yesterdayPosts = [];
+        let recentPosts = [];
         let archiveByDate = {};
         let archiveByMonth = {};
         let currentView = 'today';
@@ -1947,26 +1942,27 @@
 
         function organizeData() {
             const now = new Date();
-            const todayKey = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
-            const yesterdayDate = new Date(now.getTime() - 86400000);
-            const yesterdayKey = yesterdayDate.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
-
-            todayPosts = [];
-            yesterdayPosts = [];
+            recentPosts = [];
             archiveByDate = {};
             archiveByMonth = {};
 
             allPosts.forEach(post => {
                 const dk = getEstDateKey(post.created_at);
                 const mk = dk.slice(0, 7);
-                if (dk === todayKey) todayPosts.push(post);
-                else if (dk === yesterdayKey) yesterdayPosts.push(post);
                 if (!archiveByDate[dk]) archiveByDate[dk] = [];
                 archiveByDate[dk].push(post);
                 if (!archiveByMonth[mk]) archiveByMonth[mk] = {};
                 if (!archiveByMonth[mk][dk]) archiveByMonth[mk][dk] = [];
                 archiveByMonth[mk][dk].push(post);
             });
+
+            // Collect posts from last 3 days (EST)
+            const recentDates = [];
+            for (let i = 0; i < 3; i++) {
+                const d = new Date(now.getTime() - i * 86400000);
+                recentDates.push(d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }));
+            }
+            recentPosts = allPosts.filter(p => recentDates.includes(getEstDateKey(p.created_at)));
         }
 
         function updateStats() {
@@ -1976,8 +1972,7 @@
                 totalLikes += (p.favourites_count || 0);
             });
             document.getElementById('statTotal').textContent = allPosts.length.toLocaleString();
-            document.getElementById('statToday').textContent = todayPosts.length;
-            document.getElementById('statYesterday').textContent = yesterdayPosts.length;
+            document.getElementById('statRecent').textContent = recentPosts.length;
             document.getElementById('statReposts').textContent = formatNumber(totalReposts);
             document.getElementById('statLikes').textContent = formatNumber(totalLikes);
 
@@ -2041,13 +2036,13 @@
             const section = document.getElementById('todaySection');
             let html = '<div class="today-section"><div class="section-header"><div class="section-title">' +
                 '<span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>' +
-                '今日动态 <span class="section-count">' + todayPosts.length + ' 条帖子</span>' +
+                '近3天动态 <span class="section-count">' + recentPosts.length + ' 条帖子</span>' +
                 '</div></div><div style="font-size:10px;color:var(--text-muted);margin-bottom:12px;padding-left:28px;">📅 以华盛顿时间(EST)划分日期 · 帖子时间显示 华盛顿时间 (本地时间)</div>';
 
-            if (todayPosts.length > 0) {
-                html += todayPosts.map(p => renderPostCard(p)).join('');
+            if (recentPosts.length > 0) {
+                html += recentPosts.map(p => renderPostCard(p)).join('');
             } else {
-                html += '<div class="empty-state" style="padding:24px"><p>今天还没有发布新帖子</p></div>';
+                html += '<div class="empty-state" style="padding:24px"><p>近3天没有新帖子</p></div>';
             }
             html += '</div>';
 
@@ -2060,7 +2055,11 @@
         function renderArchiveView() {
             const section = document.getElementById('archiveSection');
             const now = new Date();
-            const todayKey = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+            const recentDates = [];
+            for (let i = 0; i < 3; i++) {
+                const d = new Date(now.getTime() - i * 86400000);
+                recentDates.push(d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }));
+            }
             const months = Object.keys(archiveByMonth).sort().reverse();
             if (months.length === 0) {
                 section.innerHTML = '<div class="empty-state"><p>暂无归档数据</p></div>';
@@ -2072,7 +2071,7 @@
 
             months.forEach(mk => {
                 const dates = Object.keys(archiveByMonth[mk]).sort().reverse();
-                const filteredDates = dates.filter(dk => dk !== todayKey);
+                const filteredDates = dates.filter(dk => !recentDates.includes(dk));
                 if (filteredDates.length === 0) return;
                 const total = filteredDates.reduce((s, d) => s + archiveByMonth[mk][d].length, 0);
                 html += '<div class="month-group"><div class="month-header"><span class="month-label">' +
