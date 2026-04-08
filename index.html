@@ -8,245 +8,356 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* ============================================
+           Design System: Truth Archive
+           Based on awesome-design-md specification
+           ============================================ */
+
+        /* === 1. Visual Theme & Atmosphere ===
+           Editorial/news aesthetic with warm amber accents.
+           Clean, readable, information-dense but not cluttered.
+           Two themes: light (default) and dark. */
+
+        /* --- Light Theme (default) --- */
         :root {
-            --bg-primary: #1a1b2e;
-            --bg-secondary: #1f2039;
-            --bg-card: #262840;
-            --bg-card-hover: #2e3050;
-            --border: #363858;
-            --border-light: #464870;
-            --text-primary: #eaeaf0;
-            --text-secondary: #b0b0c8;
-            --text-muted: #7878a0;
-            --accent: #c9a84c;
-            --accent-dim: rgba(201, 168, 76, 0.12);
-            --accent-glow: rgba(201, 168, 76, 0.25);
-            --red: #e05252;
-            --red-dim: rgba(224, 82, 82, 0.12);
-            --blue: #5b9cf5;
-            --blue-dim: rgba(91, 156, 245, 0.12);
-            --green: #4caf7d;
-            --green-dim: rgba(76, 175, 125, 0.12);
-            --radius: 12px;
-            --radius-sm: 8px;
-            --radius-lg: 16px;
-            --shadow: 0 2px 20px rgba(0,0,0,0.3);
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-primary: #f5f3ef;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #faf9f7;
+            --bg-inset: #eceae5;
+            --border: #e2dfd8;
+            --border-light: #d0cdc5;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5a5850;
+            --text-muted: #8a8880;
+            --accent: #b8860b;
+            --accent-hover: #9a7209;
+            --accent-dim: rgba(184, 134, 11, 0.08);
+            --accent-border: rgba(184, 134, 11, 0.2);
+            --red: #c0392b;
+            --red-dim: rgba(192, 57, 43, 0.08);
+            --blue: #2471a3;
+            --blue-dim: rgba(36, 113, 163, 0.08);
+            --green: #1e8449;
+            --green-dim: rgba(30, 132, 73, 0.08);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.1);
+            --header-bg: rgba(245, 243, 239, 0.88);
+            --code-bg: #f0ede8;
+            --radius: 10px;
+            --radius-sm: 6px;
+            --radius-lg: 14px;
+            --transition: 0.2s ease;
         }
+
+        /* --- Dark Theme --- */
+        [data-theme="dark"] {
+            --bg-primary: #1c1d26;
+            --bg-secondary: #24252f;
+            --bg-card: #2a2b36;
+            --bg-card-hover: #32333f;
+            --bg-inset: #1a1b24;
+            --border: #363744;
+            --border-light: #46475a;
+            --text-primary: #e4e3df;
+            --text-secondary: #a8a7a0;
+            --text-muted: #6e6d68;
+            --accent: #d4a843;
+            --accent-hover: #e0b84f;
+            --accent-dim: rgba(212, 168, 67, 0.1);
+            --accent-border: rgba(212, 168, 67, 0.25);
+            --red: #e74c3c;
+            --red-dim: rgba(231, 76, 60, 0.12);
+            --blue: #5dade2;
+            --blue-dim: rgba(93, 173, 226, 0.1);
+            --green: #52be80;
+            --green-dim: rgba(82, 190, 128, 0.1);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.35);
+            --header-bg: rgba(28, 29, 38, 0.92);
+            --code-bg: #1a1b24;
+        }
+
+        /* === 2. Typography === */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
+            font-family: 'DM Sans', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: -200px;
-            right: -200px;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -300px;
-            left: -200px;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(91, 156, 245, 0.08) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* === Header === */
+        /* === 3. Header === */
         .header {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(26, 27, 46, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: var(--header-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border);
             padding: 0 24px;
         }
         .header-inner {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 64px;
+            height: 56px;
         }
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
         }
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--accent), #e8c86a);
-            border-radius: 10px;
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'DM Serif Display', serif;
-            font-size: 18px;
-            color: var(--bg-primary);
+            font-size: 16px;
+            color: #fff;
             font-weight: 700;
         }
         .logo-text {
             font-family: 'DM Serif Display', serif;
-            font-size: 20px;
+            font-size: 18px;
             color: var(--text-primary);
             letter-spacing: -0.02em;
         }
         .logo-text span { color: var(--accent); }
         .header-right {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
         }
+        .theme-toggle {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent-border);
+            color: var(--accent);
+        }
+        .theme-toggle svg { width: 16px; height: 16px; }
         .header-badge {
-            padding: 6px 14px;
+            padding: 5px 12px;
             background: var(--green-dim);
-            border: 1px solid rgba(76, 175, 125, 0.3);
-            border-radius: 20px;
-            font-size: 12px;
+            border: 1px solid var(--green);
+            border-radius: 16px;
+            font-size: 11px;
             color: var(--green);
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
         .header-badge .dot {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             background: var(--green);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
         .update-time {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
         }
 
-        /* === Hero === */
+        /* === 4. Trump Status Widget === */
+        .trump-widget {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 24px 0;
+        }
+        .trump-status {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        .trump-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #e8c86a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Serif Display', serif;
+            font-size: 24px;
+            color: #fff;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .trump-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .trump-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+        .trump-activity {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .trump-activity .emoji { font-style: normal; }
+        .trump-times {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .trump-time-item {
+            text-align: right;
+        }
+        .trump-time-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .trump-time-value {
+            font-size: 20px;
+            font-family: 'DM Serif Display', serif;
+            color: var(--text-primary);
+            font-variant-numeric: tabular-nums;
+        }
+        .trump-time-value.est { color: var(--accent); }
+
+        /* === 5. Hero === */
         .hero {
             position: relative;
             z-index: 1;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 48px 24px 24px;
+            padding: 24px 24px 16px;
         }
         .hero h1 {
             font-family: 'DM Serif Display', serif;
-            font-size: clamp(28px, 4vw, 44px);
-            line-height: 1.15;
-            letter-spacing: -0.03em;
-            margin-bottom: 12px;
+            font-size: clamp(24px, 3.5vw, 36px);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
         }
         .hero h1 .highlight {
-            background: linear-gradient(135deg, var(--accent), #e8c86a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--accent);
         }
         .hero p {
             color: var(--text-secondary);
-            font-size: 15px;
-            max-width: 520px;
-            line-height: 1.7;
+            font-size: 14px;
+            max-width: 480px;
+            line-height: 1.6;
         }
 
-        /* === Stats === */
+        /* === 6. Stats === */
         .stats-bar {
             position: relative;
             z-index: 1;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0 24px 24px;
+            padding: 0 24px 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
         }
         .stats-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 14px 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+            padding: 12px 14px;
+            box-shadow: var(--shadow-sm);
         }
         .stats-card .label {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.06em;
             font-weight: 500;
         }
         .stats-card .value {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--text-primary);
             font-family: 'DM Serif Display', serif;
+            margin-top: 2px;
         }
         .stats-card .value.accent { color: var(--accent); }
         .stats-card .value.blue { color: var(--blue); }
         .stats-card .value.green { color: var(--green); }
         .stats-card .value.red { color: var(--red); }
 
-        /* === Controls === */
+        /* === 7. Controls === */
         .controls {
             position: relative;
             z-index: 1;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 0 24px 20px;
+            padding: 0 24px 16px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
             align-items: center;
         }
         .search-box {
             flex: 1;
-            min-width: 240px;
+            min-width: 200px;
             position: relative;
         }
         .search-box svg {
             position: absolute;
-            left: 14px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
         }
         .search-box input {
             width: 100%;
-            padding: 10px 16px 10px 42px;
+            padding: 9px 14px 9px 38px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: 13px;
             font-family: inherit;
             outline: none;
             transition: var(--transition);
+            box-shadow: var(--shadow-sm);
         }
         .search-box input::placeholder { color: var(--text-muted); }
         .search-box input:focus {
@@ -259,11 +370,13 @@
             border: 1px solid var(--border);
             border-radius: var(--radius);
             overflow: hidden;
+            box-shadow: var(--shadow-sm);
         }
         .tab-btn {
-            padding: 10px 18px;
+            padding: 9px 16px;
             background: transparent;
             border: none;
+            border-right: 1px solid var(--border);
             color: var(--text-muted);
             font-size: 13px;
             font-family: inherit;
@@ -272,246 +385,163 @@
             transition: var(--transition);
             white-space: nowrap;
         }
-        .tab-btn:hover { color: var(--text-secondary); }
+        .tab-btn:last-child { border-right: none; }
+        .tab-btn:hover { color: var(--text-secondary); background: var(--bg-card-hover); }
         .tab-btn.active {
             background: var(--accent-dim);
             color: var(--accent);
         }
-        .tab-btn .count {
-            display: inline-block;
-            margin-left: 6px;
-            padding: 1px 7px;
-            background: var(--border);
-            border-radius: 10px;
-            font-size: 11px;
-        }
-        .tab-btn.active .count {
-            background: rgba(201, 168, 76, 0.2);
-        }
 
-        /* === Main Content === */
+        /* === 8. Main Content === */
         .main-content {
             position: relative;
             z-index: 1;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 24px 80px;
         }
 
-        /* === Today Section === */
-        .today-section {
-            margin-bottom: 40px;
-        }
+        /* === 9. Section Headers === */
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--border);
         }
         .section-title {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 16px;
+            gap: 8px;
+            font-size: 15px;
             font-weight: 600;
             color: var(--text-primary);
         }
         .section-title .icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .section-title .icon.today {
-            background: var(--green-dim);
-            color: var(--green);
-        }
-        .section-title .icon.archive {
-            background: var(--blue-dim);
-            color: var(--blue);
-        }
-        .section-title .icon.search {
-            background: var(--accent-dim);
-            color: var(--accent);
-        }
-        .section-count {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
+        .section-title .icon.today { background: var(--green-dim); color: var(--green); }
+        .section-title .icon.archive { background: var(--blue-dim); color: var(--blue); }
+        .section-title .icon.search { background: var(--accent-dim); color: var(--accent); }
+        .section-count { font-size: 12px; color: var(--text-muted); font-weight: 400; }
 
-        /* === Archive Section === */
-        .archive-section { margin-bottom: 40px; }
+        /* === 10. Date Groups === */
+        .today-section { margin-bottom: 32px; }
+        .archive-section { margin-bottom: 32px; }
         .date-group {
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             overflow: hidden;
+            box-shadow: var(--shadow-sm);
         }
         .date-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 20px;
+            padding: 14px 18px;
             cursor: pointer;
             transition: var(--transition);
             user-select: none;
         }
-        .date-header:hover {
-            background: var(--bg-card-hover);
-        }
-        .date-header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .date-label {
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--text-primary);
-        }
+        .date-header:hover { background: var(--bg-card-hover); }
+        .date-header-left { display: flex; align-items: center; gap: 10px; }
+        .date-label { font-weight: 600; font-size: 13px; color: var(--text-primary); }
         .date-weekday {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             padding: 2px 8px;
-            background: var(--bg-secondary);
+            background: var(--bg-inset);
             border-radius: 10px;
         }
-        .date-post-count {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
+        .date-post-count { font-size: 11px; color: var(--text-muted); }
         .date-chevron {
             color: var(--text-muted);
             transition: transform 0.3s ease;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
         }
-        .date-group.expanded .date-chevron {
-            transform: rotate(180deg);
-        }
-        .date-posts {
-            display: none;
-            border-top: 1px solid var(--border);
-        }
-        .date-group.expanded .date-posts {
-            display: block;
-        }
-        .date-posts-inner {
-            padding: 8px 12px 12px;
-        }
+        .date-group.expanded .date-chevron { transform: rotate(180deg); }
+        .date-posts { display: none; border-top: 1px solid var(--border); }
+        .date-group.expanded .date-posts { display: block; }
+        .date-posts-inner { padding: 6px 10px 10px; }
 
-        /* === Month Group === */
-        .month-group { margin-bottom: 24px; }
-        .month-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-            padding-left: 4px;
-        }
-        .month-label {
-            font-family: 'DM Serif Display', serif;
-            font-size: 20px;
-            color: var(--text-secondary);
-        }
+        .month-group { margin-bottom: 20px; }
+        .month-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-left: 2px; }
+        .month-label { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--text-secondary); }
         .month-count {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
-            padding: 2px 10px;
+            padding: 2px 8px;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 10px;
         }
 
-        /* === Post Card === */
+        /* === 11. Post Cards === */
         .post-card {
             background: var(--bg-secondary);
             border: 1px solid transparent;
             border-radius: var(--radius);
-            padding: 16px 18px;
-            margin-bottom: 8px;
+            padding: 14px 16px;
+            margin-bottom: 6px;
             transition: var(--transition);
             position: relative;
         }
         .post-card:last-child { margin-bottom: 0; }
         .post-card:hover {
             border-color: var(--border);
-            background: var(--bg-card-hover);
+            box-shadow: var(--shadow-sm);
         }
-        .post-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 12px;
-            bottom: 12px;
-            width: 3px;
-            background: var(--accent);
-            border-radius: 2px;
-            opacity: 0;
-            transition: var(--transition);
-        }
-        .post-card:hover::before { opacity: 1; }
-
         .post-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
-            gap: 12px;
-        }
-        .post-meta {
-            display: flex;
-            align-items: center;
+            margin-bottom: 8px;
             gap: 10px;
         }
+        .post-meta { display: flex; align-items: center; gap: 8px; }
         .post-avatar {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent), #e8c86a);
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'DM Serif Display', serif;
-            font-size: 14px;
-            color: var(--bg-primary);
+            font-size: 13px;
+            color: #fff;
             font-weight: 700;
             flex-shrink: 0;
         }
         .post-user-info { display: flex; flex-direction: column; }
-        .post-username { font-weight: 600; font-size: 13px; color: var(--text-primary); }
-        .post-time { font-size: 12px; color: var(--text-muted); }
-        .post-actions {
-            display: flex;
-            gap: 4px;
-            flex-shrink: 0;
-        }
+        .post-username { font-weight: 600; font-size: 12px; color: var(--text-primary); }
+        .post-time { font-size: 11px; color: var(--text-muted); }
+        .post-actions { display: flex; gap: 2px; flex-shrink: 0; }
         .action-btn {
             display: flex;
             align-items: center;
-            gap: 4px;
-            padding: 5px 8px;
+            gap: 3px;
+            padding: 4px 7px;
             background: transparent;
             border: 1px solid transparent;
-            border-radius: 16px;
+            border-radius: 14px;
             color: var(--text-muted);
             font-size: 11px;
             cursor: pointer;
             transition: var(--transition);
             font-family: inherit;
         }
-        .action-btn:hover {
-            background: var(--bg-card);
-            border-color: var(--border);
-            color: var(--text-secondary);
-        }
-        .action-btn svg { width: 13px; height: 13px; }
+        .action-btn:hover { background: var(--bg-inset); border-color: var(--border); color: var(--text-secondary); }
+        .action-btn svg { width: 12px; height: 12px; }
         .action-btn.repost:hover { color: var(--green); background: var(--green-dim); }
         .action-btn.like:hover { color: var(--red); background: var(--red-dim); }
         .action-btn.link:hover { color: var(--blue); background: var(--blue-dim); }
@@ -534,13 +564,10 @@
             border-top: 1px solid var(--border);
             display: none;
         }
-        .post-translation.visible {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .post-translation.visible { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
         .translation-label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -559,8 +586,8 @@
             margin-top: 8px;
             padding: 4px 10px;
             background: var(--accent-dim);
-            border: 1px solid rgba(201, 168, 76, 0.15);
-            border-radius: 16px;
+            border: 1px solid var(--accent-border);
+            border-radius: 14px;
             color: var(--accent);
             font-size: 11px;
             font-family: inherit;
@@ -568,92 +595,79 @@
             cursor: pointer;
             transition: var(--transition);
         }
-        .translate-toggle:hover { background: rgba(201, 168, 76, 0.18); }
+        .translate-toggle:hover { background: var(--accent-border); }
         .translate-toggle svg { width: 11px; height: 11px; }
+        .translate-toggle.loading { opacity: 0.6; pointer-events: none; }
 
-        /* === Empty State === */
-        .empty-state {
-            text-align: center;
-            padding: 60px 24px;
-            color: var(--text-muted);
-        }
-        .empty-state svg { width: 40px; height: 40px; margin-bottom: 12px; }
-        .empty-state h3 { font-size: 16px; color: var(--text-secondary); margin-bottom: 6px; }
+        /* === 12. States === */
+        .empty-state { text-align: center; padding: 50px 24px; color: var(--text-muted); }
+        .empty-state svg { width: 36px; height: 36px; margin-bottom: 10px; }
+        .empty-state h3 { font-size: 15px; color: var(--text-secondary); margin-bottom: 4px; }
         .empty-state p { font-size: 13px; }
-
-        /* === Search Results === */
         .search-results { display: none; }
         .search-results.active { display: block; }
         .today-archive-view { display: block; }
         .today-archive-view.hidden { display: none; }
-
-        /* === Loading === */
-        .loading {
-            text-align: center;
-            padding: 60px 24px;
-            color: var(--text-muted);
-        }
+        .loading { text-align: center; padding: 50px 24px; color: var(--text-muted); }
         .loading-spinner {
-            width: 28px;
-            height: 28px;
+            width: 24px; height: 24px;
             border: 3px solid var(--border);
             border-top-color: var(--accent);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto 12px;
+            margin: 0 auto 10px;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin { to{transform:rotate(360deg)} }
 
-        /* === Footer === */
+        /* === 13. Footer === */
         .footer {
-            position: relative;
-            z-index: 1;
+            position: relative; z-index: 1;
             border-top: 1px solid var(--border);
-            padding: 20px 24px;
+            padding: 16px 24px;
             text-align: center;
             color: var(--text-muted);
-            font-size: 12px;
+            font-size: 11px;
         }
         .footer a { color: var(--accent); text-decoration: none; }
 
-        /* === Back to top === */
+        /* === 14. Back to top === */
         .back-to-top {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 42px;
-            height: 42px;
+            position: fixed; bottom: 20px; right: 20px;
+            width: 38px; height: 38px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 50%;
             color: var(--text-secondary);
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             z-index: 99;
-            opacity: 0;
-            transform: translateY(10px);
+            opacity: 0; transform: translateY(8px);
             transition: var(--transition);
             pointer-events: none;
+            box-shadow: var(--shadow-md);
         }
         .back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
-        .back-to-top:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .back-to-top:hover { border-color: var(--accent); color: var(--accent); }
 
-        /* === Responsive === */
+        /* === 15. Responsive === */
         @media (max-width: 768px) {
-            .header-inner { flex-direction: column; height: auto; padding: 12px 0; gap: 8px; }
+            .header-inner { height: auto; padding: 10px 0; gap: 6px; }
             .header-right { flex-wrap: wrap; justify-content: center; }
-            .hero { padding: 28px 24px 20px; }
-            .hero h1 { font-size: 24px; }
+            .hero { padding: 16px 24px 12px; }
+            .hero h1 { font-size: 22px; }
+            .trump-status { flex-direction: column; text-align: center; gap: 12px; padding: 16px; }
+            .trump-times { flex-direction: row; align-items: center; }
+            .stats-bar { grid-template-columns: repeat(3, 1fr); }
             .controls { flex-direction: column; }
             .search-box { min-width: 100%; }
-            .tab-group { width: 100%; overflow-x: auto; }
+            .tab-group { width: 100%; }
             .post-actions { display: none; }
-            .stats-bar { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
         }
 
-        /* === Scrollbar === */
+        /* === 16. Scrollbar === */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-primary); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -669,17 +683,41 @@
                 <div class="logo-text">Truth <span>Archive</span></div>
             </div>
             <div class="header-right">
+                <button class="theme-toggle" id="themeToggle" title="切换日/夜模式">
+                    <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
                 <div class="header-badge">
                     <span class="dot"></span>
                     实时同步
                 </div>
-                <span class="update-time" id="updateTime">更新中...</span>
+                <span class="update-time" id="updateTime">加载中...</span>
             </div>
         </div>
     </header>
 
+    <!-- Trump Status Widget -->
+    <div class="trump-widget">
+        <div class="trump-status">
+            <div class="trump-avatar">T</div>
+            <div class="trump-info">
+                <div class="trump-name">Donald J. Trump</div>
+                <div class="trump-activity" id="trumpActivity">正在分析懂王的作息...</div>
+            </div>
+            <div class="trump-times">
+                <div class="trump-time-item">
+                    <div class="trump-time-label">华盛顿</div>
+                    <div class="trump-time-value est" id="estTime">--:--</div>
+                </div>
+                <div class="trump-time-item">
+                    <div class="trump-time-label">北京时间</div>
+                    <div class="trump-time-value" id="localTime">--:--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="hero">
-        <h1>Donald J. Trump<br><span class="highlight">Truth Social</span> 帖子档案</h1>
+        <h1>Truth Social <span class="highlight">帖子档案</span></h1>
         <p>实时追踪特朗普 Truth Social 发帖，默认展示今日动态，历史按日期归档查阅。</p>
     </section>
 
@@ -719,18 +757,15 @@
     </div>
 
     <div class="main-content">
-        <!-- Today + Archive View -->
         <div class="today-archive-view" id="todayArchiveView">
             <div id="todaySection"></div>
             <div id="archiveSection"></div>
         </div>
-
-        <!-- Search Results View -->
         <div class="search-results" id="searchResults">
             <div class="section-header">
                 <div class="section-title">
                     <span class="icon search">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                     </span>
                     搜索结果
                 </div>
@@ -741,7 +776,7 @@
     </div>
 
     <button class="back-to-top" id="backToTop" title="回到顶部">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
     </button>
 
     <footer class="footer">
@@ -751,45 +786,135 @@
     </footer>
 
     <script>
-        // === State ===
+        // =============================================
+        // STATE
+        // =============================================
         let allPosts = [];
         let todayPosts = [];
         let yesterdayPosts = [];
-        let archiveByDate = {}; // { '2026-04-08': [posts], ... }
-        let archiveByMonth = {}; // { '2026-04': { '2026-04-08': [posts], ... }, ... }
+        let archiveByDate = {};
+        let archiveByMonth = {};
         let currentView = 'today';
         let expandedDates = new Set();
 
-        // === Translation Cache & API ===
+        // =============================================
+        // THEME TOGGLE
+        // =============================================
+        function initTheme() {
+            const saved = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = saved || (prefersDark ? 'dark' : 'light');
+            applyTheme(theme);
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            const icon = document.getElementById('themeIcon');
+            if (theme === 'dark') {
+                icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+            } else {
+                icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+            }
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
+
+        // =============================================
+        // TRUMP TIME & ACTIVITY
+        // =============================================
+        function updateTrumpStatus() {
+            const now = new Date();
+
+            // EST (Eastern Standard Time) = UTC-5, EDT = UTC-4
+            const estOffset = -5;
+            const estTime = new Date(now.getTime() + estOffset * 60 * 60 * 1000);
+            const estH = estTime.getHours();
+            const estM = estTime.getMinutes().toString().padStart(2, '0');
+            const estDay = estTime.getDay();
+
+            document.getElementById('estTime').textContent =
+                estH.toString().padStart(2, '0') + ':' + estM;
+
+            // Local time
+            const localH = now.getHours().toString().padStart(2, '0');
+            const localM = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('localTime').textContent = localH + ':' + localM;
+
+            // Guess what Trump is doing
+            const activity = guessTrumpActivity(estH, estDay);
+            document.getElementById('trumpActivity').innerHTML = activity;
+        }
+
+        function guessTrumpActivity(hour, dayOfWeek) {
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+            if (isWeekend) {
+                if (hour >= 6 && hour < 8) return '<span class="emoji">⛳</span> 可能在海湖庄园打高尔夫';
+                if (hour >= 8 && hour < 10) return '<span class="emoji">📺</span> 可能在看 Fox News 早晨节目';
+                if (hour >= 10 && hour < 12) return '<span class="emoji">📱</span> 可能在 Truth Social 上发帖';
+                if (hour >= 12 && hour < 13) return '<span class="emoji">🍔</span> 午餐时间，可能在享用汉堡';
+                if (hour >= 13 && hour < 17) return '<span class="emoji">📞</span> 可能在打电话处理事务';
+                if (hour >= 17 && hour < 19) return '<span class="emoji">🍽️</span> 晚餐时间';
+                if (hour >= 19 && hour < 21) return '<span class="emoji">📺</span> 可能在看新闻/发 Truth';
+                if (hour >= 21 && hour < 23) return '<span class="emoji">📱</span> 可能深夜刷手机发帖中';
+                return '<span class="emoji">😴</span> 应该在休息了';
+            } else {
+                if (hour >= 5 && hour < 7) return '<span class="emoji">📱</span> 极早起，可能在发 Truth Social';
+                if (hour >= 7 && hour < 8) return '<span class="emoji">📺</span> 可能在看 Fox & Friends';
+                if (hour >= 8 && hour < 10) return '<span class="emoji">📱</span> 高频发帖时段，可能在 Truth Social 狂发帖';
+                if (hour >= 10 && hour < 12) return '<span class="emoji">🎤</span> 可能在参加活动或会议';
+                if (hour >= 12 && hour < 13) return '<span class="emoji">🍔</span> 午餐时间';
+                if (hour >= 13 && hour < 15) return '<span class="emoji">💼</span> 下午工作时段';
+                if (hour >= 15 && hour < 17) return '<span class="emoji">📱</span> 下午发帖高峰期';
+                if (hour >= 17 && hour < 19) return '<span class="emoji">🍽️</span> 晚餐时间';
+                if (hour >= 19 && hour < 20) return '<span class="emoji">📺</span> 可能在看 Tucker / Hannity';
+                if (hour >= 20 && hour < 22) return '<span class="emoji">📱</span> 晚间发帖时段';
+                if (hour >= 22 && hour < 24) return '<span class="emoji">📱</span> 深夜刷手机，可能随时发帖';
+                return '<span class="emoji">😴</span> 罕见的休息时间';
+            }
+        }
+
+        // Update every 30 seconds
+        updateTrumpStatus();
+        setInterval(updateTrumpStatus, 30000);
+
+        // =============================================
+        // TRANSLATION (MyMemory API)
+        // =============================================
         const translationCache = new Map();
-        const TRANSLATING = '...翻译中...';
 
         async function translatePost(text) {
             if (!text || text.length < 2) return '';
             if (translationCache.has(text)) return translationCache.get(text);
-            translationCache.set(text, TRANSLATING);
 
             try {
-                const encoded = encodeURIComponent(text.substring(0, 500));
-                const resp = await fetch(`https://api.mymemory.translated.net/get?q=${encoded}&langpair=en|zh-CN`);
+                const truncated = text.substring(0, 500);
+                const resp = await fetch('https://api.mymemory.translated.net/get?q=' +
+                    encodeURIComponent(truncated) + '&langpair=en|zh-CN');
                 const data = await resp.json();
-                if (data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
+
+                if (data.responseStatus === 200 && data.responseData &&
+                    data.responseData.translatedText) {
                     let translated = data.responseData.translatedText;
-                    // MyMemory sometimes returns uppercase English when it can't translate
+                    // MyMemory returns ALL CAPS English when it can't translate
                     if (translated === text.toUpperCase() || translated === text) {
-                        translated = await fallbackTranslate(text);
+                        translated = fallbackTranslate(text);
                     }
                     translationCache.set(text, translated);
                     return translated;
                 }
-                return await fallbackTranslate(text);
+                return fallbackTranslate(text);
             } catch (e) {
-                return await fallbackTranslate(text);
+                console.warn('Translation API failed, using fallback:', e);
+                return fallbackTranslate(text);
             }
         }
 
-        async function fallbackTranslate(text) {
-            // Simple dictionary-based fallback for common phrases
+        function fallbackTranslate(text) {
             const dict = {
                 'MAKE AMERICA GREAT AGAIN!': '让美国再次伟大！',
                 'President Donald J. Trump': '唐纳德·J·特朗普总统',
@@ -803,7 +928,6 @@
                 'Witch Hunt': '政治迫害',
                 'God Bless America': '愿上帝保佑美国',
                 'GOD BLESS AMERICA': '愿上帝保佑美国',
-                'God Bless': '愿上帝保佑',
                 'the White House': '白宫',
                 'The White House': '白宫',
                 'Congress': '国会',
@@ -814,23 +938,24 @@
                 'the American People': '美国人民',
                 'We the People': '我们人民',
                 'has my Complete and Total Endorsement': '获得我的完全支持',
-                'Complete and Total Endorsement': '完全支持',
                 'I strongly endorse': '我强烈支持',
                 'Border Crisis': '边境危机',
-                'Truth Social': 'Truth Social',
                 'RINO': 'RINO（名义上的共和党人）',
                 'the American Dream': '美国梦',
             };
             let result = text;
             const entries = Object.entries(dict).sort((a, b) => b[0].length - a[0].length);
             for (const [en, zh] of entries) {
-                result = result.replace(new RegExp(en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), zh);
+                result = result.replace(
+                    new RegExp(en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), zh);
             }
             translationCache.set(text, result);
             return result;
         }
 
-        // === Utility Functions ===
+        // =============================================
+        // UTILITY FUNCTIONS
+        // =============================================
         function cleanHTML(html) {
             const div = document.createElement('div');
             div.innerHTML = html;
@@ -839,16 +964,16 @@
 
         function formatContent(text) {
             if (!text) return '';
-            let clean = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            clean = clean.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
-            clean = clean.replace(/(#\w+)/g, '<span class="hashtag">$1</span>');
-            clean = clean.replace(/(@\w+)/g, '<span class="mention">$1</span>');
-            return clean;
+            let c = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            c = c.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+            c = c.replace(/(#\w+)/g, '<span class="hashtag">$1</span>');
+            c = c.replace(/(@\w+)/g, '<span class="mention">$1</span>');
+            return c;
         }
 
         function formatTime(dateStr) {
             const d = new Date(dateStr);
-            return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+            return d.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', hour12: false });
         }
 
         function formatNumber(num) {
@@ -857,64 +982,44 @@
             return num.toString();
         }
 
-        function getDateKey(dateStr) {
-            return dateStr.slice(0, 10);
-        }
+        function getDateKey(dateStr) { return dateStr.slice(0, 10); }
+        function getMonthKey(dateStr) { return dateStr.slice(0, 7); }
 
-        function getMonthKey(dateStr) {
-            return dateStr.slice(0, 7);
-        }
-
-        function getWeekday(dateStr) {
+        function getWeekday(dateKey) {
             const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-            return days[new Date(dateStr).getDay()];
+            return days[new Date(dateKey + 'T12:00:00').getDay()];
         }
 
         function formatDateLabel(dateKey) {
-            const d = new Date(dateKey + 'T00:00:00');
             const now = new Date();
-            const today = now.toISOString().slice(0, 10);
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().slice(0, 10);
             const yesterday = new Date(now - 86400000).toISOString().slice(0, 10);
 
             if (dateKey === today) return '今天';
             if (dateKey === yesterday) return '昨天';
 
-            const month = d.getMonth() + 1;
-            const day = d.getDate();
-            return `${month}月${day}日`;
+            const d = new Date(dateKey + 'T12:00:00');
+            return `${d.getMonth() + 1}月${d.getDate()}日`;
         }
 
         function formatMonthLabel(monthKey) {
             const [year, month] = monthKey.split('-');
-            const monthNames = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-            return `${year}年 ${monthNames[parseInt(month)]}`;
+            return `${year}年 ${parseInt(month)}月`;
         }
 
-        function translatePost(text) {
-            if (!text) return '';
-            let result = text;
-            const entries = Object.entries(PHRASE_DICT).sort((a, b) => b[0].length - a[0].length);
-            for (const [en, zh] of entries) {
-                if (en.length <= 3) {
-                    const regex = new RegExp('\\b' + en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
-                    result = result.replace(regex, zh);
-                } else {
-                    result = result.replace(new RegExp(en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), zh);
-                }
-            }
-            return result;
-        }
-
+        // =============================================
+        // RENDER POST CARD
+        // =============================================
         function renderPostCard(post) {
             const content = cleanHTML(post.content || '');
             const time = formatTime(post.created_at);
             const reposts = post.reblogs_count || 0;
             const likes = post.favourites_count || 0;
             const url = post.url || '#';
-            const postId = post.id || Math.random().toString(36).substr(2, 9);
+            const pid = post.id || Math.random().toString(36).substr(2, 9);
 
             return `
-                <div class="post-card" data-post-id="${postId}" data-content="${encodeURIComponent(content)}">
+                <div class="post-card" data-pid="${pid}" data-raw="${encodeURIComponent(content)}">
                     <div class="post-header">
                         <div class="post-meta">
                             <div class="post-avatar">T</div>
@@ -938,7 +1043,7 @@
                         </div>
                     </div>
                     <div class="post-content">${formatContent(content)}</div>
-                    <button class="translate-toggle" onclick="toggleTranslation(this)">
+                    <button class="translate-toggle" onclick="handleTranslate(this)">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
                         中文翻译
                     </button>
@@ -950,7 +1055,7 @@
             `;
         }
 
-        async function toggleTranslation(btn) {
+        async function handleTranslate(btn) {
             const card = btn.closest('.post-card');
             const trans = card.querySelector('.post-translation');
             const textEl = trans.querySelector('.translation-text');
@@ -962,43 +1067,44 @@
             }
 
             trans.classList.add('visible');
+            btn.classList.add('loading');
             btn.textContent = '翻译中...';
-            btn.disabled = true;
 
-            const content = decodeURIComponent(card.dataset.content);
-            const translated = await translatePost(content);
+            const raw = decodeURIComponent(card.dataset.raw);
+            const translated = await translatePost(raw);
             textEl.textContent = translated;
 
+            btn.classList.remove('loading');
             btn.textContent = '隐藏翻译';
-            btn.disabled = false;
         }
 
-        // === Data Loading ===
+        // =============================================
+        // DATA LOADING
+        // =============================================
         async function loadData() {
             try {
                 const response = await fetch('data/posts.json');
-                if (!response.ok) throw new Error('Failed to load');
+                if (!response.ok) throw new Error('Failed');
                 allPosts = await response.json();
                 allPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 organizeData();
                 updateStats();
-                renderTodayView();
+                if (currentView === 'today') renderTodayView();
+                else if (currentView === 'archive') renderArchiveView();
             } catch (err) {
                 document.getElementById('todaySection').innerHTML = `
                     <div class="empty-state">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
                         <h3>数据加载失败</h3>
                         <p>请检查网络连接后刷新页面</p>
-                    </div>
-                `;
+                    </div>`;
             }
         }
 
         function organizeData() {
             const now = new Date();
-            const todayKey = now.toISOString().slice(0, 10);
-            const yesterdayDate = new Date(now - 86400000);
-            const yesterdayKey = yesterdayDate.toISOString().slice(0, 10);
+            const todayKey = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().slice(0, 10);
+            const yesterdayKey = new Date(now - 86400000).toISOString().slice(0, 10);
 
             todayPosts = [];
             yesterdayPosts = [];
@@ -1006,21 +1112,15 @@
             archiveByMonth = {};
 
             allPosts.forEach(post => {
-                const dateKey = getDateKey(post.created_at);
-                const monthKey = getMonthKey(post.created_at);
-
-                if (dateKey === todayKey) {
-                    todayPosts.push(post);
-                } else if (dateKey === yesterdayKey) {
-                    yesterdayPosts.push(post);
-                }
-
-                if (!archiveByDate[dateKey]) archiveByDate[dateKey] = [];
-                archiveByDate[dateKey].push(post);
-
-                if (!archiveByMonth[monthKey]) archiveByMonth[monthKey] = {};
-                if (!archiveByMonth[monthKey][dateKey]) archiveByMonth[monthKey][dateKey] = [];
-                archiveByMonth[monthKey][dateKey].push(post);
+                const dk = getDateKey(post.created_at);
+                const mk = getMonthKey(post.created_at);
+                if (dk === todayKey) todayPosts.push(post);
+                else if (dk === yesterdayKey) yesterdayPosts.push(post);
+                if (!archiveByDate[dk]) archiveByDate[dk] = [];
+                archiveByDate[dk].push(post);
+                if (!archiveByMonth[mk]) archiveByMonth[mk] = {};
+                if (!archiveByMonth[mk][dk]) archiveByMonth[mk][dk] = [];
+                archiveByMonth[mk][dk].push(post);
             });
         }
 
@@ -1030,7 +1130,6 @@
                 totalReposts += (p.reblogs_count || 0);
                 totalLikes += (p.favourites_count || 0);
             });
-
             document.getElementById('statTotal').textContent = allPosts.length.toLocaleString();
             document.getElementById('statToday').textContent = todayPosts.length;
             document.getElementById('statYesterday').textContent = yesterdayPosts.length;
@@ -1039,287 +1138,177 @@
 
             if (allPosts.length > 0) {
                 const latest = new Date(allPosts[0].created_at);
-                const m = latest.getMonth() + 1;
-                const d = latest.getDate();
-                const h = latest.getHours().toString().padStart(2, '0');
-                const min = latest.getMinutes().toString().padStart(2, '0');
-                document.getElementById('updateTime').textContent = `最新: ${m}/${d} ${h}:${min}`;
+                document.getElementById('updateTime').textContent =
+                    '最新: ' + (latest.getMonth()+1) + '/' + latest.getDate() + ' ' +
+                    latest.toLocaleTimeString(navigator.language, {hour:'2-digit',minute:'2-digit',hour12:false});
             }
         }
 
-        // === View Switching ===
+        // =============================================
+        // VIEW SWITCHING
+        // =============================================
         function switchView(view) {
             currentView = view;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`.tab-btn[data-view="${view}"]`).classList.add('active');
 
-            const todayArchive = document.getElementById('todayArchiveView');
-            const searchResults = document.getElementById('searchResults');
+            const ta = document.getElementById('todayArchiveView');
+            const sr = document.getElementById('searchResults');
 
             if (view === 'search') {
-                todayArchive.classList.add('hidden');
-                searchResults.classList.add('active');
+                ta.classList.add('hidden');
+                sr.classList.add('active');
                 document.getElementById('searchInput').focus();
                 performSearch();
             } else {
-                todayArchive.classList.remove('hidden');
-                searchResults.classList.remove('active');
-                if (view === 'today') {
-                    renderTodayView();
-                } else {
-                    renderArchiveView();
-                }
+                ta.classList.remove('hidden');
+                sr.classList.remove('active');
+                if (view === 'today') renderTodayView();
+                else renderArchiveView();
             }
         }
 
-        // === Today View ===
+        // =============================================
+        // TODAY VIEW
+        // =============================================
         function renderTodayView() {
             const section = document.getElementById('todaySection');
+            let html = '<div class="today-section"><div class="section-header"><div class="section-title">' +
+                '<span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>' +
+                '今日动态 <span class="section-count">' + todayPosts.length + ' 条帖子</span>' +
+                '</div></div>';
 
-            // Today's posts
-            let todayHTML = '';
             if (todayPosts.length > 0) {
-                todayHTML = `
-                    <div class="today-section">
-                        <div class="section-header">
-                            <div class="section-title">
-                                <span class="icon today">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                </span>
-                                今日动态
-                                <span class="section-count">${todayPosts.length} 条帖子</span>
-                            </div>
-                        </div>
-                        ${todayPosts.map(p => renderPostCard(p)).join('')}
-                    </div>
-                `;
+                html += todayPosts.map(p => renderPostCard(p)).join('');
             } else {
-                todayHTML = `
-                    <div class="today-section">
-                        <div class="section-header">
-                            <div class="section-title">
-                                <span class="icon today">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                </span>
-                                今日动态
-                                <span class="section-count">暂无新帖</span>
-                            </div>
-                        </div>
-                        <div class="empty-state" style="padding: 30px;">
-                            <p>今天还没有发布新帖子</p>
-                        </div>
-                    </div>
-                `;
+                html += '<div class="empty-state" style="padding:24px"><p>今天还没有发布新帖子</p></div>';
             }
+            html += '</div>';
 
-            // Yesterday's posts (pre-expanded)
-            let yesterdayHTML = '';
+            // Yesterday
             if (yesterdayPosts.length > 0) {
-                const yKey = Object.keys(archiveByDate).find(k => {
-                    const d = new Date(new Date() - 86400000);
-                    return k === d.toISOString().slice(0, 10);
-                });
-                if (yKey) {
-                    expandedDates.add(yKey);
-                    yesterdayHTML = `
-                        <div class="archive-section">
-                            <div class="section-header">
-                                <div class="section-title">
-                                    <span class="icon archive">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                    </span>
-                                    近期
-                                </div>
-                            </div>
-                            ${renderDateGroup(yKey, yesterdayPosts, true)}
-                        </div>
-                    `;
-                }
+                const yKey = new Date(new Date() - 86400000).toISOString().slice(0, 10);
+                expandedDates.add(yKey);
+                html += '<div class="archive-section"><div class="section-header"><div class="section-title">' +
+                    '<span class="icon archive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>' +
+                    '近期</div></div>';
+                html += renderDateGroup(yKey, yesterdayPosts, true);
+                html += '</div>';
             }
 
-            section.innerHTML = todayHTML + yesterdayHTML;
+            section.innerHTML = html;
         }
 
-        // === Archive View ===
+        // =============================================
+        // ARCHIVE VIEW
+        // =============================================
         function renderArchiveView() {
             const section = document.getElementById('archiveSection');
             const months = Object.keys(archiveByMonth).sort().reverse();
-
             if (months.length === 0) {
                 section.innerHTML = '<div class="empty-state"><p>暂无归档数据</p></div>';
                 return;
             }
+            let html = '<div class="archive-section"><div class="section-header"><div class="section-title">' +
+                '<span class="icon archive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>' +
+                '历史归档</div></div>';
 
-            let html = '<div class="archive-section">';
-            html += `
-                <div class="section-header">
-                    <div class="section-title">
-                        <span class="icon archive">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                        </span>
-                        历史归档
-                    </div>
-                </div>
-            `;
-
-            months.forEach(monthKey => {
-                const dates = Object.keys(archiveByMonth[monthKey]).sort().reverse();
-                const monthTotal = dates.reduce((sum, d) => sum + archiveByMonth[monthKey][d].length, 0);
-
-                html += `<div class="month-group">`;
-                html += `
-                    <div class="month-header">
-                        <span class="month-label">${formatMonthLabel(monthKey)}</span>
-                        <span class="month-count">${monthTotal} 条帖子</span>
-                    </div>
-                `;
-
-                dates.forEach(dateKey => {
-                    const posts = archiveByMonth[monthKey][dateKey];
-                    const isExpanded = expandedDates.has(dateKey);
-                    html += renderDateGroup(dateKey, posts, isExpanded);
+            months.forEach(mk => {
+                const dates = Object.keys(archiveByMonth[mk]).sort().reverse();
+                const total = dates.reduce((s, d) => s + archiveByMonth[mk][d].length, 0);
+                html += '<div class="month-group"><div class="month-header"><span class="month-label">' +
+                    formatMonthLabel(mk) + '</span><span class="month-count">' + total + ' 条</span></div>';
+                dates.forEach(dk => {
+                    html += renderDateGroup(dk, archiveByMonth[mk][dk], expandedDates.has(dk));
                 });
-
-                html += `</div>`;
+                html += '</div>';
             });
-
             html += '</div>';
             section.innerHTML = html;
         }
 
         function renderDateGroup(dateKey, posts, isExpanded) {
-            const weekday = getWeekday(dateKey);
-            const label = formatDateLabel(dateKey);
-            const expanded = isExpanded ? 'expanded' : '';
-
-            return `
-                <div class="date-group ${expanded}" data-date="${dateKey}">
-                    <div class="date-header" onclick="toggleDate('${dateKey}')">
-                        <div class="date-header-left">
-                            <span class="date-label">${label}</span>
-                            <span class="date-weekday">${weekday}</span>
-                            <span class="date-post-count">${posts.length} 条帖子</span>
-                        </div>
-                        <svg class="date-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                    </div>
-                    <div class="date-posts">
-                        <div class="date-posts-inner">
-                            ${posts.map(p => renderPostCard(p)).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
+            return '<div class="date-group ' + (isExpanded ? 'expanded' : '') + '" data-date="' + dateKey + '">' +
+                '<div class="date-header" onclick="toggleDate(\'' + dateKey + '\')">' +
+                '<div class="date-header-left"><span class="date-label">' + formatDateLabel(dateKey) + '</span>' +
+                '<span class="date-weekday">' + getWeekday(dateKey) + '</span>' +
+                '<span class="date-post-count">' + posts.length + ' 条帖子</span></div>' +
+                '<svg class="date-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>' +
+                '</div><div class="date-posts"><div class="date-posts-inner">' +
+                posts.map(p => renderPostCard(p)).join('') +
+                '</div></div></div>';
         }
 
         function toggleDate(dateKey) {
-            const group = document.querySelector(`.date-group[data-date="${dateKey}"]`);
-            if (!group) return;
-            group.classList.toggle('expanded');
-            if (group.classList.contains('expanded')) {
-                expandedDates.add(dateKey);
-            } else {
-                expandedDates.delete(dateKey);
-            }
+            const g = document.querySelector('.date-group[data-date="' + dateKey + '"]');
+            if (!g) return;
+            g.classList.toggle('expanded');
+            if (g.classList.contains('expanded')) expandedDates.add(dateKey);
+            else expandedDates.delete(dateKey);
         }
 
-        // === Search ===
+        // =============================================
+        // SEARCH
+        // =============================================
         function performSearch() {
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            const resultsList = document.getElementById('searchResultsList');
+            const q = document.getElementById('searchInput').value.trim().toLowerCase();
+            const list = document.getElementById('searchResultsList');
             const countEl = document.getElementById('searchCount');
 
-            if (!query) {
-                resultsList.innerHTML = '<div class="empty-state"><p>输入关键词开始搜索</p></div>';
+            if (!q) {
+                list.innerHTML = '<div class="empty-state"><p>输入关键词开始搜索</p></div>';
                 countEl.textContent = '0 条结果';
                 return;
             }
 
-            const results = allPosts.filter(p => {
-                return (p.content || '').toLowerCase().includes(query);
-            });
-
-            countEl.textContent = `${results.length} 条结果`;
+            const results = allPosts.filter(p => (p.content || '').toLowerCase().includes(q));
+            countEl.textContent = results.length + ' 条结果';
 
             if (results.length === 0) {
-                resultsList.innerHTML = `
-                    <div class="empty-state">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                        <h3>没有找到匹配的帖子</h3>
-                        <p>尝试更换搜索词</p>
-                    </div>
-                `;
+                list.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><h3>没有找到匹配的帖子</h3><p>尝试更换搜索词</p></div>';
                 return;
             }
 
-            // Group by date
             const grouped = {};
             results.forEach(p => {
-                const key = getDateKey(p.created_at);
-                if (!grouped[key]) grouped[key] = [];
-                grouped[key].push(p);
+                const k = getDateKey(p.created_at);
+                if (!grouped[k]) grouped[k] = [];
+                grouped[k].push(p);
             });
 
-            const sortedDates = Object.keys(grouped).sort().reverse();
             let html = '';
-            sortedDates.forEach(dateKey => {
-                html += `
-                    <div class="date-group expanded" data-date="${dateKey}">
-                        <div class="date-header" onclick="toggleDate('${dateKey}')">
-                            <div class="date-header-left">
-                                <span class="date-label">${formatDateLabel(dateKey)}</span>
-                                <span class="date-weekday">${getWeekday(dateKey)}</span>
-                                <span class="date-post-count">${grouped[dateKey].length} 条匹配</span>
-                            </div>
-                            <svg class="date-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-                        </div>
-                        <div class="date-posts">
-                            <div class="date-posts-inner">
-                                ${grouped[dateKey].map(p => renderPostCard(p)).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
+            Object.keys(grouped).sort().reverse().forEach(dk => {
+                html += renderDateGroup(dk, grouped[dk], true);
             });
-
-            resultsList.innerHTML = html;
+            list.innerHTML = html;
         }
 
-        // === Event Listeners ===
+        // =============================================
+        // EVENT LISTENERS
+        // =============================================
         let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', () => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
-                if (currentView !== 'search') {
-                    switchView('search');
-                } else {
-                    performSearch();
-                }
+                if (currentView !== 'search') switchView('search');
+                else performSearch();
             }, 300);
         });
 
-        document.getElementById('searchInput').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                clearTimeout(searchTimeout);
-                if (currentView !== 'search') switchView('search');
-                else performSearch();
-            }
-        });
-
-        // Back to top
         window.addEventListener('scroll', () => {
-            const btn = document.getElementById('backToTop');
-            btn.classList.toggle('visible', window.scrollY > 400);
+            document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 300);
         });
         document.getElementById('backToTop').addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // === Auto-refresh every 5 minutes ===
-        setInterval(() => {
-            loadData();
-        }, 5 * 60 * 1000);
+        // Auto-refresh every 5 minutes
+        setInterval(loadData, 5 * 60 * 1000);
 
-        // === Init ===
+        // =============================================
+        // INIT
+        // =============================================
+        initTheme();
         loadData();
     </script>
 </body>
