@@ -1807,7 +1807,11 @@
         }
 
         function getLocalDateKey(dateStr) {
-            return new Date(dateStr).toLocaleDateString('en-CA');
+            const d = new Date(dateStr);
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return y + '-' + m + '-' + day;
         }
 
         function formatNumber(num) {
@@ -1958,8 +1962,12 @@
             // Collect posts from last 3 days (local time)
             const recentDates = [];
             for (let i = 0; i < 3; i++) {
-                const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
-                recentDates.push(d.toLocaleDateString('en-CA'));
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                recentDates.push(y + '-' + m + '-' + day);
             }
             recentPosts = allPosts.filter(p => recentDates.includes(getLocalDateKey(p.created_at)));
         }
@@ -2056,8 +2064,12 @@
             const now = new Date();
             const recentDates = [];
             for (let i = 0; i < 3; i++) {
-                const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
-                recentDates.push(d.toLocaleDateString('en-CA'));
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                recentDates.push(y + '-' + m + '-' + day);
             }
             const months = Object.keys(archiveByMonth).sort().reverse();
             if (months.length === 0) {
