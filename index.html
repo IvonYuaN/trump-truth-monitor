@@ -1231,11 +1231,14 @@
             cursor: default;
             min-width: 0;
             position: relative;
+            height: 100%;
         }
         .stats-bar-stack {
             width: 100%;
+            flex: 1;
             display: flex;
             flex-direction: column;
+            justify-content: flex-end;
             gap: 1px;
             border-radius: 2px;
             overflow: hidden;
@@ -1998,6 +2001,8 @@
                 performSearch();
             } else if (view === 'today' || view === 'archive') {
                 ta.classList.remove('hidden');
+                document.getElementById('todaySection').innerHTML = '';
+                document.getElementById('archiveSection').innerHTML = '';
                 if (view === 'today') renderTodayView();
                 else renderArchiveView();
             } else if (view === 'heatmap') {
@@ -2517,6 +2522,12 @@
         // =============================================
         function renderStatsPanel() {
             const container = document.getElementById('statsPanelContent');
+
+            // Guard: if data not loaded yet
+            if (!allPosts || allPosts.length === 0) {
+                container.innerHTML = '<div class="empty-state" style="padding:24px"><p>数据加载中...</p></div>';
+                return;
+            }
 
             // Calculate stats from actual posts data
             const totalPosts = allPosts.length;
