@@ -674,6 +674,229 @@
         ::-webkit-scrollbar-track { background: var(--bg-primary); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+        /* === Fun Features === */
+        .fun-panel { display: none; }
+        .fun-panel.active { display: block; }
+
+        /* Heatmap */
+        .heatmap-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+        }
+        .heatmap-grid {
+            display: flex;
+            gap: 3px;
+            margin-top: 12px;
+        }
+        .heatmap-col { display: flex; flex-direction: column; gap: 3px; }
+        .heatmap-cell {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            background: var(--bg-inset);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+        .heatmap-cell:hover { transform: scale(1.3); z-index: 1; }
+        .heatmap-cell.l1 { background: var(--green-dim); }
+        .heatmap-cell.l2 { background: rgba(30,132,73,0.25); }
+        .heatmap-cell.l3 { background: rgba(30,132,73,0.45); }
+        .heatmap-cell.l4 { background: var(--green); }
+        .heatmap-labels {
+            display: flex;
+            gap: 3px;
+            margin-top: 6px;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .heatmap-legend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+        .heatmap-legend .heatmap-cell { cursor: default; width: 12px; height: 12px; }
+        .heatmap-tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: var(--text-primary);
+            white-space: nowrap;
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+            pointer-events: none;
+        }
+        .heatmap-cell:hover .heatmap-tooltip { display: block; }
+
+        /* Word Cloud */
+        .wordcloud-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px 12px;
+            line-height: 1.4;
+        }
+        .wordcloud-word {
+            display: inline-block;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-primary);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        .wordcloud-word:hover {
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        /* Bingo */
+        .bingo-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        .bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            max-width: 500px;
+            margin: 12px auto 0;
+        }
+        .bingo-cell {
+            aspect-ratio: 1.4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg-secondary);
+            line-height: 1.3;
+        }
+        .bingo-cell:hover { border-color: var(--accent-border); }
+        .bingo-cell.marked {
+            background: var(--accent-dim);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .bingo-cell.free {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            font-weight: 700;
+        }
+        .bingo-cell.marked::after {
+            content: ' ✓';
+            font-size: 10px;
+        }
+        .bingo-info {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .bingo-info strong { color: var(--accent); }
+
+        /* Keyword Ranking */
+        .ranking-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        .ranking-list { margin-top: 12px; }
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .ranking-item:last-child { border-bottom: none; }
+        .ranking-item:hover { padding-left: 6px; }
+        .ranking-pos {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+            background: var(--bg-inset);
+            color: var(--text-muted);
+        }
+        .ranking-item:nth-child(1) .ranking-pos { background: #ffd700; color: #7a6200; }
+        .ranking-item:nth-child(2) .ranking-pos { background: #c0c0c0; color: #555; }
+        .ranking-item:nth-child(3) .ranking-pos { background: #cd7f32; color: #fff; }
+        .ranking-bar-wrap { flex: 1; min-width: 0; }
+        .ranking-word {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .ranking-bar {
+            height: 6px;
+            background: var(--bg-inset);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .ranking-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: var(--accent);
+            transition: width 0.6s ease;
+        }
+        .ranking-count {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            .bingo-grid { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+            .bingo-cell { font-size: 9px; padding: 4px 2px; }
+            .heatmap-cell { width: 11px; height: 11px; }
+        }
     </style>
 </head>
 <body>
@@ -757,6 +980,10 @@
             <button class="tab-btn active" data-view="today" onclick="switchView('today')">今日动态</button>
             <button class="tab-btn" data-view="archive" onclick="switchView('archive')">历史归档</button>
             <button class="tab-btn" data-view="search" onclick="switchView('search')">全部搜索</button>
+            <button class="tab-btn" data-view="heatmap" onclick="switchView('heatmap')">📊 热力图</button>
+            <button class="tab-btn" data-view="wordcloud" onclick="switchView('wordcloud')">💬 词云</button>
+            <button class="tab-btn" data-view="bingo" onclick="switchView('bingo')">🎯 Bingo</button>
+            <button class="tab-btn" data-view="ranking" onclick="switchView('ranking')">📈 排行</button>
         </div>
     </div>
 
@@ -776,6 +1003,71 @@
                 <span class="section-count" id="searchCount">0 条结果</span>
             </div>
             <div id="searchResultsList"></div>
+        </div>
+
+        <!-- Heatmap Panel -->
+        <div class="fun-panel" id="heatmapPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+                    发帖热力图
+                </div>
+                <span class="section-count" id="heatmapTotal"></span>
+            </div>
+            <div class="heatmap-container">
+                <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">每天发帖频率（近90天）</div>
+                <div class="heatmap-grid" id="heatmapGrid"></div>
+                <div class="heatmap-legend">
+                    <span>少</span>
+                    <div class="heatmap-cell"></div>
+                    <div class="heatmap-cell l1"></div>
+                    <div class="heatmap-cell l2"></div>
+                    <div class="heatmap-cell l3"></div>
+                    <div class="heatmap-cell l4"></div>
+                    <span>多</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Word Cloud Panel -->
+        <div class="fun-panel" id="wordcloudPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+                    Trump 高频词汇
+                </div>
+                <span class="section-count">点击词汇搜索相关帖子</span>
+            </div>
+            <div class="wordcloud-container" id="wordcloudContainer"></div>
+        </div>
+
+        <!-- Bingo Panel -->
+        <div class="fun-panel" id="bingoPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon archive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
+                    Trump Bingo
+                </div>
+                <span class="section-count">读帖子时自动标记，点击手动标记</span>
+            </div>
+            <div class="bingo-container">
+                <div class="bingo-grid" id="bingoGrid"></div>
+                <div class="bingo-info">已标记 <strong id="bingoCount">0</strong>/24 · <button onclick="resetBingo()" style="background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;font-size:12px;">重新开始</button></div>
+            </div>
+        </div>
+
+        <!-- Ranking Panel -->
+        <div class="fun-panel" id="rankingPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+                    关键词排行榜
+                </div>
+                <span class="section-count">点击关键词搜索相关帖子</span>
+            </div>
+            <div class="ranking-container">
+                <div class="ranking-list" id="rankingList"></div>
+            </div>
         </div>
     </div>
 
@@ -1175,17 +1467,33 @@
 
             const ta = document.getElementById('todayArchiveView');
             const sr = document.getElementById('searchResults');
+            const panels = ['heatmapPanel','wordcloudPanel','bingoPanel','rankingPanel'];
+
+            // Hide all panels
+            ta.classList.add('hidden');
+            sr.classList.remove('active');
+            panels.forEach(id => document.getElementById(id).classList.remove('active'));
 
             if (view === 'search') {
-                ta.classList.add('hidden');
                 sr.classList.add('active');
                 document.getElementById('searchInput').focus();
                 performSearch();
-            } else {
+            } else if (view === 'today' || view === 'archive') {
                 ta.classList.remove('hidden');
-                sr.classList.remove('active');
                 if (view === 'today') renderTodayView();
                 else renderArchiveView();
+            } else if (view === 'heatmap') {
+                document.getElementById('heatmapPanel').classList.add('active');
+                renderHeatmap();
+            } else if (view === 'wordcloud') {
+                document.getElementById('wordcloudPanel').classList.add('active');
+                renderWordCloud();
+            } else if (view === 'bingo') {
+                document.getElementById('bingoPanel').classList.add('active');
+                renderBingo();
+            } else if (view === 'ranking') {
+                document.getElementById('rankingPanel').classList.add('active');
+                renderRanking();
             }
         }
 
@@ -1325,6 +1633,244 @@
 
         // Auto-refresh every 5 minutes
         setInterval(loadData, 5 * 60 * 1000);
+
+        // =============================================
+        // HEATMAP
+        // =============================================
+        function renderHeatmap() {
+            const grid = document.getElementById('heatmapGrid');
+            const now = new Date();
+            const days = 90;
+
+            // Count posts per day
+            const countByDay = {};
+            allPosts.forEach(p => {
+                const d = getDateKey(p.created_at);
+                countByDay[d] = (countByDay[d] || 0) + 1;
+            });
+
+            let maxCount = 1;
+            Object.values(countByDay).forEach(c => { if (c > maxCount) maxCount = c; });
+
+            // Build 13 columns x 7 rows (91 days)
+            let html = '';
+            for (let col = 0; col < 13; col++) {
+                html += '<div class="heatmap-col">';
+                for (let row = 0; row < 7; row++) {
+                    const idx = col * 7 + row;
+                    const date = new Date(now);
+                    date.setDate(date.getDate() - (days - 1 - idx));
+                    const key = date.toISOString().slice(0, 10);
+                    const count = countByDay[key] || 0;
+
+                    let level = '';
+                    if (count > 0) level = 'l1';
+                    if (count > maxCount * 0.25) level = 'l2';
+                    if (count > maxCount * 0.5) level = 'l3';
+                    if (count > maxCount * 0.75) level = 'l4';
+
+                    const label = (date.getMonth()+1) + '/' + date.getDate();
+                    html += '<div class="heatmap-cell ' + level + '">' +
+                        '<div class="heatmap-tooltip">' + label + '：' + count + ' 条帖子</div></div>';
+                }
+                html += '</div>';
+            }
+            grid.innerHTML = html;
+
+            const total = allPosts.length;
+            const avg = (total / days).toFixed(1);
+            document.getElementById('heatmapTotal').textContent =
+                total + ' 条帖子 · 日均 ' + avg + ' 条';
+        }
+
+        // =============================================
+        // WORD CLOUD
+        // =============================================
+        function renderWordCloud() {
+            const container = document.getElementById('wordcloudContainer');
+            const stopWords = new Set([
+                'the','a','an','and','or','but','in','on','at','to','for','of','with','by',
+                'from','is','was','are','were','be','been','being','have','has','had','do',
+                'does','did','will','would','could','should','may','might','shall','can',
+                'not','no','nor','so','if','then','than','too','very','just','about','up',
+                'out','its','it','this','that','these','those','my','his','her','our',
+                'we','they','he','she','i','me','you','who','what','which','when','where',
+                'how','all','each','every','both','few','more','most','other','some',
+                'such','only','own','same','also','after','before','between','through',
+                'during','into','over','under','again','further','once','here','there',
+                'why','because','as','until','while','get','got','much','many','well',
+                'back','even','still','new','now','way','don','t','s','re','ve','ll','d',
+                'm','been','make','made','know','like','go','going','come','take','see',
+                'think','look','want','give','use','find','tell','ask','work','seem',
+                'feel','try','leave','call','keep','let','begin','show','hear','play',
+                'run','move','live','believe','happen','must','really','thing','things',
+                'said','say','never','always','great','great','people','country','right',
+                'now','time','year','years','need','am','wasn','weren','hasn','haven',
+                'didn','doesn','won','wouldn','couldn','shouldn','isn','aren'
+            ]);
+
+            const wordCount = {};
+            allPosts.forEach(p => {
+                const text = (p.content || '').toLowerCase();
+                const words = text.replace(/https?:\/\/\S+/g, '').replace(/[^a-z\s]/g, ' ').split(/\s+/);
+                words.forEach(w => {
+                    if (w.length > 2 && !stopWords.has(w)) {
+                        wordCount[w] = (wordCount[w] || 0) + 1;
+                    }
+                });
+            });
+
+            const sorted = Object.entries(wordCount)
+                .filter(([w, c]) => c >= 5)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 60);
+
+            const maxC = sorted[0] ? sorted[0][1] : 1;
+            const colors = ['var(--accent)', 'var(--blue)', 'var(--red)', 'var(--green)', 'var(--text-primary)'];
+
+            let html = '';
+            sorted.forEach(([word, count], i) => {
+                const size = 12 + Math.round((count / maxC) * 28);
+                const color = colors[i % colors.length];
+                const opacity = 0.5 + (count / maxC) * 0.5;
+                html += '<span class="wordcloud-word" style="font-size:' + size + 'px;color:' + color +
+                    ';opacity:' + opacity + '" onclick="searchWord(\'' + word.replace(/'/g, "\\'") + '\')">' +
+                    word + '</span>';
+            });
+
+            container.innerHTML = html || '<p style="color:var(--text-muted)">数据加载中...</p>';
+        }
+
+        function searchWord(word) {
+            document.getElementById('searchInput').value = word;
+            switchView('search');
+        }
+
+        // =============================================
+        // BINGO
+        // =============================================
+        const BINGO_WORDS = [
+            'Fake News', 'Witch Hunt', 'MAGA', 'Tremendous', 'China',
+            'Sleepy Joe', 'America First', 'Radical Left', 'RINO', 'Border',
+            'Greatest', 'Disaster', 'Beautiful', 'Never seen before', 'Strong',
+            'Crooked', 'Loser', 'Tremendous', 'Unbelievable', 'Failing',
+            'Drain the Swamp', 'Law and Order', 'God Bless America'
+        ];
+
+        function getBingoState() {
+            try { return JSON.parse(localStorage.getItem('trump_bingo') || '{}'); }
+            catch(e) { return {}; }
+        }
+        function saveBingoState(state) {
+            localStorage.setItem('trump_bingo', JSON.stringify(state));
+        }
+
+        function renderBingo() {
+            const grid = document.getElementById('bingoGrid');
+            const state = getBingoState();
+            let html = '';
+            BINGO_WORDS.forEach((word, i) => {
+                if (i === 12) {
+                    html += '<div class="bingo-cell free">FREE</div>';
+                }
+                const marked = state[word] ? ' marked' : '';
+                html += '<div class="bingo-cell' + marked + '" onclick="toggleBingoCell(this,\'' +
+                    word.replace(/'/g, "\\'") + '\')">' + word + '</div>';
+            });
+            grid.innerHTML = html;
+            updateBingoCount();
+        }
+
+        function toggleBingoCell(el, word) {
+            el.classList.toggle('marked');
+            const state = getBingoState();
+            state[word] = el.classList.contains('marked');
+            saveBingoState(state);
+            updateBingoCount();
+        }
+
+        function updateBingoCount() {
+            const state = getBingoState();
+            const count = Object.values(state).filter(Boolean).length;
+            document.getElementById('bingoCount').textContent = count;
+        }
+
+        function resetBingo() {
+            localStorage.removeItem('trump_bingo');
+            renderBingo();
+        }
+
+        // Auto-check bingo words when viewing posts
+        function autoCheckBingo(content) {
+            const state = getBingoState();
+            const text = (content || '').toLowerCase();
+            let changed = false;
+            BINGO_WORDS.forEach(word => {
+                if (!state[word] && text.includes(word.toLowerCase())) {
+                    state[word] = true;
+                    changed = true;
+                }
+            });
+            if (changed) saveBingoState(state);
+        }
+
+        // =============================================
+        // KEYWORD RANKING
+        // =============================================
+        function renderRanking() {
+            const list = document.getElementById('rankingList');
+            const keywords = [
+                ['Fake News', /fake news/gi],
+                ['China', /\bchina\b/gi],
+                ['Great / Greatest', /\bgreat(est)?\b/gi],
+                ['America', /\bamerica\b/gi],
+                ['Border', /\bborder\b/gi],
+                ['Witch Hunt', /witch hunt/gi],
+                ['MAGA', /\bmaga\b/gi],
+                ['Joe Biden', /joe biden|biden/gi],
+                ['Radical Left', /radical left/gi],
+                ['Tremendous', /tremendous/gi],
+                ['RINO', /\brino/gi],
+                ['Sleepy Joe', /sleepy joe/gi],
+                ['Disaster', /disaster/gi],
+                ['Beautiful', /beautiful/gi],
+                ['Strong', /\bstrong(est)?\b/gi],
+                ['Crooked', /crooked/gi],
+                ['America First', /america first/gi],
+                ['God Bless', /god bless/gi],
+                ['Unbelievable', /unbelievable/gi],
+                ['Failing', /failing|fail(ed)?\b/gi],
+                ['Never Seen Before', /never seen before/gi],
+                ['Law and Order', /law and order/gi],
+                ['Drain the Swamp', /drain the swamp/gi],
+                ['Loser', /\bloser/gi],
+                ['Corrupt', /corrupt/gi],
+                ['Patriot', /patriot/gi],
+            ];
+
+            const results = keywords.map(([name, regex]) => {
+                let count = 0;
+                allPosts.forEach(p => {
+                    const matches = (p.content || '').match(regex);
+                    if (matches) count += matches.length;
+                });
+                return { name, count };
+            }).filter(r => r.count > 0).sort((a, b) => b.count - a.count).slice(0, 20);
+
+            const maxCount = results[0] ? results[0].count : 1;
+
+            let html = '';
+            results.forEach((r, i) => {
+                const pct = Math.round((r.count / maxCount) * 100);
+                html += '<div class="ranking-item" onclick="searchWord(\'' + r.name.split(' ')[0].toLowerCase() + '\')">' +
+                    '<div class="ranking-pos">' + (i + 1) + '</div>' +
+                    '<div class="ranking-bar-wrap"><div class="ranking-word">' + r.name + '</div>' +
+                    '<div class="ranking-bar"><div class="ranking-bar-fill" style="width:' + pct + '%"></div></div></div>' +
+                    '<div class="ranking-count">' + r.count + '次</div></div>';
+            });
+
+            list.innerHTML = html || '<p style="color:var(--text-muted);padding:20px;text-align:center">数据加载中...</p>';
+        }
 
         // =============================================
         // INIT
