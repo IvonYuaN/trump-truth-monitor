@@ -1969,12 +1969,16 @@
                 ? '<div style="color:var(--text-muted);font-style:italic;padding:8px 0;">📷 纯图片/视频帖 — <a href="' + url + '" target="_blank" rel="noopener" style="color:var(--accent)">点击查看原文</a></div>'
                 : '<div class="post-content">' + formatContent(content) + '</div>';
             const translationHtml = isEmpty ? '' : `
-                    <div class="post-translation visible">
-                        <div class="translation-label">中文参考翻译 <span class="translation-source" style="font-size:9px;opacity:0.5"></span></div>
-                        <div class="translation-text" data-raw="${encodeURIComponent(content)}"></div>
+                    <button class="translate-toggle" onclick="handleTranslate(this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+                        中文翻译
+                    </button>
+                    <div class="post-translation" style="display:none;" data-content="${encodeURIComponent(content)}">
+                        <div class="translation-label">中文翻译 <span class="translation-source" style="font-size:9px;opacity:0.5"></span></div>
+                        <div class="translation-text"></div>
                         <button class="translate-toggle precise" onclick="handlePreciseTranslate(this)" style="margin-top:4px;font-size:10px;padding:2px 8px;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;vertical-align:middle;margin-right:3px;"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                            精确翻译
+                            精确翻译 (DeepL)
                         </button>
                     </div>`;
 
@@ -2008,11 +2012,31 @@
             `;
         }
 
+        async function handleTranslate(btn) {
+            const trans = btn.nextElement;
+            if (!trans || !trans.classList.contains('post-translation')) return;
+            
+            // Show translation area
+            trans.style.display = 'block';
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><circle cx="12" cy="12" r="5"/></svg> 翻译中...';
+            btn.disabled = true;
+            
+            const textEl = trans.querySelector('.translation-text');
+            const sourceEl = trans.querySelector('.translation-source');
+            const raw = decodeURIComponent(trans.dataset.content);
+            
+            const translated = await translatePost(raw);
+            textEl.textContent = translated;
+            sourceEl.textContent = '';
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><circle cx="12" cy="12" r="5"/></svg> 中文翻译';
+            btn.disabled = false;
+        }
+
         async function handlePreciseTranslate(btn) {
             const trans = btn.closest('.post-translation');
             const textEl = trans.querySelector('.translation-text');
             const sourceEl = trans.querySelector('.translation-source');
-            const raw = decodeURIComponent(textEl.dataset.raw);
+            const raw = decodeURIComponent(trans.dataset.content);
 
             btn.classList.add('loading');
             btn.textContent = '翻译中...';
@@ -2025,37 +2049,6 @@
             btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;vertical-align:middle;margin-right:3px;"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> 已使用精确翻译';
             btn.style.opacity = '0.5';
             btn.style.pointerEvents = 'none';
-        }
-
-        // Auto-translate all visible posts after rendering
-        async function autoTranslatePosts() {
-            const textEls = document.querySelectorAll('.translation-text[data-raw]');
-            const toTranslate = Array.from(textEls).filter(el => {
-                // Only translate visible elements
-                const card = el.closest('.post-card');
-                if (!card) return false;
-                const rect = card.getBoundingClientRect();
-                if (rect.top > window.innerHeight || rect.bottom < 0) return false;
-                const raw = decodeURIComponent(el.dataset.raw);
-                return raw && raw.length >= 2;
-            });
-            const batchSize = 3;
-            for (let i = 0; i < toTranslate.length; i += batchSize) {
-                const batch = toTranslate.slice(i, i + batchSize);
-                await Promise.all(batch.map(async el => {
-                    const raw = decodeURIComponent(el.dataset.raw);
-                    const translated = await translatePost(raw);
-                    if (translated) {
-                        el.textContent = translated;
-                    } else {
-                        el.textContent = raw;
-                    }
-                    el.removeAttribute('data-raw');
-                }));
-                if (i + batchSize < toTranslate.length) {
-                    await new Promise(r => setTimeout(r, 300));
-                }
-            }
         }
 
         // =============================================
@@ -2193,7 +2186,6 @@
             html += '</div>';
 
             section.innerHTML = html;
-            autoTranslatePosts();
         }
 
         // =============================================
@@ -2254,7 +2246,6 @@
             g.classList.toggle('expanded');
             if (g.classList.contains('expanded')) {
                 expandedDates.add(dateKey);
-                autoTranslatePosts();
             } else {
                 expandedDates.delete(dateKey);
             }
@@ -2294,7 +2285,6 @@
                 html += renderDateGroup(dk, grouped[dk], true);
             });
             list.innerHTML = html;
-            autoTranslatePosts();
         }
 
         // =============================================
