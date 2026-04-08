@@ -675,6 +675,279 @@
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
 
+        /* === War Timeline === */
+        .war-banner {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 12px 24px 0;
+        }
+        .war-status-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .war-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+        .war-header:hover { background: var(--bg-card-hover); }
+        .war-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .war-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--red-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .war-title-group { display: flex; flex-direction: column; }
+        .war-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .war-title .live-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--red);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        .war-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+        .war-header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .war-day-count {
+            font-family: 'DM Serif Display', serif;
+            font-size: 22px;
+            color: var(--red);
+            line-height: 1;
+        }
+        .war-day-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .war-chevron {
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+            width: 16px;
+            height: 16px;
+        }
+        .war-status-card.expanded .war-chevron { transform: rotate(180deg); }
+
+        /* Phase Progress Bar */
+        .war-phases {
+            padding: 0 18px 14px;
+            display: none;
+        }
+        .war-status-card.expanded .war-phases { display: block; }
+        .war-phases-bar {
+            display: flex;
+            height: 28px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .war-phase-seg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 4px;
+            transition: opacity 0.2s;
+            cursor: default;
+            position: relative;
+        }
+        .war-phase-seg:hover { opacity: 0.85; }
+        .war-phase-seg .phase-tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: var(--text-primary);
+            white-space: nowrap;
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+            pointer-events: none;
+            font-weight: 400;
+        }
+        .war-phase-seg:hover .phase-tooltip { display: block; }
+        .war-phases-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .war-phase-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .war-phase-legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* Timeline Events */
+        .war-timeline {
+            padding: 0 18px 18px;
+            display: none;
+        }
+        .war-status-card.expanded .war-timeline { display: block; }
+        .war-timeline-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .war-timeline-list {
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .war-timeline-list::-webkit-scrollbar { width: 4px; }
+        .war-timeline-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+        .war-event {
+            display: flex;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .war-event:last-child { border-bottom: none; }
+        .war-event:hover { padding-left: 4px; }
+        .war-event-date {
+            flex-shrink: 0;
+            width: 46px;
+            text-align: center;
+        }
+        .war-event-month {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .war-event-day {
+            font-family: 'DM Serif Display', serif;
+            font-size: 18px;
+            color: var(--text-primary);
+            line-height: 1.1;
+        }
+        .war-event-dot-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            padding-top: 4px;
+        }
+        .war-event-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid var(--bg-card);
+            box-shadow: 0 0 0 1px var(--border);
+        }
+        .war-event-line {
+            width: 2px;
+            flex: 1;
+            background: var(--border);
+            margin-top: 2px;
+        }
+        .war-event-content { flex: 1; min-width: 0; }
+        .war-event-title {
+            font-size: 13px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        .war-event-tags {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+        .war-event-tag {
+            font-size: 9px;
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .war-event-tag.Trump { background: rgba(184,134,11,0.12); color: #b8860b; }
+        .war-event-tag.Iran { background: rgba(192,57,43,0.12); color: #c0392b; }
+        .war-event-tag.Israel { background: rgba(36,113,163,0.12); color: #2471a3; }
+        .war-event-tag.US { background: rgba(41,128,185,0.12); color: #2980b9; }
+        .war-event-tag.UN { background: rgba(142,68,173,0.12); color: #8e44ad; }
+        .war-event-tag.Mediator { background: rgba(30,132,73,0.12); color: #1e8449; }
+        .war-event-tag.G7 { background: rgba(52,73,94,0.12); color: #34495e; }
+        .war-event-tag.China { background: rgba(211,84,0,0.12); color: #d35400; }
+        .war-event-tag.Russia { background: rgba(127,140,141,0.12); color: #7f8c8d; }
+        .war-event-tag.Economy { background: rgba(39,174,96,0.12); color: #27ae60; }
+        .war-event-tag.EU { background: rgba(52,152,219,0.12); color: #3498db; }
+
+        .war-source-link {
+            margin-top: 10px;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .war-source-link a { color: var(--accent); text-decoration: none; }
+        .war-source-link a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .war-header { padding: 12px 14px; gap: 8px; }
+            .war-title { font-size: 13px; }
+            .war-day-count { font-size: 18px; }
+            .war-phases-bar { height: 24px; }
+            .war-phase-seg { font-size: 9px; }
+            .war-event { gap: 8px; }
+            .war-event-date { width: 38px; }
+            .war-event-day { font-size: 15px; }
+        }
+
         /* === Fun Features === */
         .fun-panel { display: none; }
         .fun-panel.active { display: block; }
@@ -938,6 +1211,47 @@
                 <div class="trump-time-item">
                     <div class="trump-time-label">北京时间</div>
                     <div class="trump-time-value" id="localTime">--:--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- War Timeline Banner -->
+    <div class="war-banner">
+        <div class="war-status-card" id="warStatusCard">
+            <div class="war-header" onclick="toggleWarTimeline()">
+                <div class="war-header-left">
+                    <div class="war-icon">⚔️</div>
+                    <div class="war-title-group">
+                        <div class="war-title">
+                            <span class="live-dot"></span>
+                            美以伊冲突追踪
+                        </div>
+                        <div class="war-subtitle" id="warSubtitle">2026.02.27 — 至今 · 数据更新至 2026-04-09</div>
+                    </div>
+                </div>
+                <div class="war-header-right">
+                    <div>
+                        <div class="war-day-count" id="warDayCount">—</div>
+                        <div class="war-day-label">天</div>
+                    </div>
+                    <svg class="war-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+            </div>
+            <div class="war-phases" id="warPhases">
+                <div class="war-phases-bar" id="warPhasesBar"></div>
+                <div class="war-phases-legend" id="warPhasesLegend"></div>
+            </div>
+            <div class="war-timeline" id="warTimeline">
+                <div class="war-timeline-title">
+                    📅 关键事件时间轴
+                    <span style="font-weight:400;font-size:11px;color:var(--text-muted)" id="warEventCount"></span>
+                </div>
+                <div class="war-timeline-list" id="warTimelineList"></div>
+                <div class="war-source-link">
+                    数据来源：<a href="https://github.com/StardustWhisper/iran-israel-us-timeline" target="_blank" rel="noopener">StardustWhisper/iran-israel-us-timeline</a> ·
+                    <a href="https://en.wikipedia.org/wiki/Timeline_of_the_2026_Iran_war" target="_blank" rel="noopener">Wikipedia</a> ·
+                    共 347 条事件记录
                 </div>
             </div>
         </div>
@@ -1871,6 +2185,119 @@
 
             list.innerHTML = html || '<p style="color:var(--text-muted);padding:20px;text-align:center">数据加载中...</p>';
         }
+
+        // =============================================
+        // WAR TIMELINE
+        // =============================================
+        const WAR_PHASES = [
+            { name: '前奏', start: '2026-02-27', end: '2026-02-27', color: '#f39c12', desc: '特朗普下令"史诗怒火"行动' },
+            { name: '开战', start: '2026-02-28', end: '2026-03-01', color: '#e74c3c', desc: '美以大规模打击伊朗，哈梅内伊被杀' },
+            { name: '伊朗报复', start: '2026-03-01', end: '2026-03-07', color: '#c0392b', desc: '伊朗向海湾7国发动报复打击' },
+            { name: '对抗升级', start: '2026-03-08', end: '2026-03-14', color: '#8e44ad', desc: 'Mojtaba继任，霍尔木兹海峡危机' },
+            { name: '外交博弈', start: '2026-03-15', end: '2026-03-22', color: '#2980b9', desc: '多方调解，G7释油，油价飙升' },
+            { name: '激烈交锋', start: '2026-03-23', end: '2026-03-31', color: '#e74c3c', desc: '冲突白热化，大规模军事行动' },
+            { name: '持续冲突', start: '2026-04-01', end: '2026-04-09', color: '#d35400', desc: '战事持续，停火前景不明' },
+        ];
+
+        const WAR_EVENTS = [
+            { date: '2026-02-27', title: '特朗普下令推进"Operation Epic Fury"', tags: ['Trump','US'] },
+            { date: '2026-02-28', title: '美以对伊朗发动大规模打击；特朗普称哈梅内伊被杀', tags: ['Trump','Iran'] },
+            { date: '2026-03-01', title: '特朗普发布"史诗怒火"声明：要求IRGC投降否则"必死无疑"', tags: ['Trump','Iran'] },
+            { date: '2026-03-01', title: '拉里贾尼宣布成立"临时领导委员会"；伊朗向海湾7国发动报复打击', tags: ['Iran'] },
+            { date: '2026-03-02', title: '鲁比奥：美方"先发制人"是因预期以色列将打击、伊朗会报复美军', tags: ['Trump','Iran','Israel'] },
+            { date: '2026-03-02', title: 'IRGC正式确认霍尔木兹海峡关闭，威胁过往船只', tags: ['Iran'] },
+            { date: '2026-03-05', title: '特朗普称要参与选择哈梅内伊继任者；美潜艇击沉伊朗军舰', tags: ['Trump','Iran'] },
+            { date: '2026-03-07', title: '伊朗总统佩泽什基安为打击邻国致歉，但拒绝"无条件投降"', tags: ['Iran','Trump'] },
+            { date: '2026-03-08', title: '伊朗宣布由Mojtaba Khamenei继任最高领袖', tags: ['Iran','Trump'] },
+            { date: '2026-03-09', title: '特朗普宣布有意"夺取"霍尔木兹海峡控制权；Brent原油突破$100', tags: ['Trump','Iran','Economy'] },
+            { date: '2026-03-10', title: '特朗普要求伊朗清除霍尔木兹水雷；美军摧毁16艘布雷船', tags: ['Trump','Iran'] },
+            { date: '2026-03-11', title: 'IEA成员国同意释油4亿桶应对供应扰动', tags: ['G7','Economy'] },
+            { date: '2026-03-13', title: '美防长宣布已"功能性摧毁"伊朗弹道导弹产能', tags: ['Trump','Iran'] },
+            { date: '2026-03-14', title: '特朗普拒绝阿曼和埃及的停火调解努力', tags: ['Mediator','Trump','Iran'] },
+            { date: '2026-03-16', title: '以军大规模打击德黑兰；IDF称已执行超7,600次打击', tags: ['Israel','Iran'] },
+            { date: '2026-03-19', title: '美军启动霍尔木兹海峡通航军事行动；追加2000亿美元拨款', tags: ['Trump','Iran'] },
+            { date: '2026-03-20', title: '特朗普告诉Axios正考虑"逐步收尾"战争', tags: ['Trump','Iran'] },
+            { date: '2026-03-21', title: '美以空袭伊朗纳坦兹核设施及核武研发基地', tags: ['Trump','Iran'] },
+            { date: '2026-03-22', title: '伊朗拒绝48小时最后通牒；威胁报复海湾能源设施', tags: ['Iran','Trump'] },
+            { date: '2026-03-23', title: '特朗普宣布延期5天：称与伊朗有"良好且富有成效的对话"', tags: ['Trump','Iran'] },
+            { date: '2026-03-25', title: '伊朗正式拒绝美方15点和平方案，提出五项反条件', tags: ['Iran','Trump'] },
+            { date: '2026-03-26', title: '特朗普延后"打击伊朗能源设施"期限至4/6', tags: ['Trump','Iran'] },
+            { date: '2026-03-28', title: '特朗普在沙特称伊朗"在撒谎"；称伊朗送来10船石油作为"礼物"', tags: ['Trump','Iran'] },
+            { date: '2026-03-30', title: '特朗普对FT称"想夺取伊朗石油"、考虑占领哈尔克岛', tags: ['Trump','Iran'] },
+            { date: '2026-04-01', title: '特朗普称战争"两到三周内"结束；宣布黄金时段全国讲话', tags: ['Trump'] },
+            { date: '2026-04-02', title: 'CENTCOM：美以联军已打击超12,300个伊朗目标；Brent突破$103', tags: ['Trump','Iran'] },
+            { date: '2026-04-03', title: '特朗普升级威胁：美军对伊朗"剩余基础设施的摧毁甚至还没开始"', tags: ['Trump'] },
+            { date: '2026-04-05', title: '伊朗高级军方官员拒绝特朗普"48小时最后通牒"', tags: ['Iran','Trump'] },
+            { date: '2026-04-07', title: '特朗普：只有我能决定停火；称伊朗正在寻求停火', tags: ['Trump','Iran'] },
+            { date: '2026-04-08', title: '白宫官员：以色列已同意停火（CBS）', tags: ['US','Israel','Trump'] },
+            { date: '2026-04-09', title: '特朗普：美军将继续留在伊朗周边直至"真正协议"完全履行', tags: ['Trump','US'] },
+        ];
+
+        function initWarTimeline() {
+            // Calculate days since conflict start
+            const startDate = new Date('2026-02-27');
+            const today = new Date();
+            const days = Math.floor((today - startDate) / 86400000);
+            document.getElementById('warDayCount').textContent = days > 0 ? days : '—';
+
+            // Build phase progress bar
+            const totalStart = new Date(WAR_PHASES[0].start).getTime();
+            const totalEnd = new Date(WAR_PHASES[WAR_PHASES.length - 1].end).getTime();
+            const totalDuration = totalEnd - totalStart;
+
+            let barHtml = '';
+            let legendHtml = '';
+            WAR_PHASES.forEach((phase, i) => {
+                const pStart = new Date(phase.start).getTime();
+                const pEnd = new Date(phase.end).getTime();
+                const pDuration = pEnd - pStart;
+                const pct = Math.max((pDuration / totalDuration) * 100, 4);
+                barHtml += '<div class="war-phase-seg" style="width:' + pct + '%;background:' + phase.color + '">' +
+                    (pct > 6 ? phase.name : '') +
+                    '<div class="phase-tooltip">' + phase.name + '（' + phase.start.slice(5) + ' ~ ' + phase.end.slice(5) + '）<br>' + phase.desc + '</div>' +
+                    '</div>';
+                legendHtml += '<div class="war-phase-legend-item">' +
+                    '<div class="war-phase-legend-dot" style="background:' + phase.color + '"></div>' +
+                    phase.name + '</div>';
+            });
+            document.getElementById('warPhasesBar').innerHTML = barHtml;
+            document.getElementById('warPhasesLegend').innerHTML = legendHtml;
+
+            // Build timeline events
+            const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+            let timelineHtml = '';
+            // Show events in reverse chronological order
+            const reversedEvents = [...WAR_EVENTS].reverse();
+            reversedEvents.forEach((evt, i) => {
+                const d = new Date(evt.date + 'T12:00:00');
+                const month = monthNames[d.getMonth()];
+                const day = d.getDate();
+                const phaseIdx = WAR_PHASES.findIndex(p => evt.date >= p.start && evt.date <= p.end);
+                const dotColor = phaseIdx >= 0 ? WAR_PHASES[phaseIdx].color : 'var(--text-muted)';
+                const isLast = i === reversedEvents.length - 1;
+
+                let tagsHtml = '';
+                evt.tags.forEach(tag => {
+                    tagsHtml += '<span class="war-event-tag ' + tag + '">' + tag + '</span>';
+                });
+
+                timelineHtml += '<div class="war-event">' +
+                    '<div class="war-event-date"><div class="war-event-month">' + month + '</div><div class="war-event-day">' + day + '</div></div>' +
+                    '<div class="war-event-dot-col"><div class="war-event-dot" style="background:' + dotColor + '"></div>' +
+                    (isLast ? '' : '<div class="war-event-line"></div>') +
+                    '</div>' +
+                    '<div class="war-event-content"><div class="war-event-title">' + evt.title + '</div>' +
+                    '<div class="war-event-tags">' + tagsHtml + '</div></div></div>';
+            });
+            document.getElementById('warTimelineList').innerHTML = timelineHtml;
+            document.getElementById('warEventCount').textContent = '共 ' + WAR_EVENTS.length + ' 个关键节点';
+        }
+
+        function toggleWarTimeline() {
+            document.getElementById('warStatusCard').classList.toggle('expanded');
+        }
+
+        initWarTimeline();
 
         // =============================================
         // INIT
