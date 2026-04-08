@@ -1805,7 +1805,15 @@
 
         function formatTime(dateStr) {
             const d = new Date(dateStr);
-            return d.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', hour12: false });
+            const local = d.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit', hour12: false });
+            const est = d.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false });
+            if (local === est) return local;
+            return est + ' <span style="opacity:0.5">(' + local + ')</span>';
+        }
+
+        function getEstDateKey(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
         }
 
         function formatNumber(num) {
@@ -1939,8 +1947,9 @@
 
         function organizeData() {
             const now = new Date();
-            const todayKey = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().slice(0, 10);
-            const yesterdayKey = new Date(now - 86400000).toISOString().slice(0, 10);
+            const todayKey = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+            const yesterdayDate = new Date(now.getTime() - 86400000);
+            const yesterdayKey = yesterdayDate.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
 
             todayPosts = [];
             yesterdayPosts = [];
@@ -1948,8 +1957,8 @@
             archiveByMonth = {};
 
             allPosts.forEach(post => {
-                const dk = getDateKey(post.created_at);
-                const mk = getMonthKey(post.created_at);
+                const dk = getEstDateKey(post.created_at);
+                const mk = dk.slice(0, 7);
                 if (dk === todayKey) todayPosts.push(post);
                 else if (dk === yesterdayKey) yesterdayPosts.push(post);
                 if (!archiveByDate[dk]) archiveByDate[dk] = [];
@@ -2033,7 +2042,7 @@
             let html = '<div class="today-section"><div class="section-header"><div class="section-title">' +
                 '<span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>' +
                 '今日动态 <span class="section-count">' + todayPosts.length + ' 条帖子</span>' +
-                '</div></div>';
+                '</div></div><div style="font-size:10px;color:var(--text-muted);margin-bottom:12px;padding-left:28px;">📅 以华盛顿时间(EST)划分日期 · 帖子时间显示 华盛顿时间 (本地时间)</div>';
 
             if (todayPosts.length > 0) {
                 html += todayPosts.map(p => renderPostCard(p)).join('');
@@ -2051,7 +2060,7 @@
         function renderArchiveView() {
             const section = document.getElementById('archiveSection');
             const now = new Date();
-            const todayKey = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().slice(0, 10);
+            const todayKey = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
             const months = Object.keys(archiveByMonth).sort().reverse();
             if (months.length === 0) {
                 section.innerHTML = '<div class="empty-state"><p>暂无归档数据</p></div>';
