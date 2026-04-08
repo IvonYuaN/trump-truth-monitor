@@ -1800,34 +1800,18 @@
 
         function formatTime(dateStr) {
             const d = new Date(dateStr);
-            // Local time (user's timezone)
+            // Local time
             const lh = d.getHours(), lm = d.getMinutes();
             const localStr = String(lh).padStart(2, '0') + ':' + String(lm).padStart(2, '0');
-            // EST time (UTC-5) / EDT (UTC-4)
-            const utcH = d.getUTCHours(), utcM = d.getUTCMinutes();
-            // Determine if EST or EDT based on date (EDT: second Sunday March ~ first Sunday November)
-            const year = d.getUTCFullYear();
-            const isEDT = isDST(d);
-            const offset = isEDT ? 4 : 5;
-            let estH = ((utcH - offset) % 24 + 24) % 24;
-            const estStr = String(estH).padStart(2, '0') + ':' + String(utcM).padStart(2, '0');
-            const label = isEDT ? 'EDT' : 'EST';
+            // Washington time: use same method as Trump status widget
+            const estOffset = -5;
+            const estTime = new Date(d.getTime() + estOffset * 60 * 60 * 1000);
+            const estStr = String(estTime.getHours()).padStart(2, '0') + ':' + String(estTime.getMinutes()).padStart(2, '0');
             if (localStr === estStr) return localStr;
-            return localStr + ' <span style="opacity:0.5">(' + estStr + ' ' + label + ')</span>';
+            return localStr + ' <span style="opacity:0.5">(' + estStr + ')</span>';
         }
 
-        function isDST(date) {
-            const y = date.getUTCFullYear();
-            // EDT starts second Sunday of March at 2am
-            const mar2 = new Date(Date.UTC(y, 2, 8));
-            mar2.setUTCDate(8 + (7 - mar2.getUTCDay()) % 7);
-            mar2.setUTCHours(7); // 2am EST = 7am UTC
-            // EDT ends first Sunday of November at 2am
-            const nov1 = new Date(Date.UTC(y, 10, 1));
-            nov1.setUTCDate(1 + (7 - nov1.getUTCDay()) % 7);
-            nov1.setUTCHours(6); // 2am EDT = 6am UTC
-            return date.getTime() >= mar2.getTime() && date.getTime() < nov1.getTime();
-        }
+        function isDST(date) { return false; }
 
         function getLocalDateKey(dateStr) {
             const d = new Date(dateStr);
@@ -2008,9 +1992,10 @@
 
             if (allPosts.length > 0) {
                 const latest = new Date(allPosts[0].created_at);
+                const lh = String(latest.getHours()).padStart(2, '0');
+                const lm = String(latest.getMinutes()).padStart(2, '0');
                 document.getElementById('updateTime').textContent =
-                    '最新: ' + (latest.getMonth()+1) + '/' + latest.getDate() + ' ' +
-                    latest.toLocaleTimeString(navigator.language, {hour:'2-digit',minute:'2-digit',hour12:false});
+                    '最新: ' + (latest.getMonth()+1) + '/' + latest.getDate() + ' ' + lh + ':' + lm;
             }
         }
 
