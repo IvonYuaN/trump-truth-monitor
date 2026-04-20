@@ -2185,8 +2185,6 @@
             }
             recentPosts = allPosts.filter(p => recentDates.includes(getLocalDateKey(p.created_at)));
 
-            // Auto-check bingo words
-            allPosts.forEach(p => { if (p.content) autoCheckBingo(p.content); });
         }
 
         function updateStats() {
@@ -2215,7 +2213,8 @@
         function switchView(view) {
             currentView = view;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`.tab-btn[data-view="${view}"]`).classList.add('active');
+            const tabBtn = document.querySelector(`.tab-btn[data-view="${view}"]`);
+            if (tabBtn) tabBtn.classList.add('active');
 
             const ta = document.getElementById('todayArchiveView');
             const sr = document.getElementById('searchResults');
@@ -2227,6 +2226,9 @@
             panels.forEach(id => document.getElementById(id).classList.remove('active'));
 
             if (view === 'today' || view === 'archive') {
+                // Keep 帖子动态 tab active for both today/archive
+                const todayBtn = document.querySelector('.tab-btn[data-view="today"]');
+                if (todayBtn) todayBtn.classList.add('active');
                 ta.classList.remove('hidden');
                 document.getElementById('todaySection').innerHTML = '';
                 document.getElementById('archiveSection').innerHTML = '';
@@ -3468,7 +3470,7 @@
         // POST PREDICTION
         // =============================================
         function renderPredict() {
-            const el = document.getElementById('predictContent');
+            const el = document.getElementById('statsPanelContent');
             if (!allPosts.length) { el.innerHTML = '<p style="color:var(--text-muted);padding:20px">数据加载中...</p>'; return; }
 
             // Analyze posting patterns by hour (EST)
