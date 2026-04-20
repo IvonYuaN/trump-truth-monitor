@@ -61,6 +61,7 @@ def convert_event(evt):
         "date": evt.get("date", ""),
         "title": title,
         "tags": evt.get("tags", []),
+        "desc": evt.get("desc", ""),
     }
 
 
@@ -89,8 +90,13 @@ def update_index_html(new_events):
     events_js = "const WAR_EVENTS = [\n"
     for i, evt in enumerate(new_events):
         tags_str = ", ".join(f"'{t}'" for t in evt["tags"])
+        title_esc = evt["title"].replace("\\", "\\\\").replace("'", "\\'")
+        desc = evt.get("desc", "").replace("\\", "\\\\").replace("'", "\\'").replace("\n", " ")
         comma = "," if i < len(new_events) - 1 else ""
-        events_js += f"            {{ date: '{evt['date']}', title: '{evt['title']}', tags: [{tags_str}] }}{comma}\n"
+        if desc:
+            events_js += "            { date: '" + evt['date'] + "', title: '" + title_esc + "', desc: '" + desc + "', tags: [" + tags_str + "] }" + comma + "\n"
+        else:
+            events_js += "            { date: '" + evt['date'] + "', title: '" + title_esc + "', tags: [" + tags_str + "] }" + comma + "\n"
     events_js += "        ];"
 
     # Replace existing WAR_EVENTS
