@@ -1430,7 +1430,7 @@
                             <span class="live-dot"></span>
                             美以伊冲突追踪
                         </div>
-                        <div class="war-subtitle" id="warSubtitle">2026.02.27 — 至今 · 数据更新至 2026-04-09</div>
+                        <div class="war-subtitle" id="warSubtitle">2026.02.27 — 至今 · 数据更新至 <span id="warDataDate">加载中</span></div>
                     </div>
                 </div>
                 <div class="war-header-right">
@@ -2622,6 +2622,10 @@
             const today = new Date();
             const days = Math.floor((today - startDate) / 86400000);
             document.getElementById('warDayCount').textContent = days > 0 ? days : '—';
+
+            // Set data date to latest event date
+            const latestDate = WAR_EVENTS[WAR_EVENTS.length - 1].date;
+            document.getElementById('warDataDate').textContent = latestDate;
 
             // Build phase progress bar
             const totalStart = new Date(WAR_PHASES[0].start).getTime();
