@@ -379,12 +379,12 @@
         }
         .tab-group::-webkit-scrollbar { display: none; }
         .tab-btn {
-            padding: 9px 16px;
+            padding: 8px 12px;
             background: transparent;
             border: none;
             border-right: 1px solid var(--border);
             color: var(--text-muted);
-            font-size: 13px;
+            font-size: 12px;
             font-family: inherit;
             font-weight: 500;
             cursor: pointer;
@@ -1570,9 +1570,7 @@
             <button class="tab-btn active" data-view="today" onclick="switchView('today')">近3天动态</button>
             <button class="tab-btn" data-view="archive" onclick="switchView('archive')">历史归档</button>
             <button class="tab-btn" data-view="search" onclick="switchView('search')">全部搜索</button>
-            <button class="tab-btn" data-view="heatmap" onclick="switchView('heatmap')">📊 热力图</button>
             <button class="tab-btn" data-view="wordcloud" onclick="switchView('wordcloud')">💬 词云</button>
-            <button class="tab-btn" data-view="bingo" onclick="switchView('bingo')">🎯 Bingo</button>
             <button class="tab-btn" data-view="ranking" onclick="switchView('ranking')">📈 排行</button>
             <button class="tab-btn" data-view="stats" onclick="switchView('stats')">📊 统计</button>
             <button class="tab-btn" data-view="sentiment" onclick="switchView('sentiment')">💭 情感</button>
@@ -1603,30 +1601,6 @@
             <div id="searchResultsList"></div>
         </div>
 
-        <!-- Heatmap Panel -->
-        <div class="fun-panel" id="heatmapPanel">
-            <div class="section-header">
-                <div class="section-title">
-                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
-                    发帖热力图
-                </div>
-                <span class="section-count" id="heatmapTotal"></span>
-            </div>
-            <div class="heatmap-container">
-                <div style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">每天发帖频率（近90天）</div>
-                <div class="heatmap-grid" id="heatmapGrid"></div>
-                <div class="heatmap-legend">
-                    <span>少</span>
-                    <div class="heatmap-cell"></div>
-                    <div class="heatmap-cell l1"></div>
-                    <div class="heatmap-cell l2"></div>
-                    <div class="heatmap-cell l3"></div>
-                    <div class="heatmap-cell l4"></div>
-                    <span>多</span>
-                </div>
-            </div>
-        </div>
-
         <!-- Word Cloud Panel -->
         <div class="fun-panel" id="wordcloudPanel">
             <div class="section-header">
@@ -1637,21 +1611,6 @@
                 <span class="section-count">点击词汇搜索相关帖子</span>
             </div>
             <div class="wordcloud-container" id="wordcloudContainer"></div>
-        </div>
-
-        <!-- Bingo Panel -->
-        <div class="fun-panel" id="bingoPanel">
-            <div class="section-header">
-                <div class="section-title">
-                    <span class="icon archive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
-                    Trump Bingo
-                </div>
-                <span class="section-count">读帖子时自动标记，点击手动标记</span>
-            </div>
-            <div class="bingo-container">
-                <div class="bingo-grid" id="bingoGrid"></div>
-                <div class="bingo-info">已标记 <strong id="bingoCount">0</strong>/24 · <button onclick="resetBingo()" style="background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;font-size:12px;">重新开始</button></div>
-            </div>
         </div>
 
         <!-- Ranking Panel -->
@@ -2309,7 +2268,7 @@
 
             const ta = document.getElementById('todayArchiveView');
             const sr = document.getElementById('searchResults');
-            const panels = ['heatmapPanel','wordcloudPanel','bingoPanel','rankingPanel','statsPanel',
+            const panels = ['wordcloudPanel','rankingPanel','statsPanel',
                 'sentimentPanel','predictPanel','marketPanel','factcheckPanel','figuresPanel','comparePanel','notifyPanel'];
 
             // Hide all panels
@@ -2327,15 +2286,9 @@
                 document.getElementById('archiveSection').innerHTML = '';
                 if (view === 'today') renderTodayView();
                 else renderArchiveView();
-            } else if (view === 'heatmap') {
-                document.getElementById('heatmapPanel').classList.add('active');
-                renderHeatmap();
             } else if (view === 'wordcloud') {
                 document.getElementById('wordcloudPanel').classList.add('active');
                 renderWordCloud();
-            } else if (view === 'bingo') {
-                document.getElementById('bingoPanel').classList.add('active');
-                renderBingo();
             } else if (view === 'ranking') {
                 document.getElementById('rankingPanel').classList.add('active');
                 renderRanking();
@@ -3604,9 +3557,7 @@
             { symbol: 'DJT', name: 'Trump Media', icon: '🇺🇸' },
             { symbol: 'BTC-USD', name: 'Bitcoin', icon: '₿' },
             { symbol: '^GSPC', name: 'S&P 500', icon: '📊' },
-            { symbol: '^DJI', name: 'Dow Jones', icon: '📈' },
             { symbol: 'GC=F', name: 'Gold', icon: '🥇' },
-            { symbol: 'CL=F', name: 'Crude Oil', icon: '🛢️' },
         ];
 
         async function renderMarket() {
@@ -3614,44 +3565,49 @@
             el.innerHTML = '<p style="color:var(--text-muted);padding:20px">加载市场数据...</p>';
 
             const PROXY = 'https://api.allorigins.win/raw?url=';
-            let html = '<div class="market-ticker">';
-            for (const asset of MARKET_ASSETS) {
+            const results = await Promise.all(MARKET_ASSETS.map(async (asset) => {
                 try {
                     const yahooUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/' + asset.symbol + '?range=5d&interval=1d';
-                    const resp = await fetchTimeout(PROXY + encodeURIComponent(yahooUrl), {}, 8000);
+                    const resp = await fetchTimeout(PROXY + encodeURIComponent(yahooUrl), {}, 10000);
                     if (!resp.ok) throw new Error('HTTP ' + resp.status);
                     const data = await resp.json();
-                    const result = data.chart.result[0];
-                    const meta = result.meta;
-                    const price = meta.regularMarketPrice;
-                    const prevClose = meta.chartPreviousClose || meta.previousClose;
-                    const change = ((price - prevClose) / prevClose * 100).toFixed(2);
-                    const isUp = change >= 0;
-
-                    html += '<div class="market-item"><div style="display:flex;justify-content:space-between;align-items:center"><span class="name">' + asset.icon + ' ' + asset.name + '</span><span style="font-size:10px;color:var(--text-muted)">' + asset.symbol + '</span></div>';
-                    html += '<div class="price">$' + (typeof price === 'number' ? price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : price) + '</div>';
-                    html += '<div class="change ' + (isUp ? 'up' : 'down') + '">' + (isUp ? '▲' : '▼') + ' ' + Math.abs(change) + '%</div>';
-
-                    const closes = result.indicators.quote[0].close.filter(c => c !== null);
-                    if (closes.length > 1) {
-                        const min = Math.min(...closes), max = Math.max(...closes);
-                        const range = max - min || 1;
-                        html += '<div class="mini-chart">';
-                        closes.forEach(c => {
-                            const h = ((c - min) / range * 80) + 20;
-                            html += '<div class="mini-chart-bar" style="height:' + h + '%;background:' + (isUp ? 'var(--green)' : 'var(--red)') + '"></div>';
-                        });
-                        html += '</div>';
-                    }
-                    html += '</div>';
+                    return { asset, data: data.chart.result[0], error: null };
                 } catch(e) {
-                    html += '<div class="market-item"><span class="name">' + asset.icon + ' ' + asset.name + '</span><p style="color:var(--text-muted);font-size:11px;margin-top:8px">暂无数据</p></div>';
+                    return { asset, data: null, error: e.message };
                 }
-            }
+            }));
+
+            let html = '<div class="market-ticker">';
+            results.forEach(({ asset, data, error }) => {
+                if (error || !data) {
+                    html += '<div class="market-item"><span class="name">' + asset.icon + ' ' + asset.name + '</span><p style="color:var(--text-muted);font-size:11px;margin-top:8px">暂无数据</p></div>';
+                    return;
+                }
+                const meta = data.meta;
+                const price = meta.regularMarketPrice;
+                const prevClose = meta.chartPreviousClose || meta.previousClose;
+                const change = ((price - prevClose) / prevClose * 100).toFixed(2);
+                const isUp = change >= 0;
+
+                html += '<div class="market-item"><div style="display:flex;justify-content:space-between;align-items:center"><span class="name">' + asset.icon + ' ' + asset.name + '</span><span style="font-size:10px;color:var(--text-muted)">' + asset.symbol + '</span></div>';
+                html += '<div class="price">$' + (typeof price === 'number' ? price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : price) + '</div>';
+                html += '<div class="change ' + (isUp ? 'up' : 'down') + '">' + (isUp ? '▲' : '▼') + ' ' + Math.abs(change) + '%</div>';
+
+                const closes = data.indicators.quote[0].close.filter(c => c !== null);
+                if (closes.length > 1) {
+                    const min = Math.min(...closes), max = Math.max(...closes);
+                    const range = max - min || 1;
+                    html += '<div class="mini-chart">';
+                    closes.forEach(c => {
+                        const h = ((c - min) / range * 80) + 20;
+                        html += '<div class="mini-chart-bar" style="height:' + h + '%;background:' + (isUp ? 'var(--green)' : 'var(--red)') + '"></div>';
+                    });
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
             html += '</div>';
-            html += '<div style="padding:12px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);margin-top:12px">';
-            html += '💡 数据来源: Yahoo Finance · 5天走势 · ' + MARKET_ASSETS.map(a => a.name).join(' · ');
-            html += '</div>';
+            html += '<div style="padding:12px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);margin-top:12px">💡 数据来源: Yahoo Finance · 5天走势</div>';
             el.innerHTML = html;
         }
 
