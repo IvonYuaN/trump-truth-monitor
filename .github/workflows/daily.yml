@@ -6,7 +6,7 @@ on:
     - cron: '0 */6 * * *'
     # 每天UTC 16:00更新冲突时间线（北京时间 0:00）
     - cron: '0 16 * * *'
-  workflow_dispatch: # 手动触发
+  workflow_dispatch:
 
 jobs:
   update-posts:
@@ -39,7 +39,6 @@ jobs:
 
   update-timeline:
     runs-on: ubuntu-latest
-    needs: update-posts
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,18 +51,16 @@ jobs:
       - name: Install requests
         run: pip install requests
 
-      - name: Update war timeline
+      - name: Update war timeline from StardustWhisper
         run: |
           mkdir -p output
           python update_timeline.py
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-      - name: Commit timeline data
+      - name: Commit timeline update
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add data/war_timeline.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "data: auto-update war_timeline.json $(date -u '+%Y-%m-%d %H:%M UTC')" && git push)
+          git add index.html
+          git diff --quiet && git diff --staged --quiet || (git commit -m "data: sync war timeline from StardustWhisper $(date -u '+%Y-%m-%d %H:%M UTC')" && git push)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
