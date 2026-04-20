@@ -1671,6 +1671,7 @@
             document.getElementById('localTime').textContent = localH + ':' + localM;
 
             // Guess what Trump is doing + update avatar
+            const estH = parseInt(estTimeStr.split(':')[0]);
             const { text: activity, avatar } = guessTrumpActivity(estH, estDay);
             document.getElementById('trumpActivity').innerHTML = activity;
 
@@ -3214,8 +3215,7 @@
                 allPosts.forEach(p => {
                     try {
                         const d = new Date(p.created_at);
-                        const h = d.getUTCHours();
-                        const estHour = ((h - 5) % 24 + 24) % 24;
+                        const estHour = parseInt(d.toLocaleString('en-US', { timeZone: 'America/New_York', hour: '2-digit', hour12: false }));
                         hourlyData[estHour]++;
                     } catch(e) {}
                 });
