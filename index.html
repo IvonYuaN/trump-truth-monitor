@@ -3541,17 +3541,24 @@
             if (_marketCache) { el.innerHTML = _marketCache; return; }
             el.innerHTML = '<p style="color:var(--text-muted);padding:20px">⏳ 正在加载市场数据...</p>';
 
-            const PROXY = 'https://api.allorigins.win/raw?url=';
+            const PROXIES = [
+                'https://api.allorigins.win/raw?url=',
+                'https://corsproxy.io/?',
+                'https://api.codetabs.com/v1/proxy?quest='
+            ];
+
             const results = await Promise.all(MARKET_ASSETS.map(async (asset) => {
-                try {
-                    const yahooUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/' + asset.symbol + '?range=5d&interval=1d';
-                    const resp = await fetchTimeout(PROXY + encodeURIComponent(yahooUrl), {}, 10000);
-                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                    const data = await resp.json();
-                    return { asset, data: data.chart.result[0], error: null };
-                } catch(e) {
-                    return { asset, data: null, error: e.message };
+                for (const proxy of PROXIES) {
+                    try {
+                        const yahooUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/' + asset.symbol + '?range=5d&interval=1d';
+                        const resp = await fetchTimeout(proxy + encodeURIComponent(yahooUrl), {}, 8000);
+                        if (!resp.ok) continue;
+                        const data = await resp.json();
+                        if (!data.chart || !data.chart.result) continue;
+                        return { asset, data: data.chart.result[0], error: null };
+                    } catch(e) { continue; }
                 }
+                return { asset, data: null, error: 'all proxies failed' };
             }));
 
             let html = '<div class="market-ticker">';
