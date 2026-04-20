@@ -1634,7 +1634,7 @@
                 </div>
                 <span class="section-count">Trump相关资产走势</span>
             </div>
-            <div id="marketContent"></div>
+            <div id="marketContent"><p style="color:var(--text-muted);padding:20px">⏳ 正在后台加载市场数据...</p></div>
         </div>
 
         <!-- Figures Panel -->
@@ -2520,7 +2520,7 @@
 
         function searchWord(word) {
             document.getElementById('searchInput').value = word;
-            switchView('search');
+            document.getElementById('searchInput').dispatchEvent(new Event('input'));
         }
 
         // =============================================
@@ -3393,6 +3393,9 @@
         initTheme();
         loadData();
 
+        // Background pre-load: fetch market data immediately
+        setTimeout(() => { renderMarket(); }, 2000);
+
         // =============================================
         // SENTIMENT ANALYSIS (Local NLP)
         // =============================================
@@ -3532,9 +3535,11 @@
             { symbol: 'GC=F', name: 'Gold', icon: '🥇' },
         ];
 
+        let _marketCache = null;
         async function renderMarket() {
             const el = document.getElementById('marketContent');
-            el.innerHTML = '<p style="color:var(--text-muted);padding:20px">加载市场数据...</p>';
+            if (_marketCache) { el.innerHTML = _marketCache; return; }
+            el.innerHTML = '<p style="color:var(--text-muted);padding:20px">⏳ 正在加载市场数据...</p>';
 
             const PROXY = 'https://api.allorigins.win/raw?url=';
             const results = await Promise.all(MARKET_ASSETS.map(async (asset) => {
@@ -3580,6 +3585,7 @@
             });
             html += '</div>';
             html += '<div style="padding:12px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);margin-top:12px">💡 数据来源: Yahoo Finance · 5天走势</div>';
+            _marketCache = html;
             el.innerHTML = html;
         }
 
