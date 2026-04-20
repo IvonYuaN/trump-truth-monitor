@@ -1568,7 +1568,6 @@
         </div>
         <div class="tab-group">
             <button class="tab-btn active" data-view="today" onclick="switchView('today')">📋 帖子动态</button>
-            <button class="tab-btn" data-view="search" onclick="switchView('search')">🔍 全文搜索</button>
             <button class="tab-btn" data-view="wordcloud" onclick="switchView('wordcloud')">📊 词频排行</button>
             <button class="tab-btn" data-view="stats" onclick="switchView('stats')">📈 数据分析</button>
             <button class="tab-btn" data-view="market" onclick="switchView('market')">💹 市场行情</button>
@@ -2227,11 +2226,7 @@
             sr.classList.remove('active');
             panels.forEach(id => document.getElementById(id).classList.remove('active'));
 
-            if (view === 'search') {
-                sr.classList.add('active');
-                document.getElementById('searchInput').focus();
-                performSearch();
-            } else if (view === 'today' || view === 'archive') {
+            if (view === 'today' || view === 'archive') {
                 ta.classList.remove('hidden');
                 document.getElementById('todaySection').innerHTML = '';
                 document.getElementById('archiveSection').innerHTML = '';
@@ -2388,8 +2383,21 @@
         document.getElementById('searchInput').addEventListener('input', () => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
-                if (currentView !== 'search') switchView('search');
-                else performSearch();
+                const val = document.getElementById('searchInput').value.trim();
+                const sr = document.getElementById('searchResults');
+                if (!val) {
+                    // Clear search, restore current tab view
+                    sr.classList.remove('active');
+                    switchView(currentView);
+                    return;
+                }
+                // Show search results inline
+                const ta = document.getElementById('todayArchiveView');
+                const panels = ['wordcloudPanel','statsPanel','marketPanel','figuresPanel','comparePanel','notifyPanel'];
+                ta.classList.add('hidden');
+                panels.forEach(id => document.getElementById(id).classList.remove('active'));
+                sr.classList.add('active');
+                performSearch();
             }, 300);
         });
 
