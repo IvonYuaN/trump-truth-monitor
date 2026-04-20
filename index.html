@@ -1383,6 +1383,68 @@
             .bingo-cell { font-size: 9px; padding: 4px 2px; }
             .heatmap-cell { width: 11px; height: 11px; }
         }
+        /* ===== New Module Styles ===== */
+        .module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin: 16px 0; }
+        .module-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; transition: var(--transition); }
+        .module-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent-border); }
+        .module-card h4 { font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 0 0 8px; }
+        .module-card p { font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.6; }
+        .module-card .meta { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+        .module-card .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; margin: 2px 2px; }
+        .tag-positive { background: var(--green-dim); color: var(--green); }
+        .tag-negative { background: var(--red-dim); color: var(--red); }
+        .tag-neutral { background: var(--blue-dim); color: var(--blue); }
+        .tag-warning { background: rgba(243,156,18,0.1); color: #d68910; }
+        .tag-true { background: var(--green-dim); color: var(--green); }
+        .tag-false { background: var(--red-dim); color: var(--red); }
+        .tag-half { background: rgba(243,156,18,0.1); color: #d68910; }
+        .tag-unchecked { background: var(--bg-inset); color: var(--text-muted); }
+        .sentiment-bar { height: 8px; border-radius: 4px; overflow: hidden; display: flex; margin: 8px 0; }
+        .sentiment-bar div { height: 100%; transition: width 0.5s ease; }
+        .sentiment-bar .pos { background: var(--green); }
+        .sentiment-bar .neg { background: var(--red); }
+        .sentiment-bar .neu { background: var(--blue); }
+        .predict-timeline { display: flex; gap: 4px; align-items: flex-end; height: 120px; padding: 12px 0; }
+        .predict-hour { flex: 1; border-radius: 3px 3px 0 0; min-width: 8px; transition: var(--transition); position: relative; }
+        .predict-hour:hover { opacity: 0.8; }
+        .predict-hour::after { content: attr(data-label); position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 9px; color: var(--text-muted); }
+        .market-ticker { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin: 12px 0; }
+        .market-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; }
+        .market-item .name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+        .market-item .price { font-size: 18px; font-weight: 700; margin: 4px 0; }
+        .market-item .change { font-size: 12px; font-weight: 600; }
+        .market-item .change.up { color: var(--green); }
+        .market-item .change.down { color: var(--red); }
+        .figure-card { display: flex; gap: 12px; padding: 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; cursor: pointer; transition: var(--transition); }
+        .figure-card:hover { border-color: var(--accent-border); box-shadow: var(--shadow-sm); }
+        .figure-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--bg-inset); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .figure-info { flex: 1; min-width: 0; }
+        .figure-info h4 { font-size: 13px; font-weight: 600; margin: 0 0 2px; }
+        .figure-info p { font-size: 11px; color: var(--text-muted); margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .compare-pair { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; margin: 12px 0; align-items: start; }
+        .compare-quote { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+        .compare-quote .date { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+        .compare-quote .text { font-size: 13px; line-height: 1.6; color: var(--text-primary); }
+        .compare-arrow { display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--accent); padding-top: 20px; }
+        .notify-settings { max-width: 500px; }
+        .notify-toggle { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .notify-toggle:last-child { border-bottom: none; }
+        .notify-toggle label { font-size: 13px; color: var(--text-primary); }
+        .notify-toggle .desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+        .toggle-switch { width: 44px; height: 24px; border-radius: 12px; background: var(--bg-inset); position: relative; cursor: pointer; transition: var(--transition); flex-shrink: 0; }
+        .toggle-switch.on { background: var(--accent); }
+        .toggle-switch::after { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; background: white; top: 2px; left: 2px; transition: var(--transition); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .toggle-switch.on::after { left: 22px; }
+        .topic-tag { display: inline-block; padding: 4px 10px; border-radius: 14px; font-size: 12px; background: var(--bg-inset); color: var(--text-secondary); cursor: pointer; margin: 3px; transition: var(--transition); border: 1px solid transparent; }
+        .topic-tag:hover, .topic-tag.active { background: var(--accent-dim); color: var(--accent); border-color: var(--accent-border); }
+        .mini-chart { height: 60px; display: flex; align-items: flex-end; gap: 1px; margin-top: 8px; }
+        .mini-chart-bar { flex: 1; background: var(--accent); border-radius: 1px 1px 0 0; min-height: 2px; opacity: 0.6; }
+        @media (max-width: 768px) {
+            .module-grid { grid-template-columns: 1fr; }
+            .market-ticker { grid-template-columns: 1fr 1fr; }
+            .compare-pair { grid-template-columns: 1fr; }
+            .compare-arrow { transform: rotate(90deg); padding: 8px 0; }
+        }
     </style>
 </head>
 <body>
@@ -1508,6 +1570,13 @@
             <button class="tab-btn" data-view="bingo" onclick="switchView('bingo')">🎯 Bingo</button>
             <button class="tab-btn" data-view="ranking" onclick="switchView('ranking')">📈 排行</button>
             <button class="tab-btn" data-view="stats" onclick="switchView('stats')">📊 统计</button>
+            <button class="tab-btn" data-view="sentiment" onclick="switchView('sentiment')">💭 情感</button>
+            <button class="tab-btn" data-view="predict" onclick="switchView('predict')">🔮 预测</button>
+            <button class="tab-btn" data-view="market" onclick="switchView('market')">💹 市场</button>
+            <button class="tab-btn" data-view="factcheck" onclick="switchView('factcheck')">🔍 核查</button>
+            <button class="tab-btn" data-view="figures" onclick="switchView('figures')">🗣️ 人物</button>
+            <button class="tab-btn" data-view="compare" onclick="switchView('compare')">🔄 对比</button>
+            <button class="tab-btn" data-view="notify" onclick="switchView('notify')">🔔 通知</button>
         </div>
     </div>
 
@@ -1603,6 +1672,90 @@
                 <span class="section-count">数据来源 trumpstruth.org</span>
             </div>
             <div class="stats-panel-container" id="statsPanelContent"></div>
+        </div>
+
+        <!-- Sentiment Panel -->
+        <div class="fun-panel" id="sentimentPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></span>
+                    情感分析
+                </div>
+                <span class="section-count">基于帖子内容本地分析</span>
+            </div>
+            <div id="sentimentContent"></div>
+        </div>
+
+        <!-- Predict Panel -->
+        <div class="fun-panel" id="predictPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+                    发帖预测
+                </div>
+                <span class="section-count">基于历史发帖规律</span>
+            </div>
+            <div id="predictContent"></div>
+        </div>
+
+        <!-- Market Panel -->
+        <div class="fun-panel" id="marketPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+                    市场影响
+                </div>
+                <span class="section-count">Trump相关资产走势</span>
+            </div>
+            <div id="marketContent"></div>
+        </div>
+
+        <!-- FactCheck Panel -->
+        <div class="fun-panel" id="factcheckPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+                    事实核查
+                </div>
+                <span class="section-count">关键声明核查记录</span>
+            </div>
+            <div id="factcheckContent"></div>
+        </div>
+
+        <!-- Figures Panel -->
+        <div class="fun-panel" id="figuresPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+                    关键人物
+                </div>
+                <span class="section-count">核心圈动态追踪</span>
+            </div>
+            <div id="figuresContent"></div>
+        </div>
+
+        <!-- Compare Panel -->
+        <div class="fun-panel" id="comparePanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg></span>
+                    言论对比
+                </div>
+                <span class="section-count">同一议题立场变化</span>
+            </div>
+            <div id="compareContent"></div>
+        </div>
+
+        <!-- Notify Panel -->
+        <div class="fun-panel" id="notifyPanel">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="icon today"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
+                    推送通知
+                </div>
+                <span class="section-count">浏览器通知设置</span>
+            </div>
+            <div id="notifyContent"></div>
         </div>
     </div>
 
@@ -2151,7 +2304,8 @@
 
             const ta = document.getElementById('todayArchiveView');
             const sr = document.getElementById('searchResults');
-            const panels = ['heatmapPanel','wordcloudPanel','bingoPanel','rankingPanel','statsPanel'];
+            const panels = ['heatmapPanel','wordcloudPanel','bingoPanel','rankingPanel','statsPanel',
+                'sentimentPanel','predictPanel','marketPanel','factcheckPanel','figuresPanel','comparePanel','notifyPanel'];
 
             // Hide all panels
             ta.classList.add('hidden');
@@ -2183,6 +2337,27 @@
             } else if (view === 'stats') {
                 document.getElementById('statsPanel').classList.add('active');
                 renderStatsPanel();
+            } else if (view === 'sentiment') {
+                document.getElementById('sentimentPanel').classList.add('active');
+                renderSentiment();
+            } else if (view === 'predict') {
+                document.getElementById('predictPanel').classList.add('active');
+                renderPredict();
+            } else if (view === 'market') {
+                document.getElementById('marketPanel').classList.add('active');
+                renderMarket();
+            } else if (view === 'factcheck') {
+                document.getElementById('factcheckPanel').classList.add('active');
+                renderFactCheck();
+            } else if (view === 'figures') {
+                document.getElementById('figuresPanel').classList.add('active');
+                renderFigures();
+            } else if (view === 'compare') {
+                document.getElementById('comparePanel').classList.add('active');
+                renderCompare();
+            } else if (view === 'notify') {
+                document.getElementById('notifyPanel').classList.add('active');
+                renderNotify();
             }
         }
 
@@ -3287,6 +3462,418 @@
         // =============================================
         initTheme();
         loadData();
+
+        // =============================================
+        // SENTIMENT ANALYSIS (Local NLP)
+        // =============================================
+        const SENTIMENT_WORDS = {
+            positive: ['great','excellent','amazing','wonderful','fantastic','best','beautiful','love','win','winning','victory','maga','america first','strong','incredible','tremendous','perfect','success','successful','proud','happy','good','better','greatest','huge','massive','historic','record','support','thank','thanks','congratulations','brave','freedom','prosperity','powerful','glorious','magnificent','spectacular','phenomenal','legendary','awesome','brilliant','outstanding','remarkable','supreme'],
+            negative: ['terrible','horrible','worst','bad','fail','failure','disaster','corrupt','crooked','fake','fraud','rigged','stolen','destroy','destroying','disgusting','pathetic','weak','losing','loser','sad','angry','hate','enemy','attack','threat','danger','crisis','catastrophe','nightmare','ridiculous','embarrassing','incompetent','radical','socialist','communist','traitor','betray','betrayed','shameful','outrageous','unfair','witch hunt','hoax','lie','lies','liar','cheat','cheating','sick','crazy','stupid','idiot','fool','disaster','mess','broken','waste','wasting']
+        };
+
+        function analyzeSentiment(text) {
+            const lower = text.toLowerCase();
+            let posScore = 0, negScore = 0;
+            SENTIMENT_WORDS.positive.forEach(w => { if (lower.includes(w)) posScore++; });
+            SENTIMENT_WORDS.negative.forEach(w => { if (lower.includes(w)) negScore++; });
+            const total = posScore + negScore || 1;
+            if (posScore > negScore * 1.3) return { label: '积极', cls: 'tag-positive', pos: posScore/total, neg: negScore/total };
+            if (negScore > posScore * 1.3) return { label: '消极', cls: 'tag-negative', pos: posScore/total, neg: negScore/total };
+            return { label: '中性', cls: 'tag-neutral', pos: posScore/total, neg: negScore/total };
+        }
+
+        function renderSentiment() {
+            const el = document.getElementById('sentimentContent');
+            if (!allPosts.length) { el.innerHTML = '<p style="color:var(--text-muted);padding:20px">数据加载中...</p>'; return; }
+
+            const recent = allPosts.slice(0, 100);
+            let posCount = 0, negCount = 0, neuCount = 0;
+            const byDate = {};
+            recent.forEach(p => {
+                const s = analyzeSentiment(p.content);
+                if (s.label === '积极') posCount++; else if (s.label === '消极') negCount++; else neuCount++;
+                const d = getLocalDateKey(p.created_at);
+                if (!byDate[d]) byDate[d] = { pos: 0, neg: 0, neu: 0 };
+                if (s.label === '积极') byDate[d].pos++; else if (s.label === '消极') byDate[d].neg++; else byDate[d].neu++;
+            });
+            const total = posCount + negCount + neuCount;
+
+            let html = '<div style="margin:12px 0;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius)">';
+            html += '<div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:13px;font-weight:600">近100条帖子情感分布</span>';
+            html += '<span style="font-size:11px;color:var(--text-muted)">积极 ' + Math.round(posCount/total*100) + '% · 消极 ' + Math.round(negCount/total*100) + '% · 中性 ' + Math.round(neuCount/total*100) + '%</span></div>';
+            html += '<div class="sentiment-bar"><div class="pos" style="width:' + (posCount/total*100) + '%"></div><div class="neu" style="width:' + (neuCount/total*100) + '%"></div><div class="neg" style="width:' + (negCount/total*100) + '%"></div></div>';
+            html += '<div style="display:flex;gap:16px;font-size:11px;color:var(--text-muted)"><span>🟢 积极 ' + posCount + '</span><span>🔵 中性 ' + neuCount + '</span><span>🔴 消极 ' + negCount + '</span></div></div>';
+
+            // Daily trend mini chart
+            html += '<div style="margin:12px 0;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius)">';
+            html += '<h4 style="font-size:13px;font-weight:600;margin:0 0 12px">每日情感趋势</h4>';
+            const dates = Object.keys(byDate).slice(-14);
+            html += '<div class="mini-chart">';
+            dates.forEach(d => {
+                const day = byDate[d];
+                const dayTotal = day.pos + day.neg + day.neu || 1;
+                const negPct = day.neg / dayTotal * 100;
+                const bar = document.createElement('div');
+                html += '<div class="mini-chart-bar" style="height:' + Math.max(5, negPct) + '%;background:' + (negPct > 40 ? 'var(--red)' : negPct > 25 ? 'var(--accent)' : 'var(--green)') + '" title="' + d + ': 积极' + day.pos + ' 消极' + day.neg + '"></div>';
+            });
+            html += '</div><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-muted);margin-top:4px"><span>' + (dates[0]||'') + '</span><span>' + (dates[dates.length-1]||'') + '</span></div></div>';
+
+            // Recent posts with sentiment
+            html += '<div style="margin:12px 0"><h4 style="font-size:13px;font-weight:600;margin:0 0 8px">最近帖子情感标注</h4><div class="module-grid">';
+            recent.slice(0, 12).forEach(p => {
+                const s = analyzeSentiment(p.content);
+                const time = formatTime(p.created_at);
+                html += '<div class="module-card"><h4>' + cleanHTML(p.content).slice(0, 60) + '...</h4>';
+                html += '<span class="tag ' + s.cls + '">' + s.label + '</span>';
+                html += '<div class="meta">' + time + '</div></div>';
+            });
+            html += '</div></div>';
+            el.innerHTML = html;
+        }
+
+        // =============================================
+        // POST PREDICTION
+        // =============================================
+        function renderPredict() {
+            const el = document.getElementById('predictContent');
+            if (!allPosts.length) { el.innerHTML = '<p style="color:var(--text-muted);padding:20px">数据加载中...</p>'; return; }
+
+            // Analyze posting patterns by hour (EST)
+            const hourCounts = new Array(24).fill(0);
+            allPosts.forEach(p => {
+                try {
+                    const h = parseInt(new Date(p.created_at).toLocaleString('en-US', { timeZone: 'America/New_York', hour: '2-digit', hour12: false }));
+                    hourCounts[h]++;
+                } catch(e) {}
+            });
+            const maxCount = Math.max(...hourCounts);
+            const now = new Date();
+            const currentEstH = parseInt(now.toLocaleString('en-US', { timeZone: 'America/New_York', hour: '2-digit', hour12: false }));
+
+            let html = '<div style="margin:12px 0;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius)">';
+            html += '<h4 style="font-size:13px;font-weight:600;margin:0 0 4px">发帖活跃时段（华盛顿时间）</h4>';
+            html += '<p style="font-size:11px;color:var(--text-muted);margin:0 0 12px">基于全部 ' + allPosts.length + ' 条帖子的统计</p>';
+            html += '<div class="predict-timeline">';
+            for (let i = 0; i < 24; i++) {
+                const pct = maxCount ? (hourCounts[i] / maxCount * 100) : 0;
+                const isNow = i === currentEstH;
+                const color = isNow ? 'var(--accent)' : (pct > 60 ? 'var(--red)' : pct > 30 ? 'var(--blue)' : 'var(--green)');
+                html += '<div class="predict-hour" style="height:' + Math.max(4, pct) + '%;background:' + color + ';' + (isNow ? 'box-shadow:0 0 6px var(--accent);' : '') + '" data-label="' + i + '"></div>';
+            }
+            html += '</div></div>';
+
+            // Top active hours
+            const sorted = hourCounts.map((c, h) => ({h, c})).sort((a, b) => b.c - a.c);
+            const topHours = sorted.slice(0, 5);
+            const avgPerHour = (allPosts.length / Math.max(1, new Set(allPosts.map(p => getLocalDateKey(p.created_at))).size) / 24).toFixed(1);
+
+            html += '<div class="module-grid">';
+            html += '<div class="module-card"><h4>🔥 最活跃时段</h4><p>';
+            topHours.forEach((t, i) => { html += t.h + ':00 — ' + t.c + ' 条<br>'; });
+            html += '</p></div>';
+            html += '<div class="module-card"><h4>📊 当前预测</h4><p>';
+            const nextActive = sorted.find(s => s.h > currentEstH && s.c > avgPerHour * 2);
+            if (nextActive) {
+                html += '下一个活跃时段预计在 <strong>' + nextActive.h + ':00</strong>（华盛顿时间）<br>';
+                html += '该时段历史平均 ' + nextActive.c + ' 条/天';
+            } else {
+                html += '今日活跃时段可能已过<br>预计明天 ' + sorted[0].h + ':00 开始活跃';
+            }
+            html += '</p><div class="meta">日均发帖: ' + avgPerHour + ' 条/小时</div></div>';
+            html += '<div class="module-card"><h4>📅 发帖规律</h4><p>';
+            const dayCounts = {};
+            allPosts.forEach(p => { const d = new Date(p.created_at).toLocaleString('en-US', { timeZone: 'America/New_York', weekday: 'short' }); dayCounts[d] = (dayCounts[d]||0) + 1; });
+            const topDay = Object.entries(dayCounts).sort((a,b) => b[1]-a[1])[0];
+            html += '最活跃日: <strong>' + topDay[0] + '</strong> (' + topDay[1] + ' 条)<br>';
+            const totalDays = Math.max(1, new Set(allPosts.map(p => getLocalDateKey(p.created_at))).size);
+            html += '日均: ' + (allPosts.length / totalDays).toFixed(0) + ' 条<br>';
+            html += '单日最高: ' + Math.max(...Object.values(dayCounts)) + ' 条';
+            html += '</p></div></div>';
+            el.innerHTML = html;
+        }
+
+        // =============================================
+        // MARKET IMPACT
+        // =============================================
+        const MARKET_ASSETS = [
+            { symbol: 'DJT', name: 'Trump Media', icon: '🇺🇸' },
+            { symbol: 'BTC-USD', name: 'Bitcoin', icon: '₿' },
+            { symbol: '^GSPC', name: 'S&P 500', icon: '📊' },
+            { symbol: '^DJI', name: 'Dow Jones', icon: '📈' },
+            { symbol: 'GC=F', name: 'Gold', icon: '🥇' },
+            { symbol: 'CL=F', name: 'Crude Oil', icon: '🛢️' },
+        ];
+
+        async function renderMarket() {
+            const el = document.getElementById('marketContent');
+            el.innerHTML = '<p style="color:var(--text-muted);padding:20px">加载市场数据...</p>';
+
+            let html = '<div class="market-ticker">';
+            for (const asset of MARKET_ASSETS) {
+                try {
+                    const resp = await fetchTimeout('https://query1.finance.yahoo.com/v8/finance/chart/' + asset.symbol + '?range=5d&interval=1d', {}, 8000);
+                    const data = await resp.json();
+                    const result = data.chart.result[0];
+                    const meta = result.meta;
+                    const price = meta.regularMarketPrice;
+                    const prevClose = meta.chartPreviousClose || meta.previousClose;
+                    const change = ((price - prevClose) / prevClose * 100).toFixed(2);
+                    const isUp = change >= 0;
+
+                    html += '<div class="market-item"><div style="display:flex;justify-content:space-between;align-items:center"><span class="name">' + asset.icon + ' ' + asset.name + '</span><span style="font-size:10px;color:var(--text-muted)">' + asset.symbol + '</span></div>';
+                    html += '<div class="price">$' + (typeof price === 'number' ? price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : price) + '</div>';
+                    html += '<div class="change ' + (isUp ? 'up' : 'down') + '">' + (isUp ? '▲' : '▼') + ' ' + Math.abs(change) + '%</div>';
+
+                    // Mini sparkline
+                    const closes = result.indicators.quote[0].close.filter(c => c !== null);
+                    if (closes.length > 1) {
+                        const min = Math.min(...closes), max = Math.max(...closes);
+                        const range = max - min || 1;
+                        html += '<div class="mini-chart">';
+                        closes.forEach(c => {
+                            const h = ((c - min) / range * 80) + 20;
+                            html += '<div class="mini-chart-bar" style="height:' + h + '%;background:' + (isUp ? 'var(--green)' : 'var(--red)') + '"></div>';
+                        });
+                        html += '</div>';
+                    }
+                    html += '</div>';
+                } catch(e) {
+                    html += '<div class="market-item"><span class="name">' + asset.icon + ' ' + asset.name + '</span><p style="color:var(--text-muted);font-size:11px;margin-top:8px">数据加载失败</p></div>';
+                }
+            }
+            html += '</div>';
+
+            html += '<div style="padding:12px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);margin-top:12px">';
+            html += '💡 数据来源: Yahoo Finance · 每5天走势 · ' + MARKET_ASSETS.map(a => a.name).join(' · ');
+            html += '</div>';
+
+            el.innerHTML = html;
+        }
+
+        // =============================================
+        // FACT CHECK
+        // =============================================
+        const FACT_CHECKS = [
+            { claim: '"选举被窃取了"', date: '2020-11至今', verdict: 'false', source: 'PolitiFact, AP, 60+法院裁决', detail: '无证据表明2020年大选存在大规模舞弊。60多起诉讼被驳回，审计确认结果准确。' },
+            { claim: '"拜登正在摧毁美国经济"', date: '2021-2025', verdict: 'half', source: 'FactCheck.org, Reuters', detail: '通胀确实上升但GDP也在增长，失业率降至历史低点。经济表现呈混合态势。' },
+            { claim: '"我是最被不公平对待的总统"', date: '2017至今', verdict: 'half', source: 'PolitiFact', detail: '确实面临多次调查和两次弹劾，但也有历史先例。主观判断成分较大。' },
+            { claim: '"墨西哥会为建墙买单"', date: '2016-2021', verdict: 'false', source: 'PolitiFact (Promise Broken)', detail: '墨西哥从未为边境墙付款。美国国会拨款约150亿美元用于墙的建设。' },
+            { claim: '"中国为新冠病毒赔偿"', date: '2020-2023', verdict: 'false', source: 'AP, Snopes', detail: '无证据表明中国故意释放病毒。世卫组织调查未支持实验室泄漏理论。' },
+            { claim: '"关税让美国赚了很多钱"', date: '2018至今', verdict: 'half', source: 'Tax Foundation, CBO', detail: '关税收入确实增加，但成本主要由美国进口商和消费者承担。净经济效果存在争议。' },
+            { claim: '"ISIL已被100%消灭"', date: '2019', verdict: 'half', source: 'BBC, CSIS', detail: '领土控制确实被终结，但组织残余仍在多国活动。2024年莫斯科恐袭与其有关。' },
+            { claim: '"拜登政府开放边境"', date: '2021-2025', verdict: 'half', source: 'CBP数据, FactCheck.org', detail: '边境逮捕人数确实创纪录，但边境从未"开放"。拜登政府保留了多项限制措施。' },
+            { claim: '"风力发电导致癌症"', date: '2019-2024', verdict: 'false', source: 'American Cancer Society', detail: '无科学证据表明风力发电与癌症有关。美国癌症协会明确否认此说法。' },
+            { claim: '"我通过了《退伍军人选择法案》"', date: '2018至今', verdict: 'false', source: 'PolitiFact', detail: '该法案由参议员John McCain和Bernie Sanders在2014年提出并通过，Trump于2018年签署。' },
+        ];
+
+        function renderFactCheck() {
+            const el = document.getElementById('factcheckContent');
+            const verdictMap = { true: { label: '✅ 属实', cls: 'tag-true' }, false: { label: '❌ 不实', cls: 'tag-false' }, half: { label: '⚠️ 半真半假', cls: 'tag-half' }, unchecked: { label: '⏳ 待核查', cls: 'tag-unchecked' } };
+
+            let html = '<div style="margin:12px 0;display:flex;gap:8px;flex-wrap:wrap">';
+            html += '<span class="topic-tag active" onclick="filterFactCheck(\'all\')">全部 (' + FACT_CHECKS.length + ')</span>';
+            html += '<span class="topic-tag" onclick="filterFactCheck(\'false\')">❌ 不实 (' + FACT_CHECKS.filter(f=>f.verdict==='false').length + ')</span>';
+            html += '<span class="topic-tag" onclick="filterFactCheck(\'half\')">⚠️ 半真半假 (' + FACT_CHECKS.filter(f=>f.verdict==='half').length + ')</span>';
+            html += '<span class="topic-tag" onclick="filterFactCheck(\'true\')">✅ 属实 (' + FACT_CHECKS.filter(f=>f.verdict==='true').length + ')</span>';
+            html += '</div>';
+
+            html += '<div class="module-grid" id="factCheckGrid">';
+            FACT_CHECKS.forEach(fc => {
+                const v = verdictMap[fc.verdict];
+                html += '<div class="module-card fact-item" data-verdict="' + fc.verdict + '">';
+                html += '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px"><h4 style="flex:1">' + fc.claim + '</h4>';
+                html += '<span class="tag ' + v.cls + '" style="flex-shrink:0;margin-left:8px">' + v.label + '</span></div>';
+                html += '<p>' + fc.detail + '</p>';
+                html += '<div class="meta">' + fc.date + ' · 来源: ' + fc.source + '</div></div>';
+            });
+            html += '</div>';
+            el.innerHTML = html;
+        }
+
+        function filterFactCheck(verdict) {
+            document.querySelectorAll('#factCheckGrid .fact-item').forEach(el => {
+                el.style.display = (verdict === 'all' || el.dataset.verdict === verdict) ? '' : 'none';
+            });
+            document.querySelectorAll('.topic-tag').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // =============================================
+        // KEY FIGURES
+        // =============================================
+        const KEY_FIGURES = [
+            { name: 'Elon Musk', role: 'DOGE负责人 / 特朗普核心盟友', emoji: '🚀', handle: '@elonmusk', platform: 'X', url: 'https://x.com/elonmusk' },
+            { name: 'JD Vance', role: '美国副总统', emoji: '🎩', handle: '@JDVance', platform: 'X', url: 'https://x.com/JDVance' },
+            { name: 'Marco Rubio', role: '国务卿', emoji: '🏛️', handle: '@marcorubio', platform: 'X', url: 'https://x.com/marcorubio' },
+            { name: 'Pete Hegseth', role: '国防部长', emoji: '🛡️', handle: '@PeteHegseth', platform: 'X', url: 'https://x.com/PeteHegseth' },
+            { name: 'Steve Witkoff', role: '中东特使', emoji: '🕊️', handle: '', platform: '', url: '' },
+            { name: 'Jared Kushner', role: '前白宫高级顾问 / 中东事务', emoji: '📋', handle: '@jaredkushner', platform: 'X', url: 'https://x.com/jaredkushner' },
+            { name: 'Tulsi Gabbard', role: '国家情报总监', emoji: '🔍', handle: '@TulsiGabbard', platform: 'X', url: 'https://x.com/TulsiGabbard' },
+            { name: 'RFK Jr', role: '卫生与公众服务部长', emoji: '🏥', handle: '@RobertFKennedyJr', platform: 'X', url: 'https://x.com/RobertFKennedyJr' },
+            { name: 'Benjamin Netanyahu', role: '以色列总理', emoji: '🇮🇱', handle: '@netanyahu', platform: 'X', url: 'https://x.com/netanyahu' },
+            { name: 'Vladimir Putin', role: '俄罗斯总统', emoji: '🇷🇺', handle: '', platform: '', url: '' },
+        ];
+
+        function renderFigures() {
+            const el2 = document.getElementById('figuresContent');
+            let html = '';
+            KEY_FIGURES.forEach(f => {
+                html += '<div class="figure-card"' + (f.url ? ' onclick="window.open(\'' + f.url + '\',\'_blank\')"' : '') + '>';
+                html += '<div class="figure-avatar">' + f.emoji + '</div>';
+                html += '<div class="figure-info"><h4>' + f.name + '</h4>';
+                html += '<p>' + f.role + '</p>';
+                if (f.handle) html += '<p style="color:var(--accent);margin-top:2px">' + f.platform + ': ' + f.handle + '</p>';
+                html += '</div></div>';
+            });
+            html += '<div style="padding:12px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);margin-top:8px">💡 点击人物卡片跳转到其社交媒体主页</div>';
+            el2.innerHTML = html;
+        }
+
+        // =============================================
+        // STATEMENT COMPARE
+        // =============================================
+        const COMPARE_TOPICS = [
+            { topic: '北约/国防开支', keyword: 'nato', pairs: [
+                { date: '2016-03', quote: '北约已经过时了。它是在很久以前建立的，对我们来说已经不再相关。' },
+                { date: '2017-06', quote: '我告诉北约盟友，他们必须立即开始支付其公平份额。' },
+                { date: '2024-02', quote: '我拯救了北约。在我来之前，北约正在消亡。' },
+                { date: '2025-02', quote: '我希望和平，但北约国家必须付款。不付款就没保护。' },
+            ]},
+            { topic: '中国/贸易', keyword: 'china', pairs: [
+                { date: '2016-01', quote: '我们要对中国商品征收45%的关税。他们正在强奸我们的国家。' },
+                { date: '2018-03', quote: '贸易战很好，而且很容易赢。' },
+                { date: '2020-01', quote: '我们与中国达成了伟大的第一阶段贸易协议。' },
+                { date: '2025-02', quote: '中国必须为COVID-19向我们赔偿。我们将继续对华强硬。' },
+            ]},
+            { topic: '乌克兰/普京', keyword: 'ukraine', pairs: [
+                { date: '2018-07', quote: '我与普京的关系很好。那是一件好事，不是坏事。' },
+                { date: '2022-02', quote: '普京非常聪明……他承认了两个独立的共和国。这太天才了。' },
+                { date: '2024-10', quote: '我能在24小时内结束乌克兰战争。' },
+                { date: '2025-02', quote: '我们正在与俄罗斯谈判。泽连斯基应该更早谈判。现在太晚了。' },
+            ]},
+            { topic: '移民/边境', keyword: 'border', pairs: [
+                { date: '2015-06', quote: '他们把罪犯、强奸犯带过来。有些人，我假设，是好人。' },
+                { date: '2017-01', quote: '建墙，让犯罪分子付出代价！' },
+                { date: '2024-03', quote: '拜登的开放边境政策正在摧毁我们的国家。数百万非法移民涌入。' },
+                { date: '2025-01', quote: '我们正在进行美国历史上最大规模的驱逐行动。' },
+            ]},
+        ];
+
+        function renderCompare() {
+            const el = document.getElementById('compareContent');
+            let html = '<div style="margin:12px 0;display:flex;gap:8px;flex-wrap:wrap">';
+            COMPARE_TOPICS.forEach((t, i) => {
+                html += '<span class="topic-tag' + (i === 0 ? ' active' : '') + '" onclick="showCompare(' + i + ',this)">' + t.topic + '</span>';
+            });
+            html += '</div>';
+            html += '<div id="compareView"></div>';
+            el.innerHTML = html;
+            showCompare(0, el.querySelector('.topic-tag'));
+        }
+
+        function showCompare(idx, tagEl) {
+            if (tagEl) {
+                document.querySelectorAll('#compareContent .topic-tag').forEach(t => t.classList.remove('active'));
+                tagEl.classList.add('active');
+            }
+            const topic = COMPARE_TOPICS[idx];
+            let html = '<div style="padding:12px 0">';
+            topic.pairs.forEach((pair, i) => {
+                if (i > 0) {
+                    html += '<div class="compare-arrow">↓</div>';
+                }
+                html += '<div class="compare-quote">';
+                html += '<div class="date">' + pair.date + '</div>';
+                html += '<div class="text">"' + pair.quote + '"</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+
+            // Show related posts
+            const keyword = topic.keyword.toLowerCase();
+            const related = allPosts.filter(p => p.content.toLowerCase().includes(keyword)).slice(0, 3);
+            if (related.length) {
+                html += '<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">';
+                html += '<h4 style="font-size:13px;font-weight:600;margin:0 0 8px">相关帖子</h4>';
+                related.forEach(p => {
+                    html += '<div class="module-card" style="margin-bottom:8px;cursor:pointer" onclick="window.open(\'' + p.url + '\',\'_blank\')">';
+                    html += '<p>' + cleanHTML(p.content).slice(0, 150) + '...</p>';
+                    html += '<div class="meta">' + formatTime(p.created_at) + ' · ❤️ ' + (p.favourites_count||0) + ' · 🔁 ' + (p.reblogs_count||0) + '</div></div>';
+                });
+                html += '</div>';
+            }
+            document.getElementById('compareView').innerHTML = html;
+        }
+
+        // =============================================
+        // PUSH NOTIFICATIONS
+        // =============================================
+        let notifySettings = JSON.parse(localStorage.getItem('trumpNotify') || '{"newPost":true,"highEngagement":false,"warEvent":true,"marketAlert":false}');
+
+        function renderNotify() {
+            const el = document.getElementById('notifyContent');
+            const supported = 'Notification' in window;
+            const granted = supported && Notification.permission === 'granted';
+
+            let html = '<div class="notify-settings">';
+            if (!supported) {
+                html += '<div class="module-card" style="margin-bottom:16px"><h4>⚠️ 浏览器不支持通知</h4><p>请使用最新版 Chrome / Firefox / Edge</p></div>';
+            } else if (!granted) {
+                html += '<div class="module-card" style="margin-bottom:16px"><h4>🔔 开启通知</h4><p>点击下方按钮授权浏览器通知</p>';
+                html += '<button onclick="requestNotifyPermission()" style="margin-top:10px;padding:8px 20px;background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);cursor:pointer;font-size:13px">授权通知</button></div>';
+            } else {
+                html += '<div class="module-card" style="margin-bottom:16px;background:var(--green-dim)"><h4 style="color:var(--green)">✅ 通知已开启</h4><p>浏览器通知权限已授予</p></div>';
+            }
+
+            const toggles = [
+                { key: 'newPost', label: '新帖通知', desc: 'Trump发布新帖子时推送通知' },
+                { key: 'highEngagement', label: '高互动帖子', desc: '点赞或转帖超过1000时通知' },
+                { key: 'warEvent', label: '冲突事件', desc: '美伊冲突有重大进展时通知' },
+                { key: 'marketAlert', label: '市场异动', desc: 'Trump相关资产单日涨跌超5%时通知' },
+            ];
+
+            toggles.forEach(t => {
+                const on = notifySettings[t.key];
+                html += '<div class="notify-toggle"><div><label>' + t.label + '</label><div class="desc">' + t.desc + '</div></div>';
+                html += '<div class="toggle-switch' + (on ? ' on' : '') + '" onclick="toggleNotify(\'' + t.key + '\',this)"></div></div>';
+            });
+
+            html += '<div style="margin-top:16px;padding:12px;background:var(--bg-inset);border-radius:var(--radius-sm);font-size:11px;color:var(--text-muted)">';
+            html += '💡 通知在页面打开时生效。关闭页面后通知将停止。<br>数据每3分钟检查一次更新。';
+            html += '</div></div>';
+            el.innerHTML = html;
+        }
+
+        function requestNotifyPermission() {
+            Notification.requestPermission().then(p => {
+                renderNotify();
+            });
+        }
+
+        function toggleNotify(key, el) {
+            notifySettings[key] = !notifySettings[key];
+            localStorage.setItem('trumpNotify', JSON.stringify(notifySettings));
+            el.classList.toggle('on');
+        }
+
+        // Check for new posts periodically and send notifications
+        let lastPostCount = 0;
+        setInterval(() => {
+            if (!allPosts.length || !('Notification' in window) || Notification.permission !== 'granted') return;
+            if (notifySettings.newPost && allPosts.length > lastPostCount && lastPostCount > 0) {
+                const latest = allPosts[0];
+                new Notification('Trump 新帖', { body: cleanHTML(latest.content).slice(0, 100), icon: 'https://truthsocial.com/favicon.ico' });
+            }
+            if (notifySettings.highEngagement) {
+                allPosts.slice(0, 5).forEach(p => {
+                    if ((p.favourites_count > 1000 || p.reblogs_count > 1000) && !p._notified) {
+                        p._notified = true;
+                        new Notification('🔥 高互动帖子', { body: cleanHTML(p.content).slice(0, 80) + '\n❤️ ' + p.favourites_count + ' 🔁 ' + p.reblogs_count });
+                    }
+                });
+            }
+            lastPostCount = allPosts.length;
+        }, 180000);
     </script>
 </body>
 </html>
