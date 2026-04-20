@@ -1,15 +1,16 @@
-name: Update Truth Social Data
+name: Update Data
 
 on:
   schedule:
-    # 每6小时运行一次（UTC 0,6,12,18 = 北京时间 8,14,20,2）
+    # 每6小时更新帖子数据（UTC 0,6,12,18 = 北京时间 8,14,20,2）
     - cron: '0 */6 * * *'
+    # 每天UTC 16:00更新冲突时间线（北京时间 0:00）
+    - cron: '0 16 * * *'
   workflow_dispatch: # 手动触发
 
 jobs:
-  update:
+  update-posts:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,16 +23,47 @@ jobs:
       - name: Install requests
         run: pip install requests
 
-      - name: Update data
+      - name: Update posts data
         run: |
           mkdir -p output
           python update_data.py
 
-      - name: Commit and push
+      - name: Commit and push posts
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add data/posts.json
           git diff --quiet && git diff --staged --quiet || (git commit -m "data: auto-update posts.json $(date -u '+%Y-%m-%d %H:%M UTC')" && git push)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-timeline:
+    runs-on: ubuntu-latest
+    needs: update-posts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Update war timeline
+        run: |
+          mkdir -p output
+          python update_timeline.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Commit timeline data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/war_timeline.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "data: auto-update war_timeline.json $(date -u '+%Y-%m-%d %H:%M UTC')" && git push)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
