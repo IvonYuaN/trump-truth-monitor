@@ -379,7 +379,7 @@
         }
         .tab-group::-webkit-scrollbar { display: none; }
         .tab-btn {
-            padding: 8px 12px;
+            padding: 7px 10px;
             background: transparent;
             border: none;
             border-right: 1px solid var(--border);
@@ -2239,7 +2239,7 @@
                 else renderArchiveView();
             } else if (view === 'wordcloud') {
                 document.getElementById('wordcloudPanel').classList.add('active');
-                renderWordTab('cloud');
+                showWordTab('cloud', document.querySelector('#wordcloudPanel .topic-tag'));
             } else if (view === 'stats') {
                 document.getElementById('statsPanel').classList.add('active');
                 showStatsTab('overview', document.querySelector('#statsSubTabs .topic-tag'));
