@@ -1993,12 +1993,16 @@
             return localStr + ' <span style="opacity:0.5">(' + estStr + ')</span>';
         }
 
-        function getLocalDateKey(dateStr) {
+        function getEstDateKey(dateStr) {
             const d = new Date(dateStr);
-            const y = d.getFullYear();
-            const m = String(d.getMonth() + 1).padStart(2, '0');
-            const day = String(d.getDate()).padStart(2, '0');
-            return y + '-' + m + '-' + day;
+            const estStr = d.toLocaleString('en-US', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' });
+            // Format: MM/DD/YYYY → YYYY-MM-DD
+            const parts = estStr.split('/');
+            return parts[2] + '-' + parts[0] + '-' + parts[1];
+        }
+
+        function getLocalDateKey(dateStr) {
+            return getEstDateKey(dateStr);
         }
 
         function formatNumber(num) {
@@ -2173,15 +2177,12 @@
                 archiveByMonth[mk][dk].push(post);
             });
 
-            // Collect posts from last 3 days (local time)
+            // Collect posts from last 3 days (EST time)
             const recentDates = [];
             for (let i = 0; i < 3; i++) {
                 const d = new Date();
                 d.setDate(d.getDate() - i);
-                const y = d.getFullYear();
-                const m = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                recentDates.push(y + '-' + m + '-' + day);
+                recentDates.push(getEstDateKey(d.toISOString()));
             }
             recentPosts = allPosts.filter(p => recentDates.includes(getLocalDateKey(p.created_at)));
 
@@ -2287,10 +2288,7 @@
             for (let i = 0; i < 3; i++) {
                 const d = new Date();
                 d.setDate(d.getDate() - i);
-                const y = d.getFullYear();
-                const m = String(d.getMonth() + 1).padStart(2, '0');
-                const day = String(d.getDate()).padStart(2, '0');
-                recentDates.push(y + '-' + m + '-' + day);
+                recentDates.push(getEstDateKey(d.toISOString()));
             }
             const months = Object.keys(archiveByMonth).sort().reverse();
             if (months.length === 0) {
@@ -2410,8 +2408,17 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Auto-refresh every 5 minutes
-        setInterval(loadData, 5 * 60 * 1000);
+        // Auto-refresh: adaptive based on US Eastern Time
+        // US daytime (8am-12am ET): every 3 min | Night: every 10 min
+        function scheduleRefresh() {
+            const estH = parseInt(new Date().toLocaleString('en-US', { timeZone: 'America/New_York', hour: '2-digit', hour12: false }));
+            const isDaytime = estH >= 8 && estH < 24;
+            const interval = isDaytime ? 3 * 60 * 1000 : 10 * 60 * 1000;
+            setTimeout(() => {
+                loadData().then(() => scheduleRefresh());
+            }, interval);
+        }
+        scheduleRefresh();
 
         // =============================================
         // HEATMAP
