@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trump Truth Social Archive</title>
+    <title>Trump Truth Social 帖子档案</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -293,7 +293,7 @@
             margin: 0 auto;
             padding: 0 24px 20px;
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
         }
         .stats-card {
@@ -673,7 +673,7 @@
             .controls { flex-direction: column; }
             .search-box { min-width: 100%; }
             .tab-group { width: 100%; }
-            .post-actions { display: none; }
+            .post-actions { flex-wrap: wrap; gap: 4px; }
         }
         @media (max-width: 480px) {
             .stats-bar { grid-template-columns: repeat(2, 1fr); }
@@ -1659,13 +1659,11 @@
         function updateTrumpStatus() {
             const now = new Date();
 
-            // Washington time = UTC - 5 (EST) or UTC - 4 (EDT)
-            const utcH = now.getUTCHours(), utcM = now.getUTCMinutes();
-            const estH = ((utcH - 5) % 24 + 24) % 24;
-            const estDay = now.getUTCDay(); // approximate, good enough for activity guess
+            // Washington time using Intl API (handles DST)
+            const estTimeStr = now.toLocaleString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false });
+            const estDay = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' })).getDay();
 
-            document.getElementById('estTime').textContent =
-                String(estH).padStart(2, '0') + ':' + String(utcM).padStart(2, '0');
+            document.getElementById('estTime').textContent = estTimeStr;
 
             // Local time (user's timezone)
             const localH = now.getHours().toString().padStart(2, '0');
@@ -1733,12 +1731,24 @@
         const translationCache = new Map();
         const preciseTranslationCache = new Map();
 
+        // AbortSignal.timeout polyfill for older browsers
+        function fetchTimeout(url, options = {}, ms = 5000) {
+            if (AbortSignal.timeout) {
+                options.signal = AbortSignal.timeout(ms);
+                return fetch(url, options);
+            }
+            const ctrl = new AbortController();
+            const id = setTimeout(() => ctrl.abort(), ms);
+            options.signal = ctrl.signal;
+            return fetch(url, options).finally(() => clearTimeout(id));
+        }
+
         // API 1: MyMemory (free, no key, 500 chars limit)
         async function translateMyMemory(text) {
             try {
                 const truncated = text.substring(0, 500);
-                const resp = await fetch('https://api.mymemory.translated.net/get?q=' +
-                    encodeURIComponent(truncated) + '&langpair=en|zh-CN', { signal: AbortSignal.timeout(5000) });
+                const resp = await fetchTimeout('https://api.mymemory.translated.net/get?q=' +
+                    encodeURIComponent(truncated) + '&langpair=en|zh-CN', {}, 5000);
                 const data = await resp.json();
                 if (data.responseStatus === 200 && data.responseData?.translatedText) {
                     let translated = data.responseData.translatedText;
@@ -1753,12 +1763,11 @@
         async function translateLibre(text) {
             try {
                 const truncated = text.substring(0, 500);
-                const resp = await fetch('https://libretranslate.com/translate', {
+                const resp = await fetchTimeout('https://libretranslate.com/translate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ q: truncated, source: 'en', target: 'zh', format: 'text' }),
-                    signal: AbortSignal.timeout(5000)
-                });
+                }, 5000);
                 const data = await resp.json();
                 if (data.translatedText) return data.translatedText;
             } catch (e) { console.warn('LibreTranslate failed:', e.message); }
@@ -1769,9 +1778,7 @@
         async function translateLingva(text) {
             try {
                 const truncated = text.substring(0, 500);
-                const resp = await fetch('https://lingva.ml/api/v1/en/zh/' + encodeURIComponent(truncated), {
-                    signal: AbortSignal.timeout(5000)
-                });
+                const resp = await fetchTimeout('https://lingva.ml/api/v1/en/zh/' + encodeURIComponent(truncated), {}, 5000);
                 const data = await resp.json();
                 if (data.translation) return data.translation;
             } catch (e) { console.warn('Lingva failed:', e.message); }
@@ -1782,9 +1789,7 @@
         async function translateYoudao(text) {
             try {
                 const truncated = text.substring(0, 500);
-                const resp = await fetch('https://dict.youdao.com/suggest?num=1&doctype=json&q=' + encodeURIComponent(truncated), {
-                    signal: AbortSignal.timeout(5000)
-                });
+                const resp = await fetchTimeout('https://dict.youdao.com/suggest?num=1&doctype=json&q=' + encodeURIComponent(truncated), {}, 5000);
                 const data = await resp.json();
                 if (data.translateResult?.resultCode === 0 && data.translateResult?.translateData) {
                     return data.translateResult.translateData.map(d => d.translateResult).join('');
@@ -1797,9 +1802,7 @@
         async function translateGoogle(text) {
             try {
                 const truncated = text.substring(0, 500);
-                const resp = await fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(truncated), {
-                    signal: AbortSignal.timeout(5000)
-                });
+                const resp = await fetchTimeout('https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=' + encodeURIComponent(truncated), {}, 5000);
                 const data = await resp.json();
                 if (data && data[0]) {
                     return data[0].map(arr => arr[0]).filter(Boolean).join('');
@@ -1915,15 +1918,11 @@
             // Local time (user's timezone)
             const lh = d.getHours(), lm = d.getMinutes();
             const localStr = String(lh).padStart(2, '0') + ':' + String(lm).padStart(2, '0');
-            // Washington time = UTC - 5
-            const utcH = d.getUTCHours(), utcM = d.getUTCMinutes();
-            const estH = ((utcH - 5) % 24 + 24) % 24;
-            const estStr = String(estH).padStart(2, '0') + ':' + String(utcM).padStart(2, '0');
+            // Washington time using Intl API (handles DST automatically)
+            const estStr = d.toLocaleString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false });
             if (localStr === estStr) return localStr;
             return localStr + ' <span style="opacity:0.5">(' + estStr + ')</span>';
         }
-
-        function isDST(date) { return false; }
 
         function getLocalDateKey(dateStr) {
             const d = new Date(dateStr);
@@ -2065,23 +2064,28 @@
         // DATA LOADING
         // =============================================
         async function loadData() {
-            try {
-                const response = await fetch('data/posts.json');
-                if (!response.ok) throw new Error('Failed');
-                allPosts = await response.json();
-                allPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                organizeData();
-                updateStats();
-                if (currentView === 'today') renderTodayView();
-                else if (currentView === 'archive') renderArchiveView();
-            } catch (err) {
-                document.getElementById('todaySection').innerHTML = `
-                    <div class="empty-state">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
-                        <h3>数据加载失败</h3>
-                        <p>请检查网络连接后刷新页面</p>
-                    </div>`;
+            for (let attempt = 1; attempt <= 3; attempt++) {
+                try {
+                    const response = await fetch('data/posts.json');
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    allPosts = await response.json();
+                    allPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                    organizeData();
+                    updateStats();
+                    if (currentView === 'today') renderTodayView();
+                    else if (currentView === 'archive') renderArchiveView();
+                    return;
+                } catch (err) {
+                    console.warn('Load attempt ' + attempt + ' failed:', err.message);
+                    if (attempt < 3) await new Promise(r => setTimeout(r, 2000));
+                }
             }
+            document.getElementById('todaySection').innerHTML = `
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+                    <h3>数据加载失败</h3>
+                    <p>请检查网络连接后刷新页面（已重试3次）</p>
+                </div>`;
         }
 
         function organizeData() {
@@ -2111,6 +2115,9 @@
                 recentDates.push(y + '-' + m + '-' + day);
             }
             recentPosts = allPosts.filter(p => recentDates.includes(getLocalDateKey(p.created_at)));
+
+            // Auto-check bingo words
+            allPosts.forEach(p => { if (p.content) autoCheckBingo(p.content); });
         }
 
         function updateStats() {
@@ -2438,7 +2445,7 @@
             'Fake News', 'Witch Hunt', 'MAGA', 'Tremendous', 'China',
             'Sleepy Joe', 'America First', 'Radical Left', 'RINO', 'Border',
             'Greatest', 'Disaster', 'Beautiful', 'Never seen before', 'Strong',
-            'Crooked', 'Loser', 'Tremendous', 'Unbelievable', 'Failing',
+            'Crooked', 'Loser', 'Unfair', 'Unbelievable', 'Failing',
             'Drain the Swamp', 'Law and Order', 'God Bless America'
         ];
 
@@ -2547,7 +2554,7 @@
             let html = '';
             results.forEach((r, i) => {
                 const pct = Math.round((r.count / maxCount) * 100);
-                html += '<div class="ranking-item" onclick="searchWord(\'' + r.name.split(' ')[0].toLowerCase() + '\')">' +
+                html += '<div class="ranking-item" onclick="searchWord(\'' + r.name.toLowerCase() + '\')">' +
                     '<div class="ranking-pos">' + (i + 1) + '</div>' +
                     '<div class="ranking-bar-wrap"><div class="ranking-word">' + r.name + '</div>' +
                     '<div class="ranking-bar"><div class="ranking-bar-fill" style="width:' + pct + '%"></div></div></div>' +
@@ -3221,7 +3228,7 @@
                 html += '<div class="stats-overview-card"><div class="sov-label">纯媒体帖</div><div class="sov-value" style="color:var(--blue)">' + emptyPosts + '</div><div class="sov-sub">占比 ' + (emptyPosts / totalPosts * 100).toFixed(1) + '%</div></div>';
                 html += '</div>';
 
-                html += '<div class="stats-overview" style="margin-bottom:20px">';
+                html += '<div class="stats-overview" style="margin-bottom:20px;grid-template-columns:repeat(2,1fr)">';
                 html += '<div class="stats-overview-card"><div class="sov-label">总点赞</div><div class="sov-value" style="color:var(--red)">' + formatNumber(totalLikes) + '</div><div class="sov-sub">篇均 ' + formatNumber(Math.round(totalLikes / totalPosts)) + '</div></div>';
                 html += '<div class="stats-overview-card"><div class="sov-label">总转帖</div><div class="sov-value" style="color:var(--green)">' + formatNumber(totalReposts) + '</div><div class="sov-sub">篇均 ' + formatNumber(Math.round(totalReposts / totalPosts)) + '</div></div>';
                 html += '</div>';

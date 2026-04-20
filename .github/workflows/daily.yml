@@ -2,13 +2,16 @@ name: Update Data
 
 on:
   schedule:
-    # 每3小时运行一次（UTC 0,3,6,9,12,15,18,21 = 北京时间 8,11,14,17,20,23,2,5）
+    # 帖子数据每3小时（UTC 0,3,6,9,12,15,18,21 = 北京时间 8,11,14,17,20,23,2,5）
     - cron: '0 */3 * * *'
+    # 时间线每6小时（UTC 1,7,13,19 = 北京时间 9,15,21,3）
+    - cron: '0 1,7,13,19 * * *'
   workflow_dispatch:
 
 jobs:
   update-posts:
     runs-on: ubuntu-latest
+    if: github.event.schedule == '*/3' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,6 +40,7 @@ jobs:
 
   update-timeline:
     runs-on: ubuntu-latest
+    if: contains('1 7 13 19', github.event.schedule[0:1] || '') || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
