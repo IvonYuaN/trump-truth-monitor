@@ -371,9 +371,13 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            overflow: hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
             box-shadow: var(--shadow-sm);
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
+        .tab-group::-webkit-scrollbar { display: none; }
         .tab-btn {
             padding: 9px 16px;
             background: transparent;
@@ -384,8 +388,9 @@
             font-family: inherit;
             font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
             white-space: nowrap;
+            flex-shrink: 0;
+            transition: var(--transition);
         }
         .tab-btn:last-child { border-right: none; }
         .tab-btn:hover { color: var(--text-secondary); background: var(--bg-card-hover); }
@@ -3608,10 +3613,13 @@
             const el = document.getElementById('marketContent');
             el.innerHTML = '<p style="color:var(--text-muted);padding:20px">加载市场数据...</p>';
 
+            const PROXY = 'https://api.allorigins.win/raw?url=';
             let html = '<div class="market-ticker">';
             for (const asset of MARKET_ASSETS) {
                 try {
-                    const resp = await fetchTimeout('https://query1.finance.yahoo.com/v8/finance/chart/' + asset.symbol + '?range=5d&interval=1d', {}, 8000);
+                    const yahooUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/' + asset.symbol + '?range=5d&interval=1d';
+                    const resp = await fetchTimeout(PROXY + encodeURIComponent(yahooUrl), {}, 8000);
+                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
                     const data = await resp.json();
                     const result = data.chart.result[0];
                     const meta = result.meta;
@@ -3624,7 +3632,6 @@
                     html += '<div class="price">$' + (typeof price === 'number' ? price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : price) + '</div>';
                     html += '<div class="change ' + (isUp ? 'up' : 'down') + '">' + (isUp ? '▲' : '▼') + ' ' + Math.abs(change) + '%</div>';
 
-                    // Mini sparkline
                     const closes = result.indicators.quote[0].close.filter(c => c !== null);
                     if (closes.length > 1) {
                         const min = Math.min(...closes), max = Math.max(...closes);
@@ -3638,15 +3645,13 @@
                     }
                     html += '</div>';
                 } catch(e) {
-                    html += '<div class="market-item"><span class="name">' + asset.icon + ' ' + asset.name + '</span><p style="color:var(--text-muted);font-size:11px;margin-top:8px">数据加载失败</p></div>';
+                    html += '<div class="market-item"><span class="name">' + asset.icon + ' ' + asset.name + '</span><p style="color:var(--text-muted);font-size:11px;margin-top:8px">暂无数据</p></div>';
                 }
             }
             html += '</div>';
-
             html += '<div style="padding:12px;font-size:11px;color:var(--text-muted);border-top:1px solid var(--border);margin-top:12px">';
-            html += '💡 数据来源: Yahoo Finance · 每5天走势 · ' + MARKET_ASSETS.map(a => a.name).join(' · ');
+            html += '💡 数据来源: Yahoo Finance · 5天走势 · ' + MARKET_ASSETS.map(a => a.name).join(' · ');
             html += '</div>';
-
             el.innerHTML = html;
         }
 
