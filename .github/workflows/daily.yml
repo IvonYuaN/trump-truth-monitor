@@ -7,16 +7,11 @@ on:
     # 时间线每6小时（UTC 1,7,13,19 = 北京时间 9,15,21,3）
     - cron: '0 1,7,13,19 * * *'
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'update_data.py'
-      - 'update_timeline.py'
 
 jobs:
   update-posts:
     runs-on: ubuntu-latest
-    if: github.event.schedule == '*/3' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -45,7 +40,7 @@ jobs:
 
   update-timeline:
     runs-on: ubuntu-latest
-    if: contains('1 7 13 19', github.event.schedule[0:1] || '') || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
